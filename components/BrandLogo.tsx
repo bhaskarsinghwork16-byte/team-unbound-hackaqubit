@@ -15,32 +15,19 @@ export default function BrandLogo({ size = 'md', showSubtitle, showTagline }: Br
   const titleSize = size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-lg' : 'text-base';
 
   return (
-    <Link href="/dashboard" className="flex items-center gap-2.5 group select-none">
-      {/* Precision Medical Optical & Cross Motif */}
-      <div className={`relative ${iconDimensions} rounded-lg bg-teal-600 text-white flex items-center justify-center shadow-sm group-hover:bg-teal-700 transition-colors`}>
-        <svg
-          className="w-4 h-4 text-white"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {/* Subtle Aperture / Iris Circle with Medical Cross center */}
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 8v8" />
-          <path d="M8 12h8" />
-        </svg>
+    <Link href="/dashboard" className="flex items-center gap-3 group select-none">
+      {/* Glossy 3D Green Cross Emblem */}
+      <div className={`relative ${iconDimensions} rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.4)] border border-emerald-300/40 group-hover:scale-105 transition-transform`}>
+        <span className="font-extrabold text-white text-lg leading-none">+</span>
       </div>
 
       {/* Brand Typography */}
       <div className="flex flex-col">
-        <span className={`${titleSize} font-bold tracking-tight text-slate-900 group-hover:text-teal-900 transition-colors leading-none`}>
+        <span className={`${titleSize} font-extrabold text-white group-hover:text-emerald-300 transition-colors leading-tight tracking-tight`}>
           HealthScreen
         </span>
         {displaySubtitle && (
-          <span className="text-[11px] font-medium text-slate-500 tracking-tight mt-1 leading-none">
+          <span className="text-[11px] font-medium text-slate-400 leading-tight">
             Community Screening
           </span>
         )}
