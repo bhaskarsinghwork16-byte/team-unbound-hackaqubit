@@ -17,6 +17,7 @@ import {
   Sparkles,
   ArrowRight,
   ShieldCheck,
+  Shield,
   Eye
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
