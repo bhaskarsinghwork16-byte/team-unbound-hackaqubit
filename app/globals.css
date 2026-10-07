@@ -1,63 +1,160 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Inter:ital,wght@0,300..800;1,300..800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* HealthScreen Design Tokens */
+  --hs-primary: #0d9488;        /* Teal 600 */
+  --hs-primary-hover: #0f766e;  /* Teal 700 */
+  --hs-primary-light: #f0fdfa;  /* Teal 50 */
+  --hs-primary-border: #99f6e4; /* Teal 200 */
+
+  --hs-bg: #f8fafc;             /* Slate 50 Neutral Clinical Background */
+  --hs-surface: #ffffff;        /* White Card Surface */
+  --hs-border: #e2e8f0;         /* Slate 200 Subtle Border */
+  --hs-border-subtle: #f1f5f9;  /* Slate 100 */
+
+  --hs-text-primary: #0f172a;   /* Slate 900 */
+  --hs-text-secondary: #475569; /* Slate 600 */
+  --hs-text-muted: #94a3b8;     /* Slate 400 */
+
+  /* Semantic Status Tokens */
+  --hs-success: #059669;        /* Emerald 600 */
+  --hs-success-bg: #ecfdf5;     /* Emerald 50 */
+  --hs-warning: #d97706;        /* Amber 600 */
+  --hs-warning-bg: #fffbeb;     /* Amber 50 */
+  --hs-error: #e11d48;          /* Rose 600 */
+  --hs-error-bg: #fff1f2;       /* Rose 50 */
+  --hs-info: #0284c7;           /* Sky 600 */
+  --hs-info-bg: #f0f9ff;        /* Sky 50 */
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-pixel: 'Silkscreen', monospace;
+}
+
 @layer base {
-  :root {
-    --background: 215 28% 97%;      /* Elegant luminous slate-gray #f8fafc */
-    --foreground: 222 47% 11%;      /* Deep rich slate #0f172a */
-
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-
-    --primary: 173 80% 32%;         /* Restrained healthcare teal #0d9488 */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 214 32% 91%;       /* Slate 100 */
-    --secondary-foreground: 222 47% 11%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;   /* Clinical Red for High-Risk #dc2626 */
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;    /* Soft subtle border #e2e8f0 */
-    --input: 214.3 31.8% 91.4%;
-    --ring: 173 80% 32%;
-
-    --radius: 0.75rem;              /* 12px card radius */
+  html, body {
+    background-color: var(--hs-bg);
+    color: var(--hs-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    @apply antialiased selection:bg-teal-500/20 selection:text-teal-900;
   }
 
-  body {
-    @apply bg-background text-foreground antialiased selection:bg-teal-500/20 selection:text-teal-900;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 700;
+    color: var(--hs-text-primary);
   }
 }
 
-/* Subtle medical styling enhancements */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+.pixel {
+  font-family: 'Silkscreen', monospace;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
 }
 
-.clinical-badge-lower {
-  @apply bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold;
+/* ── Standardized Clinical Card System ── */
+.glass-container-3d {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 }
 
-.clinical-badge-higher {
-  @apply bg-rose-50 text-rose-800 border border-rose-200 font-semibold;
+.glass-table-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
 }
 
-.clinical-badge-inconclusive {
-  @apply bg-amber-50 text-amber-800 border border-amber-200 font-semibold;
+/* ── Stat Cards (Consistent Clinical SaaS Palette) ── */
+.glass-stat-green {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #059669;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-green:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(5, 150, 105, 0.12);
+  border-color: #cbd5e1;
+}
+
+.glass-stat-cyan {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #0d9488;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-cyan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.12);
+  border-color: #cbd5e1;
+}
+
+.glass-stat-amber {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #d97706;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-amber:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(217, 119, 6, 0.12);
+  border-color: #cbd5e1;
+}
+
+.glass-stat-blue {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #2563eb;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-blue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.12);
+  border-color: #cbd5e1;
+}
+
+/* ── Subtle Animations ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-subtle {
+  animation: float-subtle 5s ease-in-out infinite;
+}
+
+/* Pulse indicator for live sync */
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.pulse-dot {
+  animation: pulseDot 2s infinite ease-in-out;
 }

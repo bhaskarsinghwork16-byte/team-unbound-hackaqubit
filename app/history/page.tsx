@@ -8,17 +8,30 @@ import {
   Eye, 
   Smile, 
   CheckCircle2, 
-  AlertTriangle, 
   AlertCircle,
   HelpCircle,
-  X, 
-  ShieldCheck, 
   Clock,
   ArrowRight,
-  ExternalLink,
-  GitPullRequest
+  ShieldCheck,
+  ClipboardList
 } from 'lucide-react';
 import { ScreeningResult } from '@/types';
+import {
+  Button,
+  Card,
+  CardContent,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  Input,
+  Badge,
+  StatusBadge,
+  EmptyState,
+  Modal
+} from '@/components/ui';
 
 function HistoryContent() {
   const searchParams = useSearchParams();
@@ -66,246 +79,212 @@ function HistoryContent() {
     return true;
   });
 
-  const getResultBadge = (record: ScreeningResult) => {
-    if (record.resultState === 'potential_finding' || record.riskLevel === 'higher_risk') {
-      return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-xs font-semibold">
-          <AlertCircle className="w-3 h-3 text-amber-600" />
-          <span>Potential finding</span>
-        </span>
-      );
-    }
-    if (record.resultState === 'no_abnormality' || record.riskLevel === 'lower_risk') {
-      return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
-          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-          <span>No abnormality</span>
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium">
-        <HelpCircle className="w-3 h-3 text-slate-500" />
-        <span>Inconclusive</span>
-      </span>
-    );
-  };
-
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-slate-200">
         <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Badge variant="info">Clinical Repository</Badge>
+          </div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Screening Records</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Permanent patient screening repository persisted in database.
+          <p className="text-sm text-slate-500 mt-0.5">
+            Verified patient screening repository persisted in structured database storage.
           </p>
         </div>
 
-        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-          {filtered.length} {filtered.length === 1 ? 'Screening' : 'Screenings'}
-        </span>
+        <Badge variant="neutral" size="md">
+          {filtered.length} {filtered.length === 1 ? 'Record' : 'Records'}
+        </Badge>
       </div>
 
       {/* ── SEARCH & FILTER CONTROLS ── */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by Patient Name, ID, or clinical finding..."
-            className="w-full pl-9 pr-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
-          />
-        </div>
-
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <div className="flex rounded-lg bg-slate-100 p-1">
-            <button
-              onClick={() => setFilterType('all')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterType === 'all' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              All Types
-            </button>
-            <button
-              onClick={() => setFilterType('eye')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterType === 'eye' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Eye
-            </button>
-            <button
-              onClick={() => setFilterType('oral')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterType === 'oral' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Oral
-            </button>
+      <Card>
+        <CardContent className="p-4 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+          <div className="flex-1 max-w-md">
+            <Input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by Patient Name, ID, or clinical finding..."
+              leftIcon={<Search className="w-4 h-4 text-slate-400" />}
+              className="py-2 text-xs"
+            />
           </div>
 
-          <div className="flex rounded-lg bg-slate-100 p-1">
-            <button
-              onClick={() => setFilterOutcome('all')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterOutcome === 'all' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              All Findings
-            </button>
-            <button
-              onClick={() => setFilterOutcome('review')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterOutcome === 'review' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Review Advised
-            </button>
-            <button
-              onClick={() => setFilterOutcome('normal')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterOutcome === 'normal' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              No Abnormality
-            </button>
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <div className="flex rounded-xl bg-slate-100/80 p-1 border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setFilterType('all')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterType === 'all' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                All Types
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterType('eye')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterType === 'eye' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Eye
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterType('oral')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterType === 'oral' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Oral
+              </button>
+            </div>
+
+            <div className="flex rounded-xl bg-slate-100/80 p-1 border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setFilterOutcome('all')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterOutcome === 'all' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                All Findings
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterOutcome('review')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterOutcome === 'review' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Review Advised
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterOutcome('normal')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterOutcome === 'normal' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                No Abnormality
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* ── RECORDS TABLE ── */}
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
-        {loading ? (
-          <div className="p-12 text-center text-xs text-slate-500">
-            Loading screening records...
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="p-12 text-center space-y-3">
-            <h3 className="text-sm font-semibold text-slate-800">No matching screening records</h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              No clinical records matched the selected query or filters.
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
-                <tr>
-                  <th className="py-3 px-4">Patient / ID</th>
-                  <th className="py-3 px-4">Screening Type</th>
-                  <th className="py-3 px-4">Date & Time</th>
-                  <th className="py-3 px-4">Quality Score</th>
-                  <th className="py-3 px-4">Algorithm Finding</th>
-                  <th className="py-3 px-4">Review Status</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
+      <Card>
+        <CardContent className="p-0">
+          {loading ? (
+            <div className="p-12 text-center text-xs text-slate-400 font-medium">
+              Loading screening records...
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="p-6">
+              <EmptyState
+                icon={ClipboardList}
+                title="No matching screening records"
+                description="No clinical records matched the selected query or filters."
+              />
+            </div>
+          ) : (
+            <Table containerClassName="border-0 rounded-none shadow-none">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Patient / ID</TableHead>
+                  <TableHead>Screening Type</TableHead>
+                  <TableHead>Date & Time</TableHead>
+                  <TableHead>Quality Score</TableHead>
+                  <TableHead>Finding</TableHead>
+                  <TableHead>Review Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {filtered.map((record) => {
                   const sType = (record as any).type || record.screeningType;
                   return (
-                    <tr
+                    <TableRow
                       key={record.screeningId}
                       onClick={() => setSelectedRecord(record)}
-                      className="hover:bg-slate-50/60 cursor-pointer transition"
+                      className="cursor-pointer"
                     >
-                      <td className="py-3.5 px-4">
-                        <span className="font-bold text-slate-900 block">
+                      <TableCell>
+                        <span className="font-semibold text-slate-900 block">
                           {record.patientName || record.patientId}
                         </span>
-                        <span className="text-[11px] font-mono text-slate-500">
+                        <span className="text-[11px] font-mono text-slate-400">
                           {record.screeningId}
                         </span>
-                      </td>
+                      </TableCell>
 
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 capitalize">
-                          {sType === 'eye' ? <Eye className="w-3.5 h-3.5 text-teal-600" /> : <Smile className="w-3.5 h-3.5 text-emerald-600" />}
-                          <span>{sType === 'eye' ? 'Eye screening' : 'Oral screening'}</span>
+                      <TableCell className="whitespace-nowrap">
+                        <span className="inline-flex items-center gap-2 font-medium text-slate-700 capitalize text-xs">
+                          {sType === 'eye' ? <Eye className="w-4 h-4 text-teal-600" /> : <Smile className="w-4 h-4 text-emerald-600" />}
+                          <span>{sType === 'eye' ? 'Eye Screening' : 'Oral Screening'}</span>
                         </span>
-                      </td>
+                      </TableCell>
 
-                      <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">
+                      <TableCell className="text-slate-500 whitespace-nowrap text-xs font-medium">
                         {new Date(record.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {new Date(record.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </td>
+                      </TableCell>
 
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="font-semibold text-slate-800">
+                      <TableCell className="whitespace-nowrap">
+                        <span className="font-semibold text-slate-800 text-xs">
                           {record.imageQuality?.score ?? 0}%
                         </span>
-                        <span className="text-[11px] text-slate-500 ml-1">
+                        <span className="text-[11px] text-teal-600 ml-1.5 font-medium">
                           ({record.imageQuality?.grade ?? 'PASS'})
                         </span>
-                      </td>
+                      </TableCell>
 
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        {getResultBadge(record)}
-                      </td>
+                      <TableCell className="whitespace-nowrap">
+                        <StatusBadge status={record.resultState || record.riskLevel || 'inconclusive'} />
+                      </TableCell>
 
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        {record.reviewStatus === 'reviewed' ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-emerald-700 font-medium">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Reviewed</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-amber-700 font-medium">
-                            <Clock className="w-3.5 h-3.5 text-amber-600" />
-                            <span>Pending</span>
-                          </span>
-                        )}
-                      </td>
+                      <TableCell className="whitespace-nowrap">
+                        <StatusBadge status={record.reviewStatus || 'pending'} />
+                      </TableCell>
 
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <button
+                      <TableCell className="text-right whitespace-nowrap">
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedRecord(record);
                           }}
-                          className="px-2.5 py-1 rounded-md border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold text-xs"
                         >
                           View Report
-                        </button>
-                      </td>
-                    </tr>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
 
-      {/* ── INSPECTION & CLINICAL REPORT MODAL ── */}
-      {selectedRecord && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-2xl w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto space-y-5">
-            <div className="flex justify-between items-start pb-3 border-b border-slate-100">
-              <div>
-                <h3 className="text-base font-bold text-slate-900">
-                  Screening Report: {selectedRecord.patientName || selectedRecord.patientId}
-                </h3>
-                <p className="text-xs text-slate-500 font-mono mt-0.5">
-                  ID: {selectedRecord.screeningId} • Recorded on {new Date(selectedRecord.createdAt).toLocaleString()}
-                </p>
-              </div>
-
-              <button
-                onClick={() => setSelectedRecord(null)}
-                className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
+      {/* ── STANDARDIZED CLINICAL REPORT MODAL ── */}
+      <Modal
+        isOpen={Boolean(selectedRecord)}
+        onClose={() => setSelectedRecord(null)}
+        title={selectedRecord ? `Screening Report: ${selectedRecord.patientName || selectedRecord.patientId}` : ''}
+        description={selectedRecord ? `ID: ${selectedRecord.screeningId} • Recorded on ${new Date(selectedRecord.createdAt).toLocaleString()}` : ''}
+        maxWidth="xl"
+      >
+        {selectedRecord && (
+          <div className="space-y-5">
             {/* Specimen Image & Finding */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="relative aspect-4/3 rounded-lg overflow-hidden border border-slate-200 bg-black">
+              <div className="relative aspect-4/3 rounded-xl overflow-hidden border border-slate-200 bg-slate-900">
                 {selectedRecord.imageReference ? (
                   <img
                     src={selectedRecord.imageReference}
@@ -318,17 +297,17 @@ function HistoryContent() {
               </div>
 
               <div className="space-y-3 text-xs">
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Finding</span>
-                  <div className="font-bold text-slate-900">{selectedRecord.prediction}</div>
+                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Clinical Finding</span>
+                  <div className="font-bold text-slate-900 text-sm">{selectedRecord.prediction}</div>
                   <div className="text-slate-600 mt-1">
                     Quality: {selectedRecord.imageQuality?.grade} ({selectedRecord.imageQuality?.score}%)
                     {selectedRecord.confidence ? ` · Confidence: ${selectedRecord.confidence}%` : ''}
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Review & Follow-up</span>
+                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Review & Follow-up</span>
                   <div className="capitalize font-semibold text-slate-800">
                     Status: {selectedRecord.reviewStatus || 'Pending clinical review'}
                   </div>
@@ -340,12 +319,12 @@ function HistoryContent() {
             </div>
 
             {/* Recommendation */}
-            <div className="p-4 rounded-lg border border-slate-200 bg-slate-50 text-xs space-y-1">
-              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+            <div className="p-4 rounded-xl border border-slate-200 bg-teal-50/40 text-xs space-y-1">
+              <span className="font-semibold text-teal-900 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-teal-600" />
                 <span>Clinical Recommendation</span>
               </span>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-slate-700 leading-relaxed">
                 {selectedRecord.recommendation}
               </p>
             </div>
@@ -358,28 +337,29 @@ function HistoryContent() {
             <div className="pt-2 flex items-center justify-between border-t border-slate-100">
               <Link
                 href={`/patients/${selectedRecord.patientId}`}
-                className="text-xs font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+                className="text-xs font-semibold text-teal-600 hover:text-teal-700 flex items-center gap-1"
               >
                 <span>Open Patient Profile</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
-              <button
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={() => setSelectedRecord(null)}
-                className="px-4 py-1.5 rounded-lg bg-slate-900 text-white font-semibold text-xs"
               >
                 Close
-              </button>
+              </Button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   );
 }
 
 export default function HistoryPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Loading screening history...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-400 font-medium">Loading screening history...</div>}>
       <HistoryContent />
     </Suspense>
   );

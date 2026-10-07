@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       confidenceThreshold: confidenceThreshold ? Number(confidenceThreshold) : 0.60,
       targetScenario,
       qualityOverride,
-      modelMode: dataSource === 'real' ? 'real' : 'demo',
+      modelMode: dataSource === 'demo' ? 'demo' : 'real',
     });
 
     // Fetch patient name if available for rapid record linkage

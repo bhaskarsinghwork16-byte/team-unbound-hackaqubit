@@ -12,21 +12,19 @@ import {
   Settings,
   Plus,
   Bell,
-  Wifi,
-  WifiOff,
   Menu,
   X,
-  UserCheck,
-  ChevronRight,
+  ArrowRight,
   Shield,
-  Activity,
-  LogOut
+  Eye,
+  LogOut,
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const isHomePage = pathname === '/';
   const [isOnline, setIsOnline] = useState(true);
   const [mongoConnected, setMongoConnected] = useState<boolean | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -95,7 +93,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   // Helper to get current clean page title
   const getPageTitle = () => {
-    if (pathname === '/' || pathname === '/dashboard') return 'Clinical Overview';
+    if (pathname === '/dashboard') return 'Clinical Overview';
     if (pathname.startsWith('/patients')) return 'Patient Records';
     if (pathname.startsWith('/screening')) return 'New Patient Screening';
     if (pathname.startsWith('/history') || pathname.startsWith('/screenings')) return 'Screening History';
@@ -106,18 +104,60 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return 'Community Health';
   };
 
+  // ── IF WE ARE ON THE WEBSITE HOME LANDING PAGE (`/`) ──
+  if (isHomePage) {
+    return (
+      <div className="min-h-screen bg-[#fff9ec] text-[#5d2a42] font-sans antialiased flex flex-col">
+        {/* ── PUBLIC WEBSITE TOP NAVBAR ── */}
+        <header className="sticky top-0 z-50 bg-[#fff9ec]/90 backdrop-blur-md border-b border-[#d8e2dc]/60 px-4 sm:px-8 py-3.5 transition-colors">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <BrandLogo size="md" showSubtitle={true} theme="light" />
+            </div>
+
+            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-[#5d2a42]">
+              <a href="#hero" className="hover:opacity-80 transition-opacity">Platform</a>
+              <a href="#options" className="hover:opacity-80 transition-opacity">Modules</a>
+              <Link href="/screening" className="hover:opacity-80 transition-opacity flex items-center gap-1">
+                <Eye className="w-4 h-4 text-[#5d2a42]" />
+                <span>AI Screening</span>
+              </Link>
+              <Link href="/datasets" className="hover:opacity-80 transition-opacity">AI Models</Link>
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-xl text-xs sm:text-sm font-extrabold shadow-md transition-all transform hover:scale-[1.02] active:scale-95"
+              >
+                <LayoutDashboard className="w-4 h-4 text-[#ffdccc]" />
+                <span>Dashboard</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#ffdccc]" />
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 w-full max-w-7xl mx-auto">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  // ── CLINICAL WORKSPACE LAYOUT (`/dashboard`, `/patients`, etc.) ──
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-slate-50/70 text-slate-900 font-sans antialiased flex flex-col lg:flex-row relative">
       {/* ── DESKTOP LEFT SIDEBAR ── */}
-      <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200/90 h-screen sticky top-0 z-40 select-none">
+      <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200/90 h-screen sticky top-0 z-40 select-none shadow-2xs">
         {/* Brand header */}
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-          <BrandLogo size="md" showSubtitle={true} />
+          <BrandLogo size="md" showSubtitle={true} theme="light" />
         </div>
 
         {/* Navigation list */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          <div className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
+          <div className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
             Clinical Workflow
           </div>
           {navItems.map((item) => {
@@ -132,16 +172,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-teal-50 text-teal-800 font-semibold'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/80 shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon
                     className={`w-4 h-4 ${
-                      isActive ? 'text-teal-700' : 'text-slate-600'
+                      isActive ? 'text-teal-600' : 'text-slate-400'
                     }`}
                   />
                   <span>{item.label}</span>
@@ -154,26 +194,27 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        {/* Offline / Storage Status Notice */}
-        <div className="px-4 py-2 border-t border-slate-100 bg-slate-50/50">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="flex items-center gap-1.5 font-medium">
+        {/* Local Storage / Online Status Bar */}
+        <div className="px-4 py-3 border-t border-slate-100 bg-slate-50/60">
+          <div className="flex items-center justify-between text-xs text-slate-600">
+            <span className="flex items-center gap-2 font-medium">
               <span
                 className={`w-2 h-2 rounded-full ${
                   mongoConnected
                     ? 'bg-emerald-500'
                     : isOnline
-                    ? 'bg-teal-500'
+                    ? 'bg-emerald-500'
                     : 'bg-amber-500'
                 }`}
               />
-              {mongoConnected
-                ? 'MongoDB Connected'
-                : isOnline
-                ? 'Local File Storage'
-                : 'Offline Mode'}
+              <span className="flex items-center gap-1.5 text-xs text-slate-600">
+                <Shield className="w-3.5 h-3.5 text-teal-600" />
+                <span>{mongoConnected ? 'Cloud Sync' : 'Local Storage'}</span>
+              </span>
             </span>
-            <span className="text-[10px] font-mono text-slate-600">v1.4.0</span>
+            <span className="text-[10px] font-mono text-slate-400 font-semibold bg-white px-2 py-0.5 rounded border border-slate-200">
+              v1.4.0
+            </span>
           </div>
         </div>
 
@@ -204,19 +245,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* ── MOBILE / TABLET HEADER ── */}
-      <header className="lg:hidden sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between">
-        <BrandLogo size="sm" showSubtitle={false} />
+      <header className="lg:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+        <BrandLogo size="sm" showSubtitle={false} theme="light" />
         <div className="flex items-center gap-2">
           <Link
             href="/screening"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 text-white rounded-lg text-xs font-semibold shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-2xs transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Screen</span>
           </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
+            className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 transition-colors"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -226,8 +267,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Mobile drawer when menu is opened */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs flex flex-col pt-16">
-          <div className="bg-white p-4 space-y-2 border-b border-slate-200 shadow-xl">
+        <div className="lg:hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs flex flex-col pt-14">
+          <div className="bg-white p-4 space-y-1 border-b border-slate-200 shadow-xl">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -236,9 +277,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium ${
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-teal-50 text-teal-700 font-semibold'
+                      ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200'
                       : 'text-slate-600 hover:bg-slate-50'
                   }`}
                 >
@@ -252,9 +293,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* ── MAIN WORKSPACE CONTENT AREA ── */}
-      <div className="flex-1 flex flex-col min-w-0 pb-16 lg:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 pb-16 lg:pb-0 relative">
         {/* Top desktop header bar */}
-        <header className="hidden lg:flex items-center justify-between h-16 px-8 bg-white border-b border-slate-200/80 sticky top-0 z-30">
+        <header className="hidden lg:flex items-center justify-between h-16 px-8 bg-white/90 backdrop-blur-md border-b border-slate-200/90 sticky top-0 z-30">
           <div>
             <h1 className="text-lg font-bold text-slate-900 tracking-tight">
               {getPageTitle()}
@@ -263,15 +304,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
           <div className="flex items-center gap-4">
             {/* Live Connectivity Badge */}
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs text-slate-600">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 font-medium shadow-2xs">
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isOnline ? 'bg-emerald-500' : 'bg-amber-500'
+                  isOnline ? 'bg-emerald-500 pulse-dot' : 'bg-amber-500'
                 }`}
               />
-              <span className="font-medium">
-                {isOnline ? 'Online' : 'Offline'}
-              </span>
+              <span>{isOnline ? 'Online Sync' : 'Offline Mode'}</span>
             </div>
 
             {/* Notification bell */}
@@ -298,20 +337,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
-
-            {/* Primary Action Button: + New Screening */}
-            <Link
-              href="/screening"
-              className="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span>New Screening</span>
-            </Link>
           </div>
         </header>
 
         {/* Page children content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto relative z-10">
           {children}
         </main>
       </div>
@@ -321,7 +351,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <Link
           href="/dashboard"
           className={`flex flex-col items-center gap-1 ${
-            pathname === '/dashboard' || pathname === '/' ? 'text-teal-600 font-bold' : ''
+            pathname === '/dashboard' ? 'text-teal-600 font-semibold' : ''
           }`}
         >
           <LayoutDashboard className="w-4 h-4" />
@@ -330,7 +360,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <Link
           href="/patients"
           className={`flex flex-col items-center gap-1 ${
-            pathname.startsWith('/patients') ? 'text-teal-600 font-bold' : ''
+            pathname.startsWith('/patients') ? 'text-teal-600 font-semibold' : ''
           }`}
         >
           <Users className="w-4 h-4" />
@@ -338,17 +368,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </Link>
         <Link
           href="/screening"
-          className="flex flex-col items-center gap-1 text-teal-600 font-bold"
+          className="flex flex-col items-center gap-1 text-teal-600 font-semibold"
         >
-          <div className="w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center shadow-sm -mt-3">
-            <Plus className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center shadow-xs -mt-3">
+            <Plus className="w-4 h-4" />
           </div>
           <span>Screen</span>
         </Link>
         <Link
           href="/history"
           className={`flex flex-col items-center gap-1 ${
-            pathname.startsWith('/history') ? 'text-teal-600 font-bold' : ''
+            pathname.startsWith('/history') ? 'text-teal-600 font-semibold' : ''
           }`}
         >
           <ClipboardList className="w-4 h-4" />
@@ -357,7 +387,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <Link
           href="/referrals"
           className={`flex flex-col items-center gap-1 ${
-            pathname.startsWith('/referrals') ? 'text-teal-600 font-bold' : ''
+            pathname.startsWith('/referrals') ? 'text-teal-600 font-semibold' : ''
           }`}
         >
           <GitPullRequest className="w-4 h-4" />

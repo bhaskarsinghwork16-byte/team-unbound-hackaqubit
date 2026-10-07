@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+import CommunityScreeningHero from '@/components/CommunityScreeningHero';
 
 export default function RootPage() {
-  redirect('/dashboard');
+  return <CommunityScreeningHero />;
 }

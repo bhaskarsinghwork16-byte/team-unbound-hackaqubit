@@ -40,9 +40,14 @@ export default function DatasetsAndModelsPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Dataset & Model Specifications</h1>
-        <p className="text-xs text-slate-500">
+      <div className="pb-2 border-b border-slate-200">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/80">
+            Model Specifications
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dataset & Model Specifications</h1>
+        <p className="text-sm text-slate-500 mt-0.5">
           Transparent clinical documentation on training cohorts, lightweight architectures, edge quantization, and honest ethical limitations.
         </p>
       </div>
