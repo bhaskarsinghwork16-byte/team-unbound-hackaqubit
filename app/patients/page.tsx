@@ -109,62 +109,67 @@ export default function PatientsPage() {
       {/* ── HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Patients</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="pixel text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/40 font-semibold tracking-wide">
+              PATIENT DIRECTORY
+            </span>
+          </div>
+          <h1 className="text-2xl font-extrabold tracking-tight text-white">Patients</h1>
+          <p className="text-sm text-slate-300 font-medium mt-1">
             Find patients and view their longitudinal screening history.
           </p>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 rounded-full text-xs font-extrabold shadow-[0_0_20px_rgba(20,184,166,0.35)] transition-all transform hover:scale-105 border border-emerald-300/40"
         >
-          <Plus className="w-4 h-4" />
-          <span>Add Patient</span>
+          <Plus className="w-4 h-4 text-slate-950 stroke-[3]" />
+          <span>+ Add Patient</span>
         </button>
       </div>
 
-      {/* ── SEARCH & FILTER CONTROLS ── */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+      {/* ── SEARCH & FILTER CONTROLS (3D DARK GLASS) ── */}
+      <div className="glass-container-3d p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-teal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search by name, patient ID, or phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 transition"
           />
         </div>
 
         {/* Filters: All, Recently screened, Follow-up required */}
-        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100 p-1 rounded-lg">
+        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-black/40 p-1.5 rounded-xl border border-teal-500/20">
           <button
             onClick={() => setFilter('all')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
               filter === 'all'
-                ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                : 'text-slate-300 hover:text-white hover:bg-white/5'
             }`}
           >
             All Patients
           </button>
           <button
             onClick={() => setFilter('recent')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
               filter === 'recent'
-                ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                : 'text-slate-300 hover:text-white hover:bg-white/5'
             }`}
           >
             Recently Screened
           </button>
           <button
             onClick={() => setFilter('followup')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
               filter === 'followup'
-                ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                : 'text-slate-300 hover:text-white hover:bg-white/5'
             }`}
           >
             Follow-up Required
@@ -172,26 +177,26 @@ export default function PatientsPage() {
         </div>
       </div>
 
-      {/* ── PATIENTS TABLE ── */}
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
+      {/* ── PATIENTS TABLE (3D DARK GLASS) ── */}
+      <div className="glass-table-container overflow-hidden shadow-2xl">
         {loading ? (
-          <div className="p-12 text-center text-xs text-slate-500">
+          <div className="p-12 text-center text-xs text-slate-400">
             Loading patient records...
           </div>
         ) : patients.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-teal-500/10 text-teal-400 mx-auto flex items-center justify-center border border-teal-500/20">
               <Users className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-800">No patients found</h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <h3 className="text-sm font-bold text-white">No patients found</h3>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto">
               {search || filter !== 'all'
                 ? 'No patient records matched the specified filter.'
                 : 'Add a patient to begin community screening records.'}
             </p>
             <button
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 bg-teal-600 text-white rounded-lg text-xs font-semibold shadow-xs hover:bg-teal-700"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 rounded-xl text-xs font-bold shadow-md hover:scale-105 transition-transform"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Patient</span>
@@ -200,66 +205,66 @@ export default function PatientsPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
+              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
                 <tr>
-                  <th className="py-3 px-4">Patient</th>
-                  <th className="py-3 px-4">Demographics</th>
-                  <th className="py-3 px-4">Contact & Location</th>
-                  <th className="py-3 px-4">Registered Date</th>
-                  <th className="py-3 px-4">Follow-up</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th className="py-3.5 px-5">PATIENT</th>
+                  <th className="py-3.5 px-5">DEMOGRAPHICS</th>
+                  <th className="py-3.5 px-5">CONTACT & LOCATION</th>
+                  <th className="py-3.5 px-5">REGISTERED DATE</th>
+                  <th className="py-3.5 px-5">FOLLOW-UP</th>
+                  <th className="py-3.5 px-5 text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-teal-500/15 text-slate-200">
                 {patients.map((p) => (
-                  <tr key={p.patientId} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="py-3.5 px-4">
+                  <tr key={p.patientId} className="hover:bg-white/5 transition-colors">
+                    <td className="py-4 px-5">
                       <Link
                         href={`/patients/${p.patientId}`}
-                        className="font-bold text-slate-900 hover:text-teal-700 block"
+                        className="font-bold text-white hover:text-emerald-400 transition-colors block"
                       >
                         {p.name}
                       </Link>
-                      <span className="text-[11px] font-mono text-slate-500">
+                      <span className="text-[11px] font-mono text-slate-300 font-medium">
                         {p.patientId}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-700">
+                    <td className="py-4 px-5 text-slate-200 font-medium">
                       {p.age} yrs · {p.sex}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600">
-                      <div>{p.phone || '—'}</div>
-                      <span className="text-[11px] text-slate-500">{p.address || '—'}</span>
+                    <td className="py-4 px-5 text-slate-200">
+                      <div className="font-medium text-white">{p.phone || '—'}</div>
+                      <span className="text-[11px] text-slate-300">{p.address || '—'}</span>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">
+                    <td className="py-4 px-5 text-slate-300 whitespace-nowrap font-medium">
                       {formatDate(p.registeredDate)}
                     </td>
-                    <td className="py-3.5 px-4 whitespace-nowrap">
+                    <td className="py-4 px-5 whitespace-nowrap">
                       {p.needsFollowUp ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold">
-                          <AlertCircle className="w-3 h-3 text-amber-600" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(245,158,11,0.25)]">
+                          <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
                           <span>Follow-up due</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(34,197,94,0.25)]">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                           <span>Up to date</span>
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-right whitespace-nowrap space-x-2">
+                    <td className="py-4 px-5 text-right whitespace-nowrap space-x-3">
                       <Link
                         href={`/screening?patientId=${p.patientId}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-800 font-medium text-xs border border-slate-200 transition"
+                        className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-teal-500/20 hover:bg-teal-500/30 text-emerald-300 font-bold text-xs border border-teal-400/30 transition"
                       >
                         <span>Screen</span>
                       </Link>
                       <Link
                         href={`/patients/${p.patientId}`}
-                        className="inline-flex items-center gap-1 text-teal-700 hover:text-teal-800 font-semibold text-xs ml-1"
+                        className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-bold text-xs group"
                       >
                         <span>Record</span>
-                        <ArrowRight className="w-3 h-3" />
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
                     </td>
                   </tr>
@@ -270,67 +275,65 @@ export default function PatientsPage() {
         )}
       </div>
 
-      {/* ── ADD PATIENT MODAL ── */}
+      {/* ── ADD PATIENT MODAL (3D DARK GLASS) ── */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#0a1819] rounded-3xl border border-teal-500/30 max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-teal-500/20">
               <div>
-                <h3 className="text-base font-bold text-slate-900">Add New Patient</h3>
-                <p className="text-xs text-slate-500">Register a patient for clinical recordkeeping</p>
+                <h3 className="text-lg font-bold text-white">Register New Patient</h3>
+                <p className="text-xs text-slate-400 mt-0.5">Create a clinical patient profile for community screening</p>
               </div>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-md"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
             {formError && (
-              <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
+              <div className="p-3 bg-red-500/15 border border-red-500/30 rounded-xl text-xs text-red-300 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
                 <span>{formError}</span>
               </div>
             )}
 
-            <form onSubmit={handleCreatePatient} className="space-y-3 text-xs">
+            <form onSubmit={handleCreatePatient} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Full Name <span className="text-red-500">*</span>
+                <label className="block font-bold text-slate-300 mb-1">
+                  Full Name <span className="text-teal-400">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Ramesh Patel"
+                  placeholder="e.g. Kamala Devi"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                  className="w-full px-3.5 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">
-                    Age <span className="text-red-500">*</span>
+                  <label className="block font-bold text-slate-300 mb-1">
+                    Age (Years) <span className="text-teal-400">*</span>
                   </label>
                   <input
                     type="number"
-                    min="1"
-                    max="125"
                     required
-                    placeholder="e.g. 52"
+                    placeholder="e.g. 45"
                     value={newAge}
                     onChange={(e) => setNewAge(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                    className="w-full px-3.5 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Sex</label>
+                  <label className="block font-bold text-slate-300 mb-1">Sex</label>
                   <select
                     value={newSex}
                     onChange={(e) => setNewSex(e.target.value as any)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                    className="w-full px-3.5 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-white focus:outline-none focus:border-teal-400"
                   >
                     <option value="Female">Female</option>
                     <option value="Male">Male</option>
@@ -340,52 +343,41 @@ export default function PatientsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Phone Number</label>
-                <input
-                  type="tel"
-                  placeholder="e.g. +91 98765 43210"
-                  value={newPhone}
-                  onChange={(e) => setNewPhone(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Village / Ward / Address</label>
+                <label className="block font-bold text-slate-300 mb-1">Phone Number</label>
                 <input
                   type="text"
-                  placeholder="e.g. Ramnagar Ward 4"
-                  value={newAddress}
-                  onChange={(e) => setNewAddress(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                  placeholder="+91 98765 43210"
+                  value={newPhone}
+                  onChange={(e) => setNewPhone(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Clinical Notes (Optional)</label>
-                <textarea
-                  rows={2}
-                  placeholder="Known comorbidities (diabetes, hypertension, tobacco use...)"
-                  value={newNotes}
-                  onChange={(e) => setNewNotes(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                <label className="block font-bold text-slate-300 mb-1">Address / Village / Camp</label>
+                <input
+                  type="text"
+                  placeholder="District clinic or community location"
+                  value={newAddress}
+                  onChange={(e) => setNewAddress(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+              <div className="pt-3 flex items-center justify-end gap-3 border-t border-teal-500/20">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-3 py-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium"
+                  className="px-4 py-2 text-slate-400 hover:text-white font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold shadow-xs disabled:opacity-50"
+                  className="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 rounded-xl text-xs font-extrabold shadow-md hover:scale-105 transition-transform"
                 >
-                  {submitting ? 'Registering...' : 'Register Patient'}
+                  {submitting ? 'Saving...' : 'Register Patient'}
                 </button>
               </div>
             </form>

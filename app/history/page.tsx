@@ -69,23 +69,23 @@ function HistoryContent() {
   const getResultBadge = (record: ScreeningResult) => {
     if (record.resultState === 'potential_finding' || record.riskLevel === 'higher_risk') {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-xs font-semibold">
-          <AlertCircle className="w-3 h-3 text-amber-600" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(245,158,11,0.25)]">
+          <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
           <span>Potential finding</span>
         </span>
       );
     }
     if (record.resultState === 'no_abnormality' || record.riskLevel === 'lower_risk') {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
-          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(34,197,94,0.25)]">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
           <span>No abnormality</span>
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium">
-        <HelpCircle className="w-3 h-3 text-slate-500" />
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-500/15 text-slate-300 border border-slate-500/40 text-xs font-medium">
+        <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
         <span>Inconclusive</span>
       </span>
     );
@@ -94,82 +94,87 @@ function HistoryContent() {
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Screening Records</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Permanent patient screening repository persisted in database.
+          <div className="flex items-center gap-2 mb-1">
+            <span className="pixel text-[10px] bg-emerald-500/15 text-emerald-300 px-3 py-0.5 rounded-full border border-emerald-500/30 font-bold tracking-wide">
+              CLINICAL REPOSITORY
+            </span>
+          </div>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">Screening Records</h1>
+          <p className="text-xs text-slate-400 mt-1">
+            Permanent patient screening repository persisted in database storage.
           </p>
         </div>
 
-        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-          {filtered.length} {filtered.length === 1 ? 'Screening' : 'Screenings'}
+        <span className="pixel text-xs font-bold px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+          {filtered.length} {filtered.length === 1 ? 'SCREENING' : 'SCREENINGS'}
         </span>
       </div>
 
-      {/* ── SEARCH & FILTER CONTROLS ── */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+      {/* ── SEARCH & FILTER CONTROLS (3D DARK GLASS) ── */}
+      <div className="glass-container-3d p-4 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-teal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by Patient Name, ID, or clinical finding..."
-            className="w-full pl-9 pr-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+            className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-teal-400 transition"
           />
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <div className="flex rounded-lg bg-slate-100 p-1">
+          <div className="flex rounded-xl bg-black/40 p-1.5 border border-teal-500/20">
             <button
               onClick={() => setFilterType('all')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterType === 'all' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3 py-1 rounded-lg font-bold transition ${
+                filterType === 'all' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
               }`}
             >
               All Types
             </button>
             <button
               onClick={() => setFilterType('eye')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterType === 'eye' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3 py-1 rounded-lg font-bold transition ${
+                filterType === 'eye' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
               }`}
             >
               Eye
             </button>
             <button
               onClick={() => setFilterType('oral')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterType === 'oral' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3 py-1 rounded-lg font-bold transition ${
+                filterType === 'oral' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
               }`}
             >
               Oral
             </button>
           </div>
 
-          <div className="flex rounded-lg bg-slate-100 p-1">
+          <div className="flex rounded-xl bg-black/40 p-1.5 border border-teal-500/20">
             <button
               onClick={() => setFilterOutcome('all')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterOutcome === 'all' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3 py-1 rounded-lg font-bold transition ${
+                filterOutcome === 'all' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
               }`}
             >
               All Findings
             </button>
             <button
               onClick={() => setFilterOutcome('review')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterOutcome === 'review' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3 py-1 rounded-lg font-bold transition ${
+                filterOutcome === 'review' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
               }`}
             >
               Review Advised
             </button>
             <button
               onClick={() => setFilterOutcome('normal')}
-              className={`px-2.5 py-1 rounded-md font-medium transition ${
-                filterOutcome === 'normal' ? 'bg-white text-slate-900 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3 py-1 rounded-lg font-bold transition ${
+                filterOutcome === 'normal' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
               }`}
             >
               No Abnormality
@@ -178,67 +183,67 @@ function HistoryContent() {
         </div>
       </div>
 
-      {/* ── RECORDS TABLE ── */}
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
+      {/* ── RECORDS TABLE (3D DARK GLASS) ── */}
+      <div className="glass-table-container overflow-hidden shadow-2xl">
         {loading ? (
-          <div className="p-12 text-center text-xs text-slate-500">
+          <div className="p-12 text-center text-xs text-slate-400">
             Loading screening records...
           </div>
         ) : filtered.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <h3 className="text-sm font-semibold text-slate-800">No matching screening records</h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <h3 className="text-sm font-bold text-white">No matching screening records</h3>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto">
               No clinical records matched the selected query or filters.
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
+              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
                 <tr>
-                  <th className="py-3 px-4">Patient / ID</th>
-                  <th className="py-3 px-4">Screening Type</th>
-                  <th className="py-3 px-4">Date & Time</th>
-                  <th className="py-3 px-4">Quality Score</th>
-                  <th className="py-3 px-4">Algorithm Finding</th>
-                  <th className="py-3 px-4">Review Status</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th className="py-3.5 px-5">PATIENT / ID</th>
+                  <th className="py-3.5 px-5">SCREENING TYPE</th>
+                  <th className="py-3.5 px-5">DATE & TIME</th>
+                  <th className="py-3.5 px-5">QUALITY SCORE</th>
+                  <th className="py-3.5 px-5">FINDING</th>
+                  <th className="py-3.5 px-5">REVIEW STATUS</th>
+                  <th className="py-3.5 px-5 text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-teal-500/15 text-slate-200">
                 {filtered.map((record) => {
                   const sType = (record as any).type || record.screeningType;
                   return (
                     <tr
                       key={record.screeningId}
                       onClick={() => setSelectedRecord(record)}
-                      className="hover:bg-slate-50/60 cursor-pointer transition"
+                      className="hover:bg-white/5 cursor-pointer transition-colors"
                     >
-                      <td className="py-3.5 px-4">
-                        <span className="font-bold text-slate-900 block">
+                      <td className="py-4 px-5">
+                        <span className="font-bold text-white block">
                           {record.patientName || record.patientId}
                         </span>
-                        <span className="text-[11px] font-mono text-slate-500">
+                        <span className="text-[11px] font-mono text-slate-300 font-medium">
                           {record.screeningId}
                         </span>
                       </td>
 
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 capitalize">
-                          {sType === 'eye' ? <Eye className="w-3.5 h-3.5 text-teal-600" /> : <Smile className="w-3.5 h-3.5 text-emerald-600" />}
-                          <span>{sType === 'eye' ? 'Eye screening' : 'Oral screening'}</span>
+                      <td className="py-4 px-5 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-2 font-medium text-slate-200 capitalize">
+                          {sType === 'eye' ? <Eye className="w-4 h-4 text-cyan-400" /> : <Smile className="w-4 h-4 text-emerald-400" />}
+                          <span>{sType === 'eye' ? 'Eye Screening' : 'Oral Screening'}</span>
                         </span>
                       </td>
 
-                      <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">
+                      <td className="py-4 px-5 text-slate-300 whitespace-nowrap font-medium">
                         {new Date(record.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {new Date(record.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </td>
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="font-semibold text-slate-800">
+                        <span className="font-bold text-white">
                           {record.imageQuality?.score ?? 0}%
                         </span>
-                        <span className="text-[11px] text-slate-500 ml-1">
+                        <span className="text-[11px] text-emerald-400 ml-1.5 font-semibold">
                           ({record.imageQuality?.grade ?? 'PASS'})
                         </span>
                       </td>
@@ -249,13 +254,13 @@ function HistoryContent() {
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         {record.reviewStatus === 'reviewed' ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-emerald-700 font-medium">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-bold">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                             <span>Reviewed</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-amber-700 font-medium">
-                            <Clock className="w-3.5 h-3.5 text-amber-600" />
+                          <span className="inline-flex items-center gap-1 text-xs text-amber-400 font-bold">
+                            <Clock className="w-3.5 h-3.5 text-amber-400" />
                             <span>Pending</span>
                           </span>
                         )}
@@ -267,7 +272,7 @@ function HistoryContent() {
                             e.stopPropagation();
                             setSelectedRecord(record);
                           }}
-                          className="px-2.5 py-1 rounded-md border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold text-xs"
+                          className="px-3 py-1 rounded-xl border border-teal-400/40 bg-teal-500/20 hover:bg-teal-500/30 text-emerald-300 font-bold text-xs transition"
                         >
                           View Report
                         </button>
