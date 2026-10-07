@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Users,
@@ -19,15 +19,18 @@ import {
   UserCheck,
   ChevronRight,
   Shield,
-  Activity
+  Activity,
+  LogOut
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isOnline, setIsOnline] = useState(true);
   const [mongoConnected, setMongoConnected] = useState<boolean | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authUser, setAuthUser] = useState<{ userId: string; role: string } | null>(null);
 
   // Connectivity detection
   useEffect(() => {
@@ -47,11 +50,39 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       })
       .catch(() => setMongoConnected(false));
 
+    // Fetch current session user
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.userId) setAuthUser(data);
+      })
+      .catch(() => {});
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
+
+  async function handleLogout() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch { /* ignore */ }
+    router.push('/login');
+  }
+
+  // Derive display info from session
+  const roleLabel: Record<string, string> = {
+    HEALTH_WORKER: 'Health Worker',
+    DOCTOR: 'Doctor',
+    CAMP_ADMIN: 'Camp Admin',
+    SYSTEM_ADMIN: 'System Admin',
+    AUDITOR: 'Auditor',
+  };
+  const displayRole = authUser ? (roleLabel[authUser.role] ?? authUser.role) : 'Clinical Staff';
+  const displayInitials = authUser
+    ? authUser.userId.substring(0, 2).toUpperCase()
+    : 'HS';
 
   const navItems = [
     { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
@@ -147,17 +178,27 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* User profile footer */}
-        <div className="p-3 border-t border-slate-100 flex items-center gap-3 bg-white">
-          <div className="w-9 h-9 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs">
-            SR
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-slate-900 truncate">
-              Dr. Sunita Rao
-            </p>
-            <p className="text-[11px] text-slate-500 truncate">
-              Community Health Worker
-            </p>
+        <div className="p-3 border-t border-slate-100 bg-white">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs shrink-0">
+              {displayInitials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-slate-900 truncate">
+                {authUser ? authUser.userId : 'Loading…'}
+              </p>
+              <p className="text-[11px] text-slate-500 truncate">
+                {displayRole}
+              </p>
+            </div>
+            <button
+              onClick={handleLogout}
+              title="Sign out"
+              aria-label="Sign out"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </aside>
@@ -242,12 +283,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <Bell className="w-4 h-4" />
             </button>
 
-            {/* User badge */}
+            {/* User badge + logout */}
             <div className="flex items-center gap-2 pl-2 border-l border-slate-200 text-xs">
-              <div className="w-7 h-7 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold">
-                SR
+              <div className="w-7 h-7 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold shrink-0">
+                {displayInitials}
               </div>
-              <span className="font-semibold text-slate-700">Dr. Sunita</span>
+              <span className="font-semibold text-slate-700 truncate max-w-[80px]">{displayRole}</span>
+              <button
+                onClick={handleLogout}
+                title="Sign out"
+                aria-label="Sign out"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
             </div>
 
             {/* Primary Action Button: + New Screening */}
