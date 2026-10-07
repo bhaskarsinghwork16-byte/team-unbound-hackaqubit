@@ -319,10 +319,10 @@ export default function PatientProfilePage() {
                           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black ${
                             isAbnormal
                               ? 'bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30'
-                              : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+                              : 'bg-[#d8e2dc] text-[#5d2a42] border border-[#c4d4cc]'
                           }`}
                         >
-                          {isAbnormal ? <AlertCircle className="w-3.5 h-3.5 text-[#5d2a42]" /> : <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />}
+                          {isAbnormal ? <AlertCircle className="w-3.5 h-3.5 text-[#5d2a42]" /> : <CheckCircle2 className="w-3.5 h-3.5 text-[#5d2a42]" />}
                           <span>{s.prediction}</span>
                         </span>
                         {s.confidence && (

@@ -85,8 +85,8 @@ export default function DashboardPage() {
     }
     if (screening.resultState === 'no_abnormality' || screening.riskLevel === 'lower_risk') {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-black shadow-xs">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d8e2dc] text-[#5d2a42] border border-[#c4d4cc] text-xs font-black shadow-xs">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#5d2a42]" />
           <span>No abnormality</span>
         </span>
       );
@@ -102,8 +102,8 @@ export default function DashboardPage() {
   const getReviewBadge = (status?: string) => {
     if (status === 'reviewed') {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-black">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d8e2dc] text-[#5d2a42] border border-[#c4d4cc] text-xs font-black">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#5d2a42]" />
           <span>Reviewed</span>
         </span>
       );

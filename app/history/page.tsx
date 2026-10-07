@@ -77,8 +77,8 @@ function HistoryContent() {
     }
     if (record.resultState === 'no_abnormality' || record.riskLevel === 'lower_risk') {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-black shadow-xs">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d8e2dc] text-[#5d2a42] border border-[#c4d4cc] text-xs font-black shadow-xs">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#5d2a42]" />
           <span>No abnormality</span>
         </span>
       );
@@ -127,54 +127,54 @@ function HistoryContent() {
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <div className="flex rounded-xl bg-black/40 p-1.5 border border-teal-500/20">
+          <div className="flex rounded-2xl bg-[#fff9ec] p-1.5 border border-[#d8e2dc]">
             <button
               onClick={() => setFilterType('all')}
-              className={`px-3 py-1 rounded-lg font-bold transition ${
-                filterType === 'all' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
+              className={`px-3 py-1 rounded-xl font-bold transition ${
+                filterType === 'all' ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm' : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
               }`}
             >
               All Types
             </button>
             <button
               onClick={() => setFilterType('eye')}
-              className={`px-3 py-1 rounded-lg font-bold transition ${
-                filterType === 'eye' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
+              className={`px-3 py-1 rounded-xl font-bold transition ${
+                filterType === 'eye' ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm' : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
               }`}
             >
               Eye
             </button>
             <button
               onClick={() => setFilterType('oral')}
-              className={`px-3 py-1 rounded-lg font-bold transition ${
-                filterType === 'oral' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
+              className={`px-3 py-1 rounded-xl font-bold transition ${
+                filterType === 'oral' ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm' : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
               }`}
             >
               Oral
             </button>
           </div>
 
-          <div className="flex rounded-xl bg-black/40 p-1.5 border border-teal-500/20">
+          <div className="flex rounded-2xl bg-[#fff9ec] p-1.5 border border-[#d8e2dc]">
             <button
               onClick={() => setFilterOutcome('all')}
-              className={`px-3 py-1 rounded-lg font-bold transition ${
-                filterOutcome === 'all' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
+              className={`px-3 py-1 rounded-xl font-bold transition ${
+                filterOutcome === 'all' ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm' : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
               }`}
             >
               All Findings
             </button>
             <button
               onClick={() => setFilterOutcome('review')}
-              className={`px-3 py-1 rounded-lg font-bold transition ${
-                filterOutcome === 'review' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
+              className={`px-3 py-1 rounded-xl font-bold transition ${
+                filterOutcome === 'review' ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm' : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
               }`}
             >
               Review Advised
             </button>
             <button
               onClick={() => setFilterOutcome('normal')}
-              className={`px-3 py-1 rounded-lg font-bold transition ${
-                filterOutcome === 'normal' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md' : 'text-slate-300 hover:text-white'
+              className={`px-3 py-1 rounded-xl font-bold transition ${
+                filterOutcome === 'normal' ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm' : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
               }`}
             >
               No Abnormality
@@ -229,21 +229,21 @@ function HistoryContent() {
                       </td>
 
                       <td className="py-4 px-5 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-2 font-medium text-slate-200 capitalize">
-                          {sType === 'eye' ? <Eye className="w-4 h-4 text-cyan-400" /> : <Smile className="w-4 h-4 text-emerald-400" />}
+                        <span className="inline-flex items-center gap-2 font-bold text-[#5d2a42] capitalize">
+                          {sType === 'eye' ? <Eye className="w-4 h-4 text-[#5d2a42]" /> : <Smile className="w-4 h-4 text-[#5d2a42]" />}
                           <span>{sType === 'eye' ? 'Eye Screening' : 'Oral Screening'}</span>
                         </span>
                       </td>
 
-                      <td className="py-4 px-5 text-slate-300 whitespace-nowrap font-medium">
+                      <td className="py-4 px-5 text-[#5d2a42]/80 whitespace-nowrap font-bold">
                         {new Date(record.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {new Date(record.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </td>
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="font-bold text-white">
+                        <span className="font-black text-[#5d2a42]">
                           {record.imageQuality?.score ?? 0}%
                         </span>
-                        <span className="text-[11px] text-emerald-400 ml-1.5 font-semibold">
+                        <span className="text-[11px] text-[#5d2a42]/80 ml-1.5 font-bold">
                           ({record.imageQuality?.grade ?? 'PASS'})
                         </span>
                       </td>
@@ -254,12 +254,12 @@ function HistoryContent() {
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         {record.reviewStatus === 'reviewed' ? (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-black">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d8e2dc] text-[#5d2a42] border border-[#c4d4cc] text-xs font-black">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#5d2a42]" />
                             <span>Reviewed</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30 text-xs font-black shadow-xs">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#ffdccc] text-xs font-black shadow-xs">
                             <Clock className="w-3.5 h-3.5 text-[#5d2a42]" />
                             <span>Pending</span>
                           </span>
@@ -272,7 +272,7 @@ function HistoryContent() {
                             e.stopPropagation();
                             setSelectedRecord(record);
                           }}
-                          className="px-3 py-1 rounded-xl border border-teal-400/40 bg-teal-500/20 hover:bg-teal-500/30 text-emerald-300 font-bold text-xs transition"
+                          className="px-3 py-1 rounded-xl border border-[#fec89a] bg-[#ffdccc] hover:bg-[#fec89a] text-[#5d2a42] font-black text-xs transition"
                         >
                           View Report
                         </button>
@@ -360,17 +360,17 @@ function HistoryContent() {
               {selectedRecord.clinicalCaveat || 'Decision support only. Clinical review mandatory.'}
             </p>
 
-            <div className="pt-2 flex items-center justify-between border-t border-slate-100">
+            <div className="pt-2 flex items-center justify-between border-t border-[#d8e2dc]">
               <Link
                 href={`/patients/${selectedRecord.patientId}`}
-                className="text-xs font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+                className="text-xs font-bold text-[#5d2a42] hover:underline flex items-center gap-1"
               >
                 <span>Open Patient Profile</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
               <button
                 onClick={() => setSelectedRecord(null)}
-                className="px-4 py-1.5 rounded-lg bg-slate-900 text-white font-semibold text-xs"
+                className="px-4 py-1.5 rounded-xl bg-[#5d2a42] text-[#fff9ec] font-bold text-xs hover:bg-[#4a2135]"
               >
                 Close
               </button>
