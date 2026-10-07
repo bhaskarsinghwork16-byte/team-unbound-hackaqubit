@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPatients, savePatient } from '@/lib/db-store';
 import { PatientRecord } from '@/types';
+import { Role } from '@/lib/security/types';
+import { hasPermission } from '@/lib/security/authorization/rbac';
 
 /**
  * GET /api/patients
@@ -10,9 +12,15 @@ import { PatientRecord } from '@/types';
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const searchParams = new URL(request.url).searchParams;
     const search = searchParams.get('search')?.toLowerCase().trim() || '';
     const filter = searchParams.get('filter') || 'all';
+
+    const userRole = request.headers.get('x-user-role') as Role;
+    if (!userRole || !hasPermission(userRole, 'PATIENT_READ')) {
+      return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+    }
+
 
     let patients = await getPatients();
 
@@ -59,6 +67,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const userRole = request.headers.get('x-user-role') as Role;
+    if (!userRole || !hasPermission(userRole, 'PATIENT_CREATE')) {
+      return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+    }
+
 
     // Generate permanent patient identifier (e.g. PT-1042)
     const existing = await getPatients();
