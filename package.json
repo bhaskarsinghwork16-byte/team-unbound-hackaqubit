@@ -10,10 +10,11 @@
     "seed:admin": "ts-node --project tsconfig.json scripts/seed-admin.ts"
   },
   "dependencies": {
-    "argon2": "^0.45.1",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/matter-js": "^0.20.2",
+    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
-    "jose": "^6.2.12",
+    "framer-motion": "^14.0.0",
     "lucide-react": "^0.453.0",
     "matter-js": "^0.20.0",
     "mongodb": "^6.9.0",
