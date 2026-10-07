@@ -6,7 +6,7 @@
 | 2 | Identity + JWT + RBAC | ✅ done |
 | 3 | API + Database + Image + Offline Security | ✅ done |
 | 4 | Privacy + Consent + Audit + Compliance | ✅ done |
-| 5 | Threat Testing + Hardening + Final Security Gate | ⬜ todo |
+| 5 | Threat Testing + Hardening + Final Security Gate | ✅ done |
 
 ## Phase 1 Verification
 - Date: 2026-10-07
