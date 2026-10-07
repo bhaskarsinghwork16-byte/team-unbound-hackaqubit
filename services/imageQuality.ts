@@ -1,4 +1,4 @@
-import { ImageQualityResult, QualityGrade, RawQualityMeasurements, ImageQualityMetrics, ScreeningType } from '@/types';
+import { ImageQualityResult, QualityGrade, RawQualityMeasurements, ImageQualityMetrics } from '@/types';
 
 /**
  * Computer Vision Image Quality Assessment (IQA) Service
@@ -9,12 +9,11 @@ import { ImageQualityResult, QualityGrade, RawQualityMeasurements, ImageQualityM
  * 3. Contrast: Luminance standard deviation
  * 4. Noise: High-frequency residual variance
  * 5. Framing / Resolution: Minimum 224x224 aspect check
- * 6. Anatomical Protocol Verification: Out-of-distribution / non-target surface detection (hands, skin, objects)
  * 
  * Grades:
  * - GOOD: Optimal optical conditions. Proceed to inference.
  * - ACCEPTABLE: Minor lighting/noise issue. Warning shown, user may proceed.
- * - POOR / UNUSABLE: Severe blur, blackout, or anatomical protocol mismatch (e.g. hand/skin instead of retina/mouth).
+ * - POOR / UNUSABLE: Severe blur or blackout. Gating stops inference to prevent false negatives.
  */
 
 export interface PixelDataLike {
@@ -26,7 +25,7 @@ export interface PixelDataLike {
 /**
  * Real pixel-level Computer Vision analysis
  */
-export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: ScreeningType): ImageQualityResult {
+export function computeMeasurableQuality(pixels: PixelDataLike): ImageQualityResult {
   const { data, width, height } = pixels;
   const numPixels = width * height;
 
@@ -42,16 +41,9 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
     };
   }
 
-  // 1. Convert to Grayscale, compute Mean Luminance & Anatomical Colorimetric Channels
+  // 1. Convert to Grayscale & compute Mean Luminance
   const gray = new Float32Array(numPixels);
   let sumLuminance = 0;
-  let sumR = 0;
-  let sumG = 0;
-  let sumB = 0;
-  let sumSat = 0;
-  let mucosaCount = 0;
-  let fundusCount = 0;
-  let sampleCount = 0;
 
   for (let i = 0; i < numPixels; i++) {
     const idx = i * 4;
@@ -62,39 +54,6 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
     const y = 0.299 * r + 0.587 * g + 0.114 * b;
     gray[i] = y;
     sumLuminance += y;
-
-    // Subsample for anatomical domain validation
-    if (i % 4 === 0) {
-      sumR += r;
-      sumG += g;
-      sumB += b;
-      sampleCount++;
-
-      const max = Math.max(r, g, b);
-      const min = Math.min(r, g, b);
-      const delta = max - min;
-      const sat = max === 0 ? 0 : delta / max;
-      sumSat += sat;
-
-      let h = 0;
-      if (delta > 0) {
-        if (max === r) h = ((g - b) / delta) % 6;
-        else if (max === g) h = (b - r) / delta + 2;
-        else h = (r - g) / delta + 4;
-        h = Math.round(h * 60);
-        if (h < 0) h += 360;
-      }
-
-      // Mucosal tissue: Rich pink/red (hue 340°-360° or 0°-24°, sat > 0.18, brightness > 40)
-      if ((h >= 340 || h <= 24) && sat > 0.18 && max > 40) {
-        mucosaCount++;
-      }
-
-      // Fundus tissue: Deep orange-red vascular reflection (r > 1.35*g, g > 1.05*b, r/(b+1) > 2.0)
-      if (r > 1.35 * g && g > 1.05 * b && (r / (b + 1)) > 2.0) {
-        fundusCount++;
-      }
-    }
   }
 
   const meanLuminance = sumLuminance / numPixels;
@@ -217,43 +176,7 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
     warnings.push(`Resolution is below minimum 224x224 requirement (${width}x${height}).`);
   }
 
-  const meanR = sampleCount > 0 ? sumR / sampleCount : 0;
-  const meanG = sampleCount > 0 ? sumG / sampleCount : 0;
-  const meanB = sampleCount > 0 ? sumB / sampleCount : 0;
-  const meanSat = sampleCount > 0 ? sumSat / sampleCount : 0;
-  const rgDiff = meanR - meanG;
-  const rbRatio = meanR / (meanB + 1e-4);
-  const mucosaRatio = sampleCount > 0 ? mucosaCount / sampleCount : 0;
-  const fundusRatio = sampleCount > 0 ? fundusCount / sampleCount : 0;
-
-  let isAnatomicalMismatch = false;
-  let mismatchFeedback = '';
-
-  if (screeningType === 'eye') {
-    const isFundus = (fundusRatio >= 0.15 || (rbRatio > 2.2 && rgDiff > 25));
-    if (!isFundus) {
-      isAnatomicalMismatch = true;
-      mismatchFeedback = 'Anatomical Mismatch: Image does not match retinal fundus photography. Non-ophthalmic surface detected (e.g. hand, skin, face, or room surface). Disease analysis blocked.';
-      warnings.push('Anatomical validation failed: Surface lacks retinal vascular reflection and circular fundus field of view.');
-    }
-  } else if (screeningType === 'oral') {
-    const isOral = (mucosaRatio >= 0.08 || (rgDiff > 16 && meanSat > 0.14));
-    if (!isOral) {
-      isAnatomicalMismatch = true;
-      mismatchFeedback = 'Anatomical Mismatch: Image does not match oral cavity / mucosal tissue. Non-oral surface detected (e.g. hand, palm, skin, or room surface). Please frame the mouth interior.';
-      warnings.push('Anatomical validation failed: Surface lacks vascularized oral mucosal colorimetry (palmar skin or external object detected).');
-    }
-  }
-
-  let finalScore = compositeScore;
-
-  if (isAnatomicalMismatch) {
-    grade = 'UNUSABLE';
-    isAcceptable = false;
-    canProceedWithWarning = true;
-    finalScore = Math.min(compositeScore, 18);
-    feedback = mismatchFeedback;
-  } else if (compositeScore < 50 || sharpnessScore < 35 || brightnessScore < 30) {
+  if (compositeScore < 50 || sharpnessScore < 35 || brightnessScore < 30) {
     grade = 'UNUSABLE';
     isAcceptable = false;
     canProceedWithWarning = false;
@@ -277,7 +200,7 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
 
   return {
     grade,
-    score: finalScore,
+    score: compositeScore,
     isAcceptable,
     canProceedWithWarning,
     metrics,
@@ -290,7 +213,7 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
 /**
  * Assesses an image via URL/dataURI or deterministic research demo presets
  */
-export function assessImageQualitySync(imageUri: string, screeningType?: ScreeningType): ImageQualityResult {
+export function assessImageQualitySync(imageUri: string): ImageQualityResult {
   // Deterministic mapping for known research/demo samples
   if (imageUri.includes('blurry') || imageUri.includes('poor')) {
     return {
@@ -378,49 +301,6 @@ export function assessImageQualitySync(imageUri: string, screeningType?: Screeni
     };
   }
 
-  // Quick base64 colorimetry heuristic for server-side evaluation of uploaded images
-  if (imageUri.startsWith('data:image')) {
-    try {
-      const b64 = imageUri.split(',')[1] || '';
-      const sample = Buffer.from(b64.slice(0, 16000), 'base64');
-      let rSum = 0, gSum = 0, bSum = 0, count = 0;
-      for (let i = 80; i < sample.length - 2; i += 3) {
-        rSum += sample[i];
-        gSum += sample[i + 1];
-        bSum += sample[i + 2];
-        count++;
-      }
-      const r = rSum / (count || 1);
-      const g = gSum / (count || 1);
-      const b = bSum / (count || 1);
-      const rg = r - g;
-      const rb = r / (b + 1e-4);
-
-      if (screeningType === 'oral' && (rg < 24 || Math.abs(r - g) < 20)) {
-        return {
-          grade: 'UNUSABLE',
-          score: 18,
-          isAcceptable: false,
-          canProceedWithWarning: false,
-          metrics: { sharpness: 60, brightness: 50, contrast: 40, noiseLevel: 60, framing: 60 },
-          feedback: 'Anatomical Mismatch: Image does not match oral cavity / mucosa tissue. Non-oral surface detected (e.g. hand, palm, skin, or room surface). Please frame the mouth interior.',
-          warnings: ['Anatomical validation failed: Surface lacks vascularized oral mucosal colorimetry (palmar skin or external object detected).'],
-        };
-      }
-      if (screeningType === 'eye' && (rb < 1.9 || rg < 20)) {
-        return {
-          grade: 'UNUSABLE',
-          score: 15,
-          isAcceptable: false,
-          canProceedWithWarning: false,
-          metrics: { sharpness: 60, brightness: 50, contrast: 40, noiseLevel: 60, framing: 60 },
-          feedback: 'Anatomical Mismatch: Image does not match retinal fundus photography. Non-ophthalmic surface detected (e.g. hand, skin, face, or room surface). Disease analysis blocked.',
-          warnings: ['Anatomical validation failed: Surface lacks retinal vascular reflection and circular fundus field of view.'],
-        };
-      }
-    } catch { /* proceed */ }
-  }
-
   // Default high-grade capture for standard demo samples
   return {
     grade: 'GOOD',
@@ -450,7 +330,7 @@ export function assessImageQualitySync(imageUri: string, screeningType?: Screeni
 /**
  * Browser-side helper to run actual Canvas pixel extraction on an image element or DataURL
  */
-export async function assessImageInBrowser(imageSrc: string, screeningType?: ScreeningType): Promise<ImageQualityResult> {
+export async function assessImageInBrowser(imageSrc: string): Promise<ImageQualityResult> {
   // If we are in browser and it's a real image, measure real pixels
   if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     return new Promise((resolve) => {
@@ -481,21 +361,21 @@ export async function assessImageInBrowser(imageSrc: string, screeningType?: Scr
               data: imgData.data,
               width: w,
               height: h,
-            }, screeningType);
+            });
             resolve(result);
             return;
           }
         } catch {
           // fallback if tainted canvas or CORS
         }
-        resolve(assessImageQualitySync(imageSrc, screeningType));
+        resolve(assessImageQualitySync(imageSrc));
       };
       img.onerror = () => {
-        resolve(assessImageQualitySync(imageSrc, screeningType));
+        resolve(assessImageQualitySync(imageSrc));
       };
       img.src = imageSrc;
     });
   }
 
-  return assessImageQualitySync(imageSrc, screeningType);
+  return assessImageQualitySync(imageSrc);
 }

@@ -249,3 +249,5 @@ python ml/evaluation/bias_analysis.py
 > - The application does not claim to diagnose cancer definitively.
 > - Suspected results require confirmatory clinical examination (dilated funduscopy, oral biopsy).
 > - All patient biometric data and images remain strictly on the local device and are never uploaded to third-party cloud APIs.
+#   H a c k Q U E S T P S 1  
+ 

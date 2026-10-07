@@ -117,20 +117,25 @@ export default function ReferralsPage() {
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-teal-500/20">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Referrals</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="pixel text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/40 font-semibold tracking-wide">
+              SPECIALIST REFERRALS
+            </span>
+          </div>
+          <h1 className="text-2xl font-extrabold tracking-tight text-white">Referrals</h1>
+          <p className="text-sm text-slate-300 font-medium mt-1">
             Clinical specialist referrals and community follow-up tracker.
           </p>
         </div>
       </div>
 
-      {/* ── FILTER CHIPS ── */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs flex flex-wrap gap-4 items-center justify-between">
+      {/* ── FILTER CHIPS (3D DARK GLASS) ── */}
+      <div className="glass-container-3d p-4 flex flex-wrap gap-4 items-center justify-between">
         {/* Status Filters */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-semibold text-slate-500 mr-2">Status:</span>
+          <span className="text-xs font-semibold text-slate-300 mr-2">Status:</span>
           {[
             { id: 'all', label: 'All' },
             { id: 'pending', label: 'Pending' },
@@ -142,10 +147,10 @@ export default function ReferralsPage() {
             <button
               key={item.id}
               onClick={() => setStatusFilter(item.id)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                 statusFilter === item.id
-                  ? 'bg-teal-600 text-white font-semibold shadow-2xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5 border border-teal-500/20'
               }`}
             >
               {item.label}
@@ -155,100 +160,100 @@ export default function ReferralsPage() {
 
         {/* Priority Filter */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="font-semibold text-slate-500">Priority:</span>
+          <span className="font-semibold text-slate-300">Priority:</span>
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-md text-slate-800 text-xs font-medium"
+            className="px-3 py-1.5 bg-black/50 border border-teal-500/30 rounded-xl text-white text-xs font-semibold focus:outline-none focus:border-teal-400"
           >
-            <option value="all">All Priorities</option>
-            <option value="routine">Routine</option>
-            <option value="priority">Priority</option>
-            <option value="urgent">Urgent</option>
+            <option value="all" className="bg-[#0a1a1c] text-white">All Priorities</option>
+            <option value="routine" className="bg-[#0a1a1c] text-white">Routine</option>
+            <option value="priority" className="bg-[#0a1a1c] text-white">Priority</option>
+            <option value="urgent" className="bg-[#0a1a1c] text-white">Urgent</option>
           </select>
         </div>
       </div>
 
-      {/* ── REFERRALS TABLE ── */}
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
+      {/* ── REFERRALS TABLE (3D DARK GLASS) ── */}
+      <div className="glass-table-container overflow-hidden shadow-2xl">
         {loading ? (
-          <div className="p-12 text-center text-xs text-slate-500">
+          <div className="p-12 text-center text-xs text-slate-300 font-medium">
             Loading referral records...
           </div>
         ) : referrals.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 mx-auto flex items-center justify-center border border-blue-500/20">
               <GitPullRequest className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-800">No active referrals</h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <h3 className="text-sm font-bold text-white">No active referrals</h3>
+            <p className="text-xs text-slate-300 max-w-sm mx-auto">
               Patients requiring specialist evaluation or secondary care will appear here once referred from a screening session.
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
+              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
                 <tr>
-                  <th className="py-3 px-4">Referral ID</th>
-                  <th className="py-3 px-4">Patient</th>
-                  <th className="py-3 px-4">Screening ID</th>
-                  <th className="py-3 px-4">Specialist / Facility</th>
-                  <th className="py-3 px-4">Reason</th>
-                  <th className="py-3 px-4">Priority</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Date</th>
+                  <th className="py-3.5 px-5">REFERRAL ID</th>
+                  <th className="py-3.5 px-5">PATIENT</th>
+                  <th className="py-3.5 px-5">SCREENING ID</th>
+                  <th className="py-3.5 px-5">FACILITY</th>
+                  <th className="py-3.5 px-5">REASON</th>
+                  <th className="py-3.5 px-5">PRIORITY</th>
+                  <th className="py-3.5 px-5">STATUS</th>
+                  <th className="py-3.5 px-5">DATE</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-teal-500/15 text-slate-200">
                 {referrals.map((r) => (
-                  <tr key={r.referralId} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="py-3 px-4 font-mono font-semibold text-slate-900 whitespace-nowrap">
+                  <tr key={r.referralId} className="hover:bg-white/5 transition-colors">
+                    <td className="py-3.5 px-5 font-mono font-semibold text-emerald-400 whitespace-nowrap">
                       {r.referralId}
                     </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    <td className="py-3.5 px-5 whitespace-nowrap">
                       <Link
                         href={`/patients/${r.patientId}`}
-                        className="font-bold text-slate-900 hover:text-teal-700 block"
+                        className="font-bold text-white hover:text-emerald-400 block transition-colors"
                       >
                         {r.patientName || r.patientId}
                       </Link>
-                      <span className="text-[11px] font-mono text-slate-500">{r.patientId}</span>
+                      <span className="text-[11px] font-mono text-slate-300 font-medium">{r.patientId}</span>
                     </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    <td className="py-3.5 px-5 whitespace-nowrap">
                       <Link
                         href={`/history?id=${r.screeningId}`}
-                        className="text-teal-700 hover:underline font-mono text-xs flex items-center gap-1"
+                        className="text-cyan-400 hover:text-cyan-300 font-mono text-xs flex items-center gap-1 transition-colors"
                       >
                         <span>{r.screeningId}</span>
                         <ExternalLink className="w-3 h-3" />
                       </Link>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-slate-800">{r.specialistType}</div>
-                      <div className="text-[11px] text-slate-500">{r.destinationFacility}</div>
+                    <td className="py-3.5 px-5">
+                      <div className="font-semibold text-white">{r.specialistType}</div>
+                      <div className="text-[11px] text-slate-300">{r.destinationFacility}</div>
                     </td>
-                    <td className="py-3 px-4 text-slate-700 max-w-xs">
+                    <td className="py-3.5 px-5 text-slate-200 max-w-xs">
                       <span className="line-clamp-2">{r.reason}</span>
                     </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    <td className="py-3.5 px-5 whitespace-nowrap">
                       {getPriorityBadge(r.priority)}
                     </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    <td className="py-3.5 px-5 whitespace-nowrap">
                       <select
                         value={r.status}
                         disabled={updatingId === r.referralId}
                         onChange={(e) => handleUpdateStatus(r.referralId, e.target.value as ReferralStatus)}
-                        className={`text-xs font-semibold px-2 py-1 rounded-md border ${getStatusBadge(r.status)} focus:outline-hidden`}
+                        className={`text-xs font-semibold px-2.5 py-1 rounded-lg border bg-black/60 text-white ${getStatusBadge(r.status)} focus:outline-none`}
                       >
-                        <option value="pending">Pending</option>
-                        <option value="reviewed">Reviewed</option>
-                        <option value="referral_recommended">Referral Recommended</option>
-                        <option value="follow_up_required">Follow-up Required</option>
-                        <option value="completed">Completed</option>
+                        <option value="pending" className="bg-[#0a1a1c] text-white">Pending</option>
+                        <option value="reviewed" className="bg-[#0a1a1c] text-white">Reviewed</option>
+                        <option value="referral_recommended" className="bg-[#0a1a1c] text-white">Referral Recommended</option>
+                        <option value="follow_up_required" className="bg-[#0a1a1c] text-white">Follow-up Required</option>
+                        <option value="completed" className="bg-[#0a1a1c] text-white">Completed</option>
                       </select>
                     </td>
-                    <td className="py-3 px-4 text-slate-500 whitespace-nowrap">
+                    <td className="py-3.5 px-5 text-slate-300 whitespace-nowrap font-medium">
                       {formatDate(r.createdAt)}
                     </td>
                   </tr>
