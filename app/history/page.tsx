@@ -69,23 +69,23 @@ function HistoryContent() {
   const getResultBadge = (record: ScreeningResult) => {
     if (record.resultState === 'potential_finding' || record.riskLevel === 'higher_risk') {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(245,158,11,0.25)]">
-          <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30 text-xs font-black shadow-xs">
+          <AlertCircle className="w-3.5 h-3.5 text-[#5d2a42]" />
           <span>Potential finding</span>
         </span>
       );
     }
     if (record.resultState === 'no_abnormality' || record.riskLevel === 'lower_risk') {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(34,197,94,0.25)]">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-black shadow-xs">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />
           <span>No abnormality</span>
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-500/15 text-slate-300 border border-slate-500/40 text-xs font-medium">
-        <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d8e2dc] text-[#5d2a42] border border-[#d8e2dc] text-xs font-black">
+        <HelpCircle className="w-3.5 h-3.5 text-[#5d2a42]" />
         <span>Inconclusive</span>
       </span>
     );
@@ -254,13 +254,13 @@ function HistoryContent() {
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         {record.reviewStatus === 'reviewed' ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-bold">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-black">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />
                             <span>Reviewed</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-amber-400 font-bold">
-                            <Clock className="w-3.5 h-3.5 text-amber-400" />
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30 text-xs font-black shadow-xs">
+                            <Clock className="w-3.5 h-3.5 text-[#5d2a42]" />
                             <span>Pending</span>
                           </span>
                         )}
