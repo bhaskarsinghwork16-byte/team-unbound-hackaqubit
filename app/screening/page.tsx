@@ -218,6 +218,9 @@ function ScreeningWorkflow() {
       const dataUrl = event.target?.result as string;
       if (dataUrl) {
         setImageUri(dataUrl);
+        setTargetScenario(''); // Clear previous mock scenario to ensure real validation
+        setQualityResult(null);
+        setResult(null);
       }
     };
     reader.readAsDataURL(file);
@@ -234,6 +237,9 @@ function ScreeningWorkflow() {
       ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
       setImageUri(dataUrl);
+      setTargetScenario(''); // Clear previous mock scenario to ensure real validation
+      setQualityResult(null);
+      setResult(null);
     }
     setIsCameraActive(false);
   };
@@ -946,35 +952,42 @@ function ScreeningWorkflow() {
             </div>
           ) : qualityResult ? (
             <div className="space-y-6">
-              {/* Quality Status Banner */}
+              {/* Quality Status Banner — 3 Specific Clinical States */}
               <div
                 className={`p-4 rounded-xl border flex items-center justify-between ${
-                  qualityResult.isAcceptable
+                  qualityResult.validationStatus === 'valid_usable'
                     ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900'
-                    : qualityResult.feedback.includes('Anatomical Mismatch')
+                    : qualityResult.validationStatus === 'wrong_image_type'
                     ? 'bg-rose-50/90 border-rose-200 text-rose-950'
                     : 'bg-amber-50/70 border-amber-200 text-amber-900'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  {qualityResult.isAcceptable ? (
+                  {qualityResult.validationStatus === 'valid_usable' ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                  ) : qualityResult.feedback.includes('Anatomical Mismatch') ? (
+                  ) : qualityResult.validationStatus === 'wrong_image_type' ? (
                     <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0" />
                   ) : (
                     <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
                   )}
                   <div>
                     <h3 className="font-bold text-xs">
-                      {qualityResult.isAcceptable
-                        ? 'Image Quality: Good (Passed Optical Gate)'
-                        : qualityResult.feedback.includes('Anatomical Mismatch')
-                        ? 'Anatomical Verification Failed: Non-Target Specimen'
-                        : 'Image Quality Needs Improvement'}
+                      {qualityResult.validationStatus === 'valid_usable'
+                        ? 'Image Verified & Ready for Screening'
+                        : qualityResult.validationStatus === 'wrong_image_type'
+                        ? 'Wrong Image Type (Screening Blocked)'
+                        : 'Correct Image Type, But Poor Quality (Retake Required)'}
                     </h3>
-                    <p className="text-[11px] opacity-90 mt-0.5">
+                    <p className="text-[11px] opacity-90 mt-0.5 font-medium">
                       {qualityResult.feedback}
                     </p>
+                    {qualityResult.validationStatus !== 'valid_usable' && (
+                      <p className="text-[10px] opacity-75 mt-0.5">
+                        {qualityResult.validationStatus === 'wrong_image_type'
+                          ? 'Automated disease screening is blocked for safety. Please capture the correct anatomical site.'
+                          : 'Blur or underexposure degrades optical accuracy. Please retake to proceed.'}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="text-right shrink-0">
@@ -1021,7 +1034,7 @@ function ScreeningWorkflow() {
               <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
                 <span className="font-semibold text-slate-700 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-                  Test With Benchmark Specimens:
+                  Or Test With Known Benchmark Specimen:
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
                   <button
@@ -1056,6 +1069,21 @@ function ScreeningWorkflow() {
                   >
                     ⚠ {screeningType === 'eye' ? 'Referable DR' : 'Oral Lesion'}
                   </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const uri = screeningType === 'eye' ? '/demo/demo_retina_blurry.jpg' : '/demo/demo_retina_blurry.jpg';
+                      setImageUri(uri);
+                      setTargetScenario('');
+                      setIsEvaluatingQuality(true);
+                      const res = assessImageQualitySync(uri, screeningType);
+                      setQualityResult(res);
+                      setIsEvaluatingQuality(false);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-slate-400 rounded text-slate-500 font-medium text-[11px]"
+                  >
+                    Test Blurry Retake
+                  </button>
                 </div>
               </div>
 
@@ -1069,7 +1097,7 @@ function ScreeningWorkflow() {
                   <span>Retake Image</span>
                 </button>
 
-                {qualityResult.isAcceptable ? (
+                {qualityResult.validationStatus === 'valid_usable' && qualityResult.isAcceptable ? (
                   <button
                     onClick={handleProceedToAnalysis}
                     className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
@@ -1077,18 +1105,18 @@ function ScreeningWorkflow() {
                     Run Screening Analysis →
                   </button>
                 ) : (
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <span className="text-xs text-rose-800 font-medium">
-                      {qualityResult.feedback.includes('Anatomical Mismatch')
-                        ? 'Non-target surface detected.'
-                        : 'Optical clarity insufficient.'}
+                      {qualityResult.validationStatus === 'wrong_image_type'
+                        ? 'Screening model blocked (Wrong image type).'
+                        : 'Screening model blocked (Retake required).'}
                     </span>
                     <button
-                      onClick={handleProceedToAnalysis}
-                      className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5"
+                      onClick={() => setStep(4)}
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5"
                     >
-                      <ShieldAlert className="w-3.5 h-3.5" />
-                      <span>Proceed to Clinical Outcome →</span>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Retake with Correct Image →</span>
                     </button>
                   </div>
                 )}

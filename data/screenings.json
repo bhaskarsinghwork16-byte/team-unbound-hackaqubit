@@ -1,5 +1,56 @@
 [
   {
+    "screeningId": "SCR-685239",
+    "patientId": "PT-1048",
+    "type": "eye",
+    "imageReference": "/demo/demo_retina_normal.jpg",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 89,
+      "isAcceptable": true,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 92,
+        "brightness": 88,
+        "contrast": 86,
+        "noiseLevel": 90,
+        "framing": 94
+      },
+      "measurements": {
+        "laplacianVariance": 184.2,
+        "meanLuminance": 126.5,
+        "stdDevLuminance": 52.8,
+        "noiseResidue": 4.1,
+        "width": 512,
+        "height": 512
+      },
+      "feedback": "High optical clarity: Sharp focus and balanced illumination across target field.",
+      "warnings": []
+    },
+    "resultState": "no_abnormality",
+    "riskLevel": "lower_risk",
+    "prediction": "No obvious abnormality detected",
+    "confidence": 94,
+    "recommendation": "No visual signs of referable diabetic retinopathy identified at this time. Routine annual screening advised.",
+    "clinicalCaveat": "Screening finding: Automated screening cannot guarantee complete absence of early microvascular or non-visualized pathology.",
+    "explanationSupported": true,
+    "explanationText": "Standard fundus illumination. Distributed vascular arcade without pathological microaneurysms or hard exudates.",
+    "heatmapCoordinates": [
+      {
+        "x": 260,
+        "y": 240,
+        "radius": 45,
+        "intensity": 0.35
+      }
+    ],
+    "modelVersion": "HealthScreen-DR-v1.2-DemoHoldout",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T16:31:25.239Z",
+    "patientName": "yash"
+  },
+  {
     "screeningId": "SCR-098486",
     "patientId": "PT-TEST-ORAL",
     "type": "oral",
