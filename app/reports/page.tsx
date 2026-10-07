@@ -17,6 +17,7 @@ import {
   GitPullRequest
 } from 'lucide-react';
 import { ReportsSummary } from '@/types';
+import FlexCarousel from '@/components/FlexCarousel';
 
 export default function ReportsPage() {
   const [report, setReport] = useState<ReportsSummary | null>(null);
@@ -90,6 +91,45 @@ export default function ReportsPage() {
           <Download className="w-4 h-4 stroke-[3]" />
           <span>Export Encounters CSV</span>
         </button>
+      </div>
+
+      {/* ── 3D WEBGL FLEXCAROUSEL OPERATIONAL TELEMETRY CAROUSEL ── */}
+      <div className="w-full h-[320px] relative rounded-3xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-md shadow-[#5d2a42]/5">
+        <FlexCarousel
+          items={[
+            {
+              src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=max',
+              alt: 'Community Field Screening Encounters',
+              title: '📈 Field Camp Encounters',
+              subtitle: '100% Verified Local Patient Flow'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
+              alt: 'Retinal vs Oral Breakdown',
+              title: '👁️ Retinal & Oral Triage Ratio',
+              subtitle: 'Multi-Modal AI Clinical Distribution'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80&auto=format&fit=max',
+              alt: 'Edge Inference Latency Metrics',
+              title: '⚡ Edge Engine Benchmarks',
+              subtitle: 'Sub-3 Second Offline Processing'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1200&q=80&auto=format&fit=max',
+              alt: 'Specialist Review Completion',
+              title: '⚕️ Escalation Audits',
+              subtitle: 'Longitudinal Tele-Consult Verification'
+            }
+          ]}
+          preset="liquid"
+          intro="rise"
+          cardHeight={0.65}
+          gap={14}
+          squeeze={0.2}
+          focusOnClick
+          captions
+        />
       </div>
 
       {loading ? (

@@ -16,6 +16,7 @@ import {
   User
 } from 'lucide-react';
 import { ReferralRecord, ReferralStatus, ReferralPriority } from '@/types';
+import FlexCarousel from '@/components/FlexCarousel';
 
 export default function ReferralsPage() {
   const [referrals, setReferrals] = useState<ReferralRecord[]>([]);
@@ -129,6 +130,45 @@ export default function ReferralsPage() {
             Clinical specialist referrals and community follow-up tracker.
           </p>
         </div>
+      </div>
+
+      {/* ── 3D WEBGL FLEXCAROUSEL REFERRAL HUBS CAROUSEL ── */}
+      <div className="w-full h-[320px] relative rounded-3xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-md shadow-[#5d2a42]/5">
+        <FlexCarousel
+          items={[
+            {
+              src: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&q=80&auto=format&fit=max',
+              alt: 'District Ophthalmology Center',
+              title: '👁️ District Eye Hospital',
+              subtitle: 'Retinal Specialist & Laser Clinic'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1200&q=80&auto=format&fit=max',
+              alt: 'Oral Medicine & ENT Clinic',
+              title: '👄 ENT & Maxillofacial Hub',
+              subtitle: 'Pre-Cancerous Biopsy & Screening Unit'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80&auto=format&fit=max',
+              alt: 'Regional Tertiary Medical Center',
+              title: '🏥 Regional Medical Center',
+              subtitle: 'Tertiary Escalation & Tele-Triage'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&q=80&auto=format&fit=max',
+              alt: 'Mobile Tele-Ophthalmology Van',
+              title: '🚐 Mobile Tele-Refraction Unit',
+              subtitle: 'Community Camp Escalation Van'
+            }
+          ]}
+          preset="liquid"
+          intro="rise"
+          cardHeight={0.65}
+          gap={14}
+          squeeze={0.2}
+          focusOnClick
+          captions
+        />
       </div>
 
       {/* ── FILTER CHIPS ── */}
