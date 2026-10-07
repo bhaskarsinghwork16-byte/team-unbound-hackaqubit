@@ -120,7 +120,7 @@ export default function PatientProfilePage() {
 
   if (loading) {
     return (
-      <div className="py-20 text-center text-sm text-slate-500">
+      <div className="py-20 text-center text-sm text-[#5d2a42] font-black">
         Loading patient clinical chart...
       </div>
     );
@@ -129,13 +129,13 @@ export default function PatientProfilePage() {
   if (!patient) {
     return (
       <div className="py-20 text-center space-y-4">
-        <h2 className="text-base font-bold text-slate-800">Patient Record Not Found</h2>
-        <p className="text-xs text-slate-500">The requested patient identifier was not found in the database.</p>
+        <h2 className="text-lg font-black text-[#5d2a42]">Patient Record Not Found</h2>
+        <p className="text-xs text-[#5d2a42]/80 font-bold">The requested patient identifier was not found in the database.</p>
         <Link
           href="/patients"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 text-white rounded-lg text-xs font-semibold"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#5d2a42] text-[#fff9ec] rounded-2xl text-xs font-black"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-3.5 h-3.5 text-[#ffdccc]" />
           <span>Back to Patients</span>
         </Link>
       </div>
@@ -160,52 +160,52 @@ export default function PatientProfilePage() {
       <div>
         <Link
           href="/patients"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 mb-3 transition"
+          className="inline-flex items-center gap-1 text-xs font-black text-[#5d2a42] hover:underline mb-3 transition"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-3.5 h-3.5 text-[#5d2a42]" />
           <span>Back to Patients</span>
         </Link>
 
         {/* Patient Clinical Profile Header Card */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="bg-white/90 backdrop-blur-xl p-6 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-xl bg-teal-50 border border-teal-200/80 text-teal-800 flex items-center justify-center font-bold text-lg shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-[#ffdccc] border border-[#d8e2dc] text-[#5d2a42] flex items-center justify-center font-black text-xl shrink-0">
               {patient.name.slice(0, 2).toUpperCase()}
             </div>
             <div>
               <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-xl font-bold tracking-tight text-slate-900">
+                <h1 className="text-2xl font-black tracking-tight text-[#5d2a42]">
                   {patient.name}
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-mono font-semibold">
+                <span className="px-3 py-1 rounded-full bg-[#5d2a42] text-[#fff9ec] text-xs font-mono font-black">
                   {patient.patientId}
                 </span>
                 {patient.needsFollowUp && (
-                  <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-xs font-semibold flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3 text-amber-600" />
+                  <span className="px-3 py-1 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30 text-xs font-black flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5 text-[#5d2a42]" />
                     <span>Follow-up Required</span>
                   </span>
                 )}
               </div>
 
               {/* Metadata pill strip */}
-              <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-500 mt-2">
+              <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-[#5d2a42]/85 font-bold mt-2">
                 <span>
-                  <strong>Age/Sex:</strong> {patient.age} yrs · {patient.sex}
+                  <strong className="text-[#5d2a42] font-black">Age/Sex:</strong> {patient.age} yrs · {patient.sex}
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <Phone className="w-3.5 h-3.5 text-slate-400" />
+                  <Phone className="w-3.5 h-3.5 text-[#5d2a42]" />
                   {patient.phone || 'No phone recorded'}
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                  <MapPin className="w-3.5 h-3.5 text-[#5d2a42]" />
                   {patient.address || 'Facility Primary'}
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <Calendar className="w-3.5 h-3.5 text-[#5d2a42]" />
                   Registered {formatDate(patient.registeredDate)}
                 </span>
               </div>
@@ -216,19 +216,19 @@ export default function PatientProfilePage() {
           <div className="flex items-center gap-2 self-start md:self-center">
             <button
               onClick={handleToggleFollowUp}
-              className={`px-3 py-2 rounded-lg text-xs font-semibold border transition ${
+              className={`px-4 py-2.5 rounded-2xl text-xs font-black border transition ${
                 patient.needsFollowUp
-                  ? 'border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100'
-                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                  ? 'border-[#5d2a42]/30 bg-[#fec89a] text-[#5d2a42]'
+                  : 'border-[#d8e2dc] bg-[#d8e2dc]/40 text-[#5d2a42] hover:bg-[#d8e2dc]'
               }`}
             >
               {patient.needsFollowUp ? 'Clear Follow-up' : 'Flag Follow-up'}
             </button>
             <Link
               href={`/screening?patientId=${patient.patientId}`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs transition"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-2xl text-xs font-black shadow-md border border-[#ffdccc] transition"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-3.5 h-3.5 text-[#ffdccc]" />
               <span>Start Screening</span>
             </Link>
           </div>
@@ -236,13 +236,13 @@ export default function PatientProfilePage() {
       </div>
 
       {/* ── TABS NAVIGATION ── */}
-      <div className="flex border-b border-slate-200 gap-6 text-xs font-semibold">
+      <div className="flex border-b border-[#d8e2dc] gap-6 text-xs font-black">
         <button
           onClick={() => setActiveTab('timeline')}
           className={`pb-3 relative transition ${
             activeTab === 'timeline'
-              ? 'text-teal-700 border-b-2 border-teal-600'
-              : 'text-slate-500 hover:text-slate-900'
+              ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
+              : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
           }`}
         >
           Care Timeline ({timelineItems.length})
@@ -251,8 +251,8 @@ export default function PatientProfilePage() {
           onClick={() => setActiveTab('screenings')}
           className={`pb-3 relative transition ${
             activeTab === 'screenings'
-              ? 'text-teal-700 border-b-2 border-teal-600'
-              : 'text-slate-500 hover:text-slate-900'
+              ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
+              : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
           }`}
         >
           Screening Records ({screenings.length})
@@ -261,8 +261,8 @@ export default function PatientProfilePage() {
           onClick={() => setActiveTab('referrals')}
           className={`pb-3 relative transition ${
             activeTab === 'referrals'
-              ? 'text-teal-700 border-b-2 border-teal-600'
-              : 'text-slate-500 hover:text-slate-900'
+              ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
+              : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
           }`}
         >
           Specialist Referrals ({referrals.length})
@@ -271,8 +271,8 @@ export default function PatientProfilePage() {
           onClick={() => setActiveTab('notes')}
           className={`pb-3 relative transition ${
             activeTab === 'notes'
-              ? 'text-teal-700 border-b-2 border-teal-600'
-              : 'text-slate-500 hover:text-slate-900'
+              ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
+              : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
           }`}
         >
           Clinical Notes
@@ -281,10 +281,10 @@ export default function PatientProfilePage() {
 
       {/* ── TAB CONTENT: LONGITUDINAL PATIENT TIMELINE ── */}
       {activeTab === 'timeline' && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs">
-          <h2 className="text-sm font-bold text-slate-900 mb-6">Patient Screening & Care Timeline</h2>
+        <div className="bg-white/90 backdrop-blur-xl p-6 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5">
+          <h2 className="text-base font-black text-[#5d2a42] mb-6">Patient Screening &amp; Care Timeline</h2>
 
-          <div className="relative pl-6 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+          <div className="relative pl-6 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#d8e2dc]">
             {timelineItems.map((item, idx) => {
               if (item.type === 'screening') {
                 const s = item.data;
@@ -293,62 +293,58 @@ export default function PatientProfilePage() {
 
                 return (
                   <div key={`s-${s.screeningId}`} className="relative group">
-                    {/* Circle Node on Timeline */}
                     <span
                       className={`absolute -left-6 top-1 w-4 h-4 rounded-full border-2 border-white ${
-                        isAbnormal ? 'bg-amber-500 ring-4 ring-amber-100' : 'bg-emerald-500 ring-4 ring-emerald-100'
+                        isAbnormal ? 'bg-[#fec89a] ring-4 ring-[#fec89a]/30' : 'bg-[#d8e2dc] ring-4 ring-[#d8e2dc]/50'
                       }`}
                     />
 
-                    <div className="bg-slate-50/70 p-4 rounded-lg border border-slate-200/80 hover:bg-slate-50 transition">
+                    <div className="bg-[#fff9ec] p-5 rounded-2xl border border-[#d8e2dc] shadow-xs">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-xs text-slate-900">
+                          <span className="font-black text-xs text-[#5d2a42]">
                             {type === 'eye' ? 'Retinal Screening (Diabetic Retinopathy)' : 'Oral Visual Screening'}
                           </span>
-                          <span className="text-[10px] font-mono text-slate-600">
+                          <span className="text-[10px] font-mono text-[#5d2a42]/80 font-bold">
                             {s.screeningId}
                           </span>
                         </div>
-                        <span className="text-[11px] text-slate-500">
+                        <span className="text-[11px] text-[#5d2a42]/70 font-bold">
                           {formatDateTime(s.createdAt)}
                         </span>
                       </div>
 
-                      <div className="mt-2 flex items-center gap-2 flex-wrap">
+                      <div className="mt-2.5 flex items-center gap-2 flex-wrap">
                         <span
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold ${
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black ${
                             isAbnormal
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30'
+                              : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
                           }`}
                         >
-                          {isAbnormal ? <AlertCircle className="w-3 h-3 text-amber-600" /> : <CheckCircle2 className="w-3 h-3 text-emerald-600" />}
+                          {isAbnormal ? <AlertCircle className="w-3.5 h-3.5 text-[#5d2a42]" /> : <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />}
                           <span>{s.prediction}</span>
                         </span>
                         {s.confidence && (
-                          <span className="text-[11px] text-slate-500">
+                          <span className="text-[11px] text-[#5d2a42]/80 font-bold">
                             Confidence: {s.confidence}%
                           </span>
                         )}
-                        <span className="text-[11px] text-slate-600 font-medium">
-                          Review: {s.reviewStatus || 'pending'}
-                        </span>
                       </div>
 
                       {s.recommendation && (
-                        <p className="text-xs text-slate-600 mt-2 bg-white p-2 rounded-md border border-slate-200/60">
-                          <strong>Clinical Recommendation:</strong> {s.recommendation}
+                        <p className="text-xs text-[#5d2a42] mt-2.5 bg-white p-3 rounded-xl border border-[#d8e2dc] font-bold">
+                          <strong className="text-[#5d2a42] font-black">Clinical Recommendation:</strong> {s.recommendation}
                         </p>
                       )}
 
                       <div className="mt-3 flex items-center justify-end">
                         <Link
                           href={`/history?id=${s.screeningId}`}
-                          className="inline-flex items-center gap-1 text-xs font-semibold text-teal-700 hover:text-teal-800"
+                          className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-[#ffdccc] text-[#5d2a42] rounded-xl font-black text-xs hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all"
                         >
-                          <span>View Full Screening Report</span>
-                          <ArrowRight className="w-3 h-3" />
+                          <span>View Full Report</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                       </div>
                     </div>
@@ -360,22 +356,22 @@ export default function PatientProfilePage() {
                 const r = item.data;
                 return (
                   <div key={`r-${r.referralId}`} className="relative group">
-                    <span className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-teal-600 border-2 border-white ring-4 ring-teal-100" />
-                    <div className="bg-teal-50/40 p-4 rounded-lg border border-teal-200/70">
+                    <span className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-[#5d2a42] border-2 border-white ring-4 ring-[#5d2a42]/20" />
+                    <div className="bg-[#ffdccc]/40 p-5 rounded-2xl border border-[#d8e2dc]">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <span className="font-semibold text-xs text-teal-900 flex items-center gap-1.5">
-                          <GitPullRequest className="w-3.5 h-3.5 text-teal-700" />
+                        <span className="font-black text-xs text-[#5d2a42] flex items-center gap-1.5">
+                          <GitPullRequest className="w-3.5 h-3.5 text-[#5d2a42]" />
                           Specialist Referral Created ({r.specialistType})
                         </span>
-                        <span className="text-[11px] text-slate-500">
+                        <span className="text-[11px] text-[#5d2a42]/70 font-bold">
                           {formatDateTime(r.createdAt)}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-700 mt-1">
+                      <p className="text-xs text-[#5d2a42] mt-1 font-bold">
                         <strong>Destination:</strong> {r.destinationFacility} · Priority:{' '}
-                        <span className="capitalize font-semibold">{r.priority}</span>
+                        <span className="capitalize font-black">{r.priority}</span>
                       </p>
-                      <p className="text-xs text-slate-600 mt-1 italic">
+                      <p className="text-xs text-[#5d2a42]/80 mt-1 italic font-medium">
                         &quot;{r.reason}&quot;
                       </p>
                     </div>
@@ -386,10 +382,10 @@ export default function PatientProfilePage() {
               // Registration event
               return (
                 <div key="reg" className="relative group">
-                  <span className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-slate-400 border-2 border-white ring-4 ring-slate-100" />
-                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+                  <span className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-[#d8e2dc] border-2 border-white ring-4 ring-[#d8e2dc]/40" />
+                  <div className="p-3 bg-[#fff9ec] rounded-xl border border-[#d8e2dc] text-xs text-[#5d2a42] font-bold flex items-center justify-between">
                     <span>Patient profile registered in community health system</span>
-                    <span className="text-[11px] text-slate-600">
+                    <span className="text-[11px] text-[#5d2a42]/70 font-bold">
                       {formatDateTime(patient.registeredDate)}
                     </span>
                   </div>
@@ -402,37 +398,37 @@ export default function PatientProfilePage() {
 
       {/* ── TAB CONTENT: SCREENINGS TABLE ── */}
       {activeTab === 'screenings' && (
-        <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 overflow-hidden">
           {screenings.length === 0 ? (
-            <div className="p-12 text-center text-xs text-slate-500">
+            <div className="p-12 text-center text-xs text-[#5d2a42] font-black">
               No screenings logged for this patient yet.
             </div>
           ) : (
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+              <thead className="bg-[#5d2a42] text-[#fff9ec] font-black uppercase tracking-wider border-b border-[#d8e2dc]">
                 <tr>
-                  <th className="py-3 px-4">Screening ID</th>
-                  <th className="py-3 px-4">Type</th>
-                  <th className="py-3 px-4">Date</th>
-                  <th className="py-3 px-4">Result</th>
-                  <th className="py-3 px-4">Quality</th>
-                  <th className="py-3 px-4 text-right">Report</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Screening ID</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Type</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Date</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Result</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Quality</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black text-right">Report</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-[#d8e2dc] text-[#5d2a42] font-bold">
                 {screenings.map((s) => (
-                  <tr key={s.screeningId} className="hover:bg-slate-50/60">
-                    <td className="py-3 px-4 font-mono font-semibold text-slate-900">{s.screeningId}</td>
-                    <td className="py-3 px-4 capitalize">{(s as any).type || s.screeningType}</td>
-                    <td className="py-3 px-4 text-slate-500">{formatDate(s.createdAt)}</td>
-                    <td className="py-3 px-4">
-                      <span className="font-semibold text-slate-800">{s.prediction}</span>
+                  <tr key={s.screeningId} className="hover:bg-[#ffdccc]/30 transition-colors">
+                    <td className="py-4 px-5 font-mono font-black text-[#5d2a42]">{s.screeningId}</td>
+                    <td className="py-4 px-5 capitalize font-black">{(s as any).type || s.screeningType}</td>
+                    <td className="py-4 px-5 text-[#5d2a42]/80 font-bold">{formatDate(s.createdAt)}</td>
+                    <td className="py-4 px-5">
+                      <span className="font-black text-[#5d2a42]">{s.prediction}</span>
                     </td>
-                    <td className="py-3 px-4 text-slate-600">{s.imageQuality?.grade || 'PASS'}</td>
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-4 px-5 text-[#5d2a42] font-bold">{s.imageQuality?.grade || 'PASS'}</td>
+                    <td className="py-4 px-5 text-right">
                       <Link
                         href={`/history?id=${s.screeningId}`}
-                        className="text-teal-700 hover:text-teal-800 font-semibold text-xs"
+                        className="inline-flex items-center gap-1 px-3 py-1 bg-[#ffdccc] text-[#5d2a42] rounded-xl font-black text-xs hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all"
                       >
                         View →
                       </Link>
@@ -447,35 +443,35 @@ export default function PatientProfilePage() {
 
       {/* ── TAB CONTENT: REFERRALS TABLE ── */}
       {activeTab === 'referrals' && (
-        <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 overflow-hidden">
           {referrals.length === 0 ? (
-            <div className="p-12 text-center text-xs text-slate-500">
+            <div className="p-12 text-center text-xs text-[#5d2a42] font-black">
               No specialist referrals created for this patient.
             </div>
           ) : (
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+              <thead className="bg-[#5d2a42] text-[#fff9ec] font-black uppercase tracking-wider border-b border-[#d8e2dc]">
                 <tr>
-                  <th className="py-3 px-4">Referral ID</th>
-                  <th className="py-3 px-4">Specialist / Facility</th>
-                  <th className="py-3 px-4">Priority</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Reason</th>
-                  <th className="py-3 px-4">Date</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Referral ID</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Specialist / Facility</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Priority</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Status</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Reason</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">Date</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-[#d8e2dc] text-[#5d2a42] font-bold">
                 {referrals.map((r) => (
-                  <tr key={r.referralId} className="hover:bg-slate-50/60">
-                    <td className="py-3 px-4 font-mono font-semibold text-slate-900">{r.referralId}</td>
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-slate-900">{r.specialistType}</div>
-                      <div className="text-[11px] text-slate-500">{r.destinationFacility}</div>
+                  <tr key={r.referralId} className="hover:bg-[#ffdccc]/30 transition-colors">
+                    <td className="py-4 px-5 font-mono font-black text-[#5d2a42]">{r.referralId}</td>
+                    <td className="py-4 px-5">
+                      <div className="font-black text-[#5d2a42]">{r.specialistType}</div>
+                      <div className="text-[11px] text-[#5d2a42]/80 font-bold">{r.destinationFacility}</div>
                     </td>
-                    <td className="py-3 px-4 capitalize font-semibold">{r.priority}</td>
-                    <td className="py-3 px-4 capitalize">{r.status.replace(/_/g, ' ')}</td>
-                    <td className="py-3 px-4 text-slate-700 max-w-xs truncate">{r.reason}</td>
-                    <td className="py-3 px-4 text-slate-500">{formatDate(r.createdAt)}</td>
+                    <td className="py-4 px-5 capitalize font-black">{r.priority}</td>
+                    <td className="py-4 px-5 capitalize font-bold">{r.status.replace(/_/g, ' ')}</td>
+                    <td className="py-4 px-5 text-[#5d2a42] max-w-xs truncate font-bold">{r.reason}</td>
+                    <td className="py-4 px-5 text-[#5d2a42]/80 font-bold">{formatDate(r.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -486,9 +482,9 @@ export default function PatientProfilePage() {
 
       {/* ── TAB CONTENT: CLINICAL NOTES ── */}
       {activeTab === 'notes' && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-4">
-          <h2 className="text-sm font-bold text-slate-900">Health Worker & Clinical Encounter Notes</h2>
-          <p className="text-xs text-slate-500">
+        <div className="bg-white/90 backdrop-blur-xl p-6 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 space-y-4">
+          <h2 className="text-base font-black text-[#5d2a42]">Health Worker &amp; Clinical Encounter Notes</h2>
+          <p className="text-xs text-[#5d2a42]/80 font-bold">
             Record medical history, relevant symptoms, previous eye or oral complaints, or follow-up instructions.
           </p>
 
@@ -497,23 +493,23 @@ export default function PatientProfilePage() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Document patient medical background, systemic conditions (e.g. Type 2 Diabetes for 8 years), current medications, or community outreach notes..."
-            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+            className="w-full p-4 bg-[#fff9ec] border border-[#d8e2dc] rounded-2xl text-xs text-[#5d2a42] font-bold focus:outline-none focus:border-[#5d2a42]"
           />
 
           <div className="flex items-center justify-between">
             {notesSaved ? (
-              <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
-                <Check className="w-3.5 h-3.5" />
+              <span className="text-xs text-[#5d2a42] font-black flex items-center gap-1">
+                <Check className="w-4 h-4 text-[#5d2a42]" />
                 <span>Notes saved successfully</span>
               </span>
             ) : (
-              <span className="text-[11px] text-slate-600">Saved to patient profile in database</span>
+              <span className="text-[11px] text-[#5d2a42]/70 font-bold">Saved to patient profile in database</span>
             )}
 
             <button
               onClick={handleSaveNotes}
               disabled={isSavingNotes}
-              className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50"
+              className="px-6 py-2.5 bg-[#5d2a42] text-[#fff9ec] rounded-2xl text-xs font-black shadow-md border border-[#ffdccc] hover:scale-105 transition-transform disabled:opacity-50"
             >
               {isSavingNotes ? 'Saving...' : 'Save Notes'}
             </button>

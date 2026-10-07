@@ -267,19 +267,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* ── MAIN WORKSPACE CONTENT AREA ── */}
       <div className="flex-1 flex flex-col min-w-0 pb-16 lg:pb-0 relative">
-        {/* Ambient Warm Decorative Floating Background Elements */}
+        {/* Ambient 3D Floating Background Elements */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-          {/* Peach Glow Blob (Left bottom) */}
-          <div className="absolute -left-16 bottom-8 w-72 h-72 bg-[#ffdccc]/50 rounded-full blur-3xl animate-float-slow" />
-
-          {/* Sage Glow Blob (Right bottom) */}
-          <div className="absolute -right-16 bottom-6 w-80 h-80 bg-[#d8e2dc]/50 rounded-full blur-3xl animate-float" />
-
-          {/* Soft Plum Glow Blob (Center) */}
-          <div className="absolute right-[28%] -bottom-10 w-64 h-64 bg-[#5d2a42]/10 rounded-full blur-3xl animate-float-slow" />
-
-          {/* Warm Cream / Peach Top Blob (Top right) */}
-          <div className="absolute -right-20 top-8 w-80 h-80 bg-[#ffdccc]/40 rounded-full blur-3xl animate-float" />
+          <div className="absolute -left-10 bottom-8 w-56 h-56 opacity-40 animate-float-eye">
+            <img src="/images/glass_eye_3d.jpg" alt="3D Glass Eye" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
+          </div>
+          <div className="absolute -right-8 bottom-6 w-60 h-60 opacity-40 animate-float-pill">
+            <img src="/images/glass_pill_3d.jpg" alt="3D Glass Pill" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
+          </div>
+          <div className="absolute right-[28%] -bottom-6 w-44 h-44 opacity-35 animate-float-cross">
+            <img src="/images/glass_cross_3d.jpg" alt="3D Glass Cross" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
+          </div>
+          <div className="absolute -right-14 top-8 w-64 h-64 opacity-35 animate-float-dna">
+            <img src="/images/glass_dna_3d.jpg" alt="3D Glass DNA" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
+          </div>
         </div>
 
         {/* Top desktop header bar */}

@@ -80,19 +80,19 @@ export default function ReferralsPage() {
     switch (priority) {
       case 'urgent':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-50 text-red-700 border border-red-200 text-[11px] font-bold uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#ffdccc] text-[11px] font-black uppercase tracking-wider">
             Urgent
           </span>
         );
       case 'priority':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#ffdccc] text-[#5d2a42] border border-[#fec89a] text-[11px] font-extrabold uppercase tracking-wider">
             Priority
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 text-[11px] font-medium uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#d8e2dc] text-[#5d2a42] border border-[#c4d4cc] text-[11px] font-bold uppercase tracking-wider">
             Routine
           </span>
         );
@@ -102,40 +102,40 @@ export default function ReferralsPage() {
   const getStatusBadge = (status: ReferralStatus) => {
     switch (status) {
       case 'completed':
-        return 'bg-emerald-50 text-emerald-800 border-emerald-200';
+        return 'bg-[#d8e2dc] text-[#5d2a42] border-[#c4d4cc]';
       case 'reviewed':
-        return 'bg-teal-50 text-teal-800 border-teal-200';
+        return 'bg-[#ffdccc] text-[#5d2a42] border-[#fec89a]';
       case 'referral_recommended':
-        return 'bg-blue-50 text-blue-800 border-blue-200';
+        return 'bg-[#fec89a] text-[#5d2a42] border-[#ffdccc]';
       case 'follow_up_required':
-        return 'bg-amber-50 text-amber-800 border-amber-200';
+        return 'bg-[#fec89a] text-[#5d2a42] border-[#ffdccc]';
       default:
-        return 'bg-slate-50 text-slate-700 border-slate-200';
+        return 'bg-[#fff9ec] text-[#5d2a42] border-[#d8e2dc]';
     }
   };
 
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-teal-500/20">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-[#d8e2dc]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="pixel text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/40 font-semibold tracking-wide">
+            <span className="text-[10px] bg-[#ffdccc] text-[#5d2a42] px-2.5 py-0.5 rounded-full border border-[#fec89a] font-bold tracking-wide">
               SPECIALIST REFERRALS
             </span>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-white">Referrals</h1>
-          <p className="text-sm text-slate-300 font-medium mt-1">
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#5d2a42]">Referrals</h1>
+          <p className="text-sm text-[#5d2a42]/70 font-medium mt-1">
             Clinical specialist referrals and community follow-up tracker.
           </p>
         </div>
       </div>
 
-      {/* ── FILTER CHIPS (3D DARK GLASS) ── */}
-      <div className="glass-container-3d p-4 flex flex-wrap gap-4 items-center justify-between">
+      {/* ── FILTER CHIPS ── */}
+      <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between shadow-sm">
         {/* Status Filters */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-semibold text-slate-300 mr-2">Status:</span>
+          <span className="text-xs font-bold text-[#5d2a42] mr-2">Status:</span>
           {[
             { id: 'all', label: 'All' },
             { id: 'pending', label: 'Pending' },
@@ -149,8 +149,8 @@ export default function ReferralsPage() {
               onClick={() => setStatusFilter(item.id)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                 statusFilter === item.id
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-[0_0_12px_rgba(34,197,94,0.3)]'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5 border border-teal-500/20'
+                  ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm'
+                  : 'text-[#5d2a42] hover:bg-[#ffdccc]/50 bg-[#ffdccc]/20 border border-[#fec89a]'
               }`}
             >
               {item.label}
@@ -160,40 +160,40 @@ export default function ReferralsPage() {
 
         {/* Priority Filter */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="font-semibold text-slate-300">Priority:</span>
+          <span className="font-bold text-[#5d2a42]">Priority:</span>
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-3 py-1.5 bg-black/50 border border-teal-500/30 rounded-xl text-white text-xs font-semibold focus:outline-none focus:border-teal-400"
+            className="px-3 py-1.5 bg-white border border-[#d8e2dc] rounded-xl text-[#5d2a42] text-xs font-bold focus:outline-hidden focus:border-[#5d2a42]"
           >
-            <option value="all" className="bg-[#0a1a1c] text-white">All Priorities</option>
-            <option value="routine" className="bg-[#0a1a1c] text-white">Routine</option>
-            <option value="priority" className="bg-[#0a1a1c] text-white">Priority</option>
-            <option value="urgent" className="bg-[#0a1a1c] text-white">Urgent</option>
+            <option value="all" className="bg-[#fff9ec] text-[#5d2a42]">All Priorities</option>
+            <option value="routine" className="bg-[#fff9ec] text-[#5d2a42]">Routine</option>
+            <option value="priority" className="bg-[#fff9ec] text-[#5d2a42]">Priority</option>
+            <option value="urgent" className="bg-[#fff9ec] text-[#5d2a42]">Urgent</option>
           </select>
         </div>
       </div>
 
-      {/* ── REFERRALS TABLE (3D DARK GLASS) ── */}
-      <div className="glass-table-container overflow-hidden shadow-2xl">
+      {/* ── REFERRALS TABLE ── */}
+      <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl overflow-hidden shadow-sm">
         {loading ? (
-          <div className="p-12 text-center text-xs text-slate-300 font-medium">
+          <div className="p-12 text-center text-xs text-[#5d2a42]/70 font-bold">
             Loading referral records...
           </div>
         ) : referrals.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 mx-auto flex items-center justify-center border border-blue-500/20">
+            <div className="w-12 h-12 rounded-full bg-[#ffdccc] text-[#5d2a42] mx-auto flex items-center justify-center border border-[#fec89a]">
               <GitPullRequest className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-bold text-white">No active referrals</h3>
-            <p className="text-xs text-slate-300 max-w-sm mx-auto">
+            <h3 className="text-sm font-bold text-[#5d2a42]">No active referrals</h3>
+            <p className="text-xs text-[#5d2a42]/70 max-w-sm mx-auto">
               Patients requiring specialist evaluation or secondary care will appear here once referred from a screening session.
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
+              <thead className="bg-[#5d2a42] text-[#fff9ec] uppercase tracking-wider font-black border-b border-[#5d2a42]">
                 <tr>
                   <th className="py-3.5 px-5">REFERRAL ID</th>
                   <th className="py-3.5 px-5">PATIENT</th>
@@ -205,35 +205,35 @@ export default function ReferralsPage() {
                   <th className="py-3.5 px-5">DATE</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-teal-500/15 text-slate-200">
+              <tbody className="divide-y divide-[#d8e2dc] text-[#5d2a42]">
                 {referrals.map((r) => (
-                  <tr key={r.referralId} className="hover:bg-white/5 transition-colors">
-                    <td className="py-3.5 px-5 font-mono font-semibold text-emerald-400 whitespace-nowrap">
+                  <tr key={r.referralId} className="hover:bg-[#ffdccc]/20 transition-colors">
+                    <td className="py-3.5 px-5 font-mono font-black text-[#5d2a42] whitespace-nowrap">
                       {r.referralId}
                     </td>
                     <td className="py-3.5 px-5 whitespace-nowrap">
                       <Link
                         href={`/patients/${r.patientId}`}
-                        className="font-bold text-white hover:text-emerald-400 block transition-colors"
+                        className="font-bold text-[#5d2a42] hover:underline block transition-colors"
                       >
                         {r.patientName || r.patientId}
                       </Link>
-                      <span className="text-[11px] font-mono text-slate-300 font-medium">{r.patientId}</span>
+                      <span className="text-[11px] font-mono text-[#5d2a42]/70 font-medium">{r.patientId}</span>
                     </td>
                     <td className="py-3.5 px-5 whitespace-nowrap">
                       <Link
                         href={`/history?id=${r.screeningId}`}
-                        className="text-cyan-400 hover:text-cyan-300 font-mono text-xs flex items-center gap-1 transition-colors"
+                        className="text-[#5d2a42] hover:underline font-mono text-xs flex items-center gap-1 font-bold"
                       >
                         <span>{r.screeningId}</span>
                         <ExternalLink className="w-3 h-3" />
                       </Link>
                     </td>
                     <td className="py-3.5 px-5">
-                      <div className="font-semibold text-white">{r.specialistType}</div>
-                      <div className="text-[11px] text-slate-300">{r.destinationFacility}</div>
+                      <div className="font-bold text-[#5d2a42]">{r.specialistType}</div>
+                      <div className="text-[11px] text-[#5d2a42]/70">{r.destinationFacility}</div>
                     </td>
-                    <td className="py-3.5 px-5 text-slate-200 max-w-xs">
+                    <td className="py-3.5 px-5 text-[#5d2a42] max-w-xs font-medium">
                       <span className="line-clamp-2">{r.reason}</span>
                     </td>
                     <td className="py-3.5 px-5 whitespace-nowrap">
@@ -244,16 +244,16 @@ export default function ReferralsPage() {
                         value={r.status}
                         disabled={updatingId === r.referralId}
                         onChange={(e) => handleUpdateStatus(r.referralId, e.target.value as ReferralStatus)}
-                        className={`text-xs font-semibold px-2.5 py-1 rounded-lg border bg-black/60 text-white ${getStatusBadge(r.status)} focus:outline-none`}
+                        className={`text-xs font-bold px-2.5 py-1 rounded-xl border ${getStatusBadge(r.status)} focus:outline-hidden`}
                       >
-                        <option value="pending" className="bg-[#0a1a1c] text-white">Pending</option>
-                        <option value="reviewed" className="bg-[#0a1a1c] text-white">Reviewed</option>
-                        <option value="referral_recommended" className="bg-[#0a1a1c] text-white">Referral Recommended</option>
-                        <option value="follow_up_required" className="bg-[#0a1a1c] text-white">Follow-up Required</option>
-                        <option value="completed" className="bg-[#0a1a1c] text-white">Completed</option>
+                        <option value="pending" className="bg-[#fff9ec] text-[#5d2a42]">Pending</option>
+                        <option value="reviewed" className="bg-[#fff9ec] text-[#5d2a42]">Reviewed</option>
+                        <option value="referral_recommended" className="bg-[#fff9ec] text-[#5d2a42]">Referral Recommended</option>
+                        <option value="follow_up_required" className="bg-[#fff9ec] text-[#5d2a42]">Follow-up Required</option>
+                        <option value="completed" className="bg-[#fff9ec] text-[#5d2a42]">Completed</option>
                       </select>
                     </td>
-                    <td className="py-3.5 px-5 text-slate-300 whitespace-nowrap font-medium">
+                    <td className="py-3.5 px-5 text-[#5d2a42]/70 whitespace-nowrap font-bold">
                       {formatDate(r.createdAt)}
                     </td>
                   </tr>
