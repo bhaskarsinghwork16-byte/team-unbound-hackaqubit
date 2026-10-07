@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPatientById, updatePatient, getScreeningRecords, getReferrals } from '@/lib/db-store';
+import { Role } from '@/lib/security/types';
+import { hasPermission, canAccessPatient } from '@/lib/security/authorization/rbac';
 
 /**
  * GET /api/patients/[id]
@@ -19,6 +21,14 @@ export async function GET(
         { status: 404 }
       );
     }
+
+    const userRole = _request.headers.get('x-user-role') as Role;
+    const userId = _request.headers.get('x-user-id') as string;
+    
+    if (!userRole || !hasPermission(userRole, 'PATIENT_READ') || !canAccessPatient(userRole, userId, patient.facilityId)) {
+      return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+    }
+
 
     // Fetch linked screenings and referrals for this patient
     const allScreenings = await getScreeningRecords();
@@ -57,6 +67,18 @@ export async function PATCH(
   try {
     const patientId = params.id;
     const body = await request.json();
+
+    const userRole = request.headers.get('x-user-role') as Role;
+    const userId = request.headers.get('x-user-id') as string;
+    
+    if (!userRole || !hasPermission(userRole, 'PATIENT_UPDATE')) {
+      return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+    }
+
+    const patient = await getPatientById(patientId);
+    if (!patient || !canAccessPatient(userRole, userId, patient.facilityId)) {
+      return NextResponse.json({ success: false, error: 'Access denied or patient not found' }, { status: 404 });
+    }
 
     const updated = await updatePatient(patientId, body);
 
