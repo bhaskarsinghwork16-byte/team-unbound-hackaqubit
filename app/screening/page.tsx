@@ -387,8 +387,8 @@ function ScreeningWorkflow() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* ── 3D DARK GLASS CLINICAL STEPPER ── */}
-      <div className="glass-container-3d px-5 py-3.5 flex items-center justify-between text-xs overflow-x-auto shadow-2xl">
+      {/* ── CLINICAL WORKFLOW STEPPER ── */}
+      <div className="bg-white border border-slate-200 rounded-xl px-4 py-3 flex items-center justify-between text-xs overflow-x-auto shadow-2xs">
         {[
           { num: 1, label: 'Patient' },
           { num: 2, label: 'Consent' },
@@ -403,23 +403,23 @@ function ScreeningWorkflow() {
           const isDone = step > s.num;
           return (
             <React.Fragment key={s.num}>
-              {idx > 0 && <span className="text-teal-500/40 mx-1 font-bold">›</span>}
+              {idx > 0 && <span className="text-slate-300 mx-1 font-semibold">›</span>}
               <div
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition whitespace-nowrap ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap ${
                   isActive
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(34,197,94,0.4)]'
+                    ? 'bg-teal-600 text-white font-semibold shadow-xs'
                     : isDone
-                    ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30'
-                    : 'text-slate-400 opacity-60'
+                    ? 'bg-teal-50 text-teal-700 font-medium border border-teal-200'
+                    : 'text-slate-400'
                 }`}
               >
                 <span
                   className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
                     isActive
-                      ? 'bg-slate-950 text-emerald-300 font-extrabold'
+                      ? 'bg-white/20 text-white font-bold'
                       : isDone
-                      ? 'bg-emerald-400 text-slate-950 font-bold'
-                      : 'bg-white/10 text-slate-400'
+                      ? 'bg-teal-600 text-white font-bold'
+                      : 'bg-slate-100 text-slate-400'
                   }`}
                 >
                   {isDone ? '✓' : s.num}

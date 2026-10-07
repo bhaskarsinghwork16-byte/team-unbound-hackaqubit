@@ -11,12 +11,20 @@ import {
   HelpCircle, 
   FileText, 
   Download, 
-  Layers, 
   ShieldCheck, 
   Users, 
   GitPullRequest
 } from 'lucide-react';
 import { ReportsSummary } from '@/types';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Badge
+} from '@/components/ui';
 
 export default function ReportsPage() {
   const [report, setReport] = useState<ReportsSummary | null>(null);
@@ -68,88 +76,116 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-teal-500/20">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="pixel text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/40 font-semibold tracking-wide">
-              OPERATIONAL ANALYTICS
-            </span>
+            <Badge variant="info">Operational Analytics</Badge>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-white">Screening & Facility Reports</h1>
-          <p className="text-sm text-slate-300 font-medium mt-1">
-            Aggregated metrics derived strictly from actual patient encounters in the database.
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Screening & Facility Reports</h1>
+          <p className="text-sm text-slate-500 mt-0.5">
+            Aggregated operational indicators derived from patient encounters in structured storage.
           </p>
         </div>
 
-        <button
+        <Button
+          variant="primary"
+          size="md"
+          icon={<Download className="w-4 h-4" />}
           onClick={handleExportCSV}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 rounded-full text-xs font-extrabold shadow-[0_0_20px_rgba(20,184,166,0.35)] transition-all transform hover:scale-105"
         >
-          <Download className="w-4 h-4 stroke-[3]" />
-          <span>Export Encounters CSV</span>
-        </button>
+          Export Encounters CSV
+        </Button>
       </div>
 
       {loading ? (
-        <div className="p-12 text-center text-xs text-slate-300 font-medium">
+        <div className="p-12 text-center text-xs text-slate-400 font-medium">
           Generating operational reports...
         </div>
       ) : !report ? (
-        <div className="p-12 text-center text-xs text-slate-300 font-medium">
+        <div className="p-12 text-center text-xs text-slate-400 font-medium">
           Unable to compute reports at this time.
         </div>
       ) : (
-        <div className="space-y-8">
-          {/* ── TOP 3D GLASS KPI CARDS ── */}
+        <div className="space-y-6">
+          {/* ── TOP KPI CARDS ── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-stat-green p-5 flex flex-col justify-between">
-              <span className="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">Total Screenings</span>
-              <div className="text-3xl font-extrabold text-white mt-2 drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]">{report.totalScreenings}</div>
-              <p className="text-[11px] text-emerald-300/80 mt-1 font-medium">Logged clinical screenings</p>
-            </div>
+            <Card className="border-l-4 border-l-emerald-500">
+              <CardContent className="p-5 flex flex-col justify-between">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Total Screenings
+                </span>
+                <div className="text-3xl font-bold text-slate-900 mt-2">
+                  {report.totalScreenings}
+                </div>
+                <p className="text-xs text-slate-500 mt-1">Logged clinical screenings</p>
+              </CardContent>
+            </Card>
 
-            <div className="glass-stat-amber p-5 flex flex-col justify-between">
-              <span className="text-xs font-extrabold text-amber-300 uppercase tracking-wider">Review-Required Cases</span>
-              <div className="text-3xl font-extrabold text-amber-400 mt-2 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]">{report.reviewRecommendedCount}</div>
-              <p className="text-[11px] text-amber-300/80 mt-1 font-medium">Flagged for clinician confirmation</p>
-            </div>
+            <Card className="border-l-4 border-l-amber-500">
+              <CardContent className="p-5 flex flex-col justify-between">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Review-Required Cases
+                </span>
+                <div className="text-3xl font-bold text-slate-900 mt-2">
+                  {report.reviewRecommendedCount}
+                </div>
+                <p className="text-xs text-slate-500 mt-1">Flagged for clinician review</p>
+              </CardContent>
+            </Card>
 
-            <div className="glass-stat-cyan p-5 flex flex-col justify-between">
-              <span className="text-xs font-extrabold text-cyan-300 uppercase tracking-wider">Quality Failures</span>
-              <div className="text-3xl font-extrabold text-cyan-300 mt-2 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]">{report.qualityFailures}</div>
-              <p className="text-[11px] text-cyan-300/80 mt-1 font-medium">Blocked by quality gate</p>
-            </div>
+            <Card className="border-l-4 border-l-teal-600">
+              <CardContent className="p-5 flex flex-col justify-between">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Quality Failures
+                </span>
+                <div className="text-3xl font-bold text-slate-900 mt-2">
+                  {report.qualityFailures}
+                </div>
+                <p className="text-xs text-slate-500 mt-1">Rejected by quality checks</p>
+              </CardContent>
+            </Card>
 
-            <div className="glass-stat-blue p-5 flex flex-col justify-between">
-              <span className="text-xs font-extrabold text-blue-300 uppercase tracking-wider">Avg Quality Score</span>
-              <div className="text-3xl font-extrabold text-cyan-300 mt-2 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">{report.averageQualityScore}%</div>
-              <p className="text-[11px] text-blue-300/80 mt-1 font-medium">Mean capture clarity rating</p>
-            </div>
+            <Card className="border-l-4 border-l-sky-600">
+              <CardContent className="p-5 flex flex-col justify-between">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Avg Quality Score
+                </span>
+                <div className="text-3xl font-bold text-slate-900 mt-2">
+                  {report.averageQualityScore}%
+                </div>
+                <p className="text-xs text-slate-500 mt-1">Mean capture clarity rating</p>
+              </CardContent>
+            </Card>
           </div>
 
           {/* ── PROTOCOL DISTRIBUTION & OUTCOME SPLIT ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Protocol Distribution */}
-            <div className="glass-container-3d p-6 space-y-4">
-              <h2 className="text-sm font-bold text-white">Screening Protocol Volume</h2>
-              <p className="text-xs text-slate-300 font-medium">Distribution of eye vs oral visual screenings conducted</p>
-
-              <div className="space-y-4 pt-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm font-bold text-slate-900">
+                  Screening Protocol Volume
+                </CardTitle>
+                <CardDescription className="text-xs text-slate-500">
+                  Distribution of retinal vs oral visual screenings conducted
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 pt-0">
                 <div>
-                  <div className="flex justify-between text-xs font-semibold mb-1">
-                    <span className="flex items-center gap-1.5 text-cyan-400">
-                      <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                  <div className="flex justify-between text-xs font-medium mb-1.5">
+                    <span className="flex items-center gap-1.5 text-teal-700">
+                      <Eye className="w-3.5 h-3.5" />
                       <span>Eye (Diabetic Retinopathy)</span>
                     </span>
-                    <span className="text-white font-bold">
+                    <span className="text-slate-900 font-semibold">
                       {report.retinaScreenings} ({report.totalScreenings > 0 ? Math.round((report.retinaScreenings / report.totalScreenings) * 100) : 0}%)
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-teal-500/20">
+                  <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-teal-500 to-cyan-400 rounded-full"
+                      className="h-full bg-teal-600 rounded-full"
                       style={{
                         width: `${report.totalScreenings > 0 ? (report.retinaScreenings / report.totalScreenings) * 100 : 0}%`,
                       }}
@@ -158,88 +194,100 @@ export default function ReportsPage() {
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-xs font-semibold mb-1">
-                    <span className="flex items-center gap-1.5 text-emerald-400">
-                      <Smile className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="flex justify-between text-xs font-medium mb-1.5">
+                    <span className="flex items-center gap-1.5 text-emerald-700">
+                      <Smile className="w-3.5 h-3.5" />
                       <span>Oral Visual Screening</span>
                     </span>
-                    <span className="text-white font-bold">
+                    <span className="text-slate-900 font-semibold">
                       {report.oralScreenings} ({report.totalScreenings > 0 ? Math.round((report.oralScreenings / report.totalScreenings) * 100) : 0}%)
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-teal-500/20">
+                  <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"
+                      className="h-full bg-emerald-600 rounded-full"
                       style={{
                         width: `${report.totalScreenings > 0 ? (report.oralScreenings / report.totalScreenings) * 100 : 0}%`,
                       }}
                     />
                   </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Clinical Finding Breakdown */}
-            <div className="glass-container-3d p-6 space-y-4">
-              <h2 className="text-sm font-bold text-white">Preliminary Findings Distribution</h2>
-              <p className="text-xs text-slate-300 font-medium">Classification of screenings based on algorithm assessment</p>
-
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs">
-                  <span className="font-semibold text-emerald-300 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm font-bold text-slate-900">
+                  Preliminary Findings Distribution
+                </CardTitle>
+                <CardDescription className="text-xs text-slate-500">
+                  Classification of screenings based on algorithmic assessment
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 pt-0">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-xs">
+                  <span className="font-medium text-emerald-800 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     <span>No obvious abnormality detected</span>
                   </span>
-                  <span className="font-bold text-white text-sm">{report.outcomesBreakdown.lowerRisk}</span>
+                  <span className="font-bold text-emerald-900 text-sm">{report.outcomesBreakdown.lowerRisk}</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs">
-                  <span className="font-semibold text-amber-300 flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-400" />
-                    <span>Potential finding detected (review recommended)</span>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-amber-50 border border-amber-100 text-xs">
+                  <span className="font-medium text-amber-800 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-600" />
+                    <span>Potential finding detected (review advised)</span>
                   </span>
-                  <span className="font-bold text-amber-300 text-sm">{report.outcomesBreakdown.higherRisk}</span>
+                  <span className="font-bold text-amber-900 text-sm">{report.outcomesBreakdown.higherRisk}</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-500/10 border border-slate-500/30 text-xs">
-                  <span className="font-semibold text-slate-300 flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-slate-400" />
+                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                  <span className="font-medium text-slate-700 flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-slate-500" />
                     <span>Inconclusive / low confidence</span>
                   </span>
-                  <span className="font-bold text-white text-sm">{report.outcomesBreakdown.inconclusive}</span>
+                  <span className="font-bold text-slate-900 text-sm">{report.outcomesBreakdown.inconclusive}</span>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* ── REFERRALS STATUS BREAKDOWN ── */}
-          <div className="glass-container-3d p-6 space-y-4">
-            <h2 className="text-sm font-bold text-white">Specialist Referral Tracking Overview</h2>
-            <p className="text-xs text-slate-300 font-medium">Status progression of patients referred to secondary and tertiary centres</p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2 text-center">
-              <div className="p-3 bg-black/40 border border-teal-500/20 rounded-xl">
-                <span className="text-[11px] text-slate-400 font-semibold block">Pending</span>
-                <span className="text-lg font-bold text-white mt-1 block">{report.referralsBreakdown.pending}</span>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-bold text-slate-900">
+                Specialist Referral Tracking Overview
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500">
+                Status progression of patients referred to secondary and tertiary centres
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                  <span className="text-xs text-slate-500 font-medium block">Pending</span>
+                  <span className="text-lg font-bold text-slate-900 mt-1 block">{report.referralsBreakdown.pending}</span>
+                </div>
+                <div className="p-3 bg-teal-50 border border-teal-100 rounded-xl">
+                  <span className="text-xs text-teal-700 font-medium block">Reviewed</span>
+                  <span className="text-lg font-bold text-teal-900 mt-1 block">{report.referralsBreakdown.reviewed}</span>
+                </div>
+                <div className="p-3 bg-sky-50 border border-sky-100 rounded-xl">
+                  <span className="text-xs text-sky-700 font-medium block">Referred</span>
+                  <span className="text-lg font-bold text-sky-900 mt-1 block">{report.referralsBreakdown.referralRecommended}</span>
+                </div>
+                <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl">
+                  <span className="text-xs text-amber-700 font-medium block">Follow-up Due</span>
+                  <span className="text-lg font-bold text-amber-900 mt-1 block">{report.referralsBreakdown.followUpRequired}</span>
+                </div>
+                <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
+                  <span className="text-xs text-emerald-700 font-medium block">Completed</span>
+                  <span className="text-lg font-bold text-emerald-900 mt-1 block">{report.referralsBreakdown.completed}</span>
+                </div>
               </div>
-              <div className="p-3 bg-black/40 border border-teal-500/20 rounded-xl">
-                <span className="text-[11px] text-emerald-400 font-semibold block">Reviewed</span>
-                <span className="text-lg font-bold text-white mt-1 block">{report.referralsBreakdown.reviewed}</span>
-              </div>
-              <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-                <span className="text-[11px] text-blue-300 font-semibold block">Referred</span>
-                <span className="text-lg font-bold text-blue-300 mt-1 block">{report.referralsBreakdown.referralRecommended}</span>
-              </div>
-              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-                <span className="text-[11px] text-amber-300 font-semibold block">Follow-up Due</span>
-                <span className="text-lg font-bold text-amber-300 mt-1 block">{report.referralsBreakdown.followUpRequired}</span>
-              </div>
-              <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-                <span className="text-[11px] text-emerald-300 font-semibold block">Completed</span>
-                <span className="text-lg font-bold text-emerald-300 mt-1 block">{report.referralsBreakdown.completed}</span>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>

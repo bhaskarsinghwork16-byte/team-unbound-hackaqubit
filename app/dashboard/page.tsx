@@ -13,13 +13,30 @@ import {
   HelpCircle, 
   Users, 
   ClipboardCheck, 
-  GitPullRequest,
   Calendar,
   Activity,
+  Layers,
   Sparkles
 } from 'lucide-react';
 import { ScreeningResult, OperationalMetrics } from '@/types';
 import CommunityScreeningHero from '@/components/CommunityScreeningHero';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  StatusBadge,
+  EmptyState,
+  Modal
+} from '@/components/ui';
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<OperationalMetrics>({
@@ -74,370 +91,310 @@ export default function DashboardPage() {
     }
   };
 
-  const getResultBadge = (screening: ScreeningResult) => {
-    if (screening.resultState === 'potential_finding' || screening.riskLevel === 'higher_risk') {
-      return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(245,158,11,0.25)]">
-          <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
-          <span>Potential finding</span>
-        </span>
-      );
-    }
-    if (screening.resultState === 'no_abnormality' || screening.riskLevel === 'lower_risk') {
-      return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-xs font-semibold shadow-[0_0_12px_rgba(34,197,94,0.25)]">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-          <span>No abnormality</span>
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-500/15 text-slate-300 border border-slate-500/40 text-xs font-medium">
-        <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-        <span>Inconclusive</span>
-      </span>
-    );
-  };
-
-  const getReviewBadge = (status?: string) => {
-    if (status === 'reviewed') {
-      return (
-        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Reviewed</span>
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-400">
-        <Clock className="w-3.5 h-3.5 text-amber-400" />
-        <span>Pending review</span>
-      </span>
-    );
-  };
-
   return (
     <div className="space-y-8">
-      {/* ── HERO SECTION FOR HEALTHSCREEN (COMMUNITY SCREENING) ── */}
-      <CommunityScreeningHero />
+      {/* ── HERO SECTION FOR HEALTHSCREEN (COMMUNITY SCREENING SHOWCASE) ── */}
+      <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-2xs">
+        <CommunityScreeningHero />
+      </div>
 
       {/* ── HEADER & PRIMARY ACTION ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-            <span>{getGreeting()}, Dr. Sunita</span>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            {getGreeting()}, Dr. Sunita
           </h1>
-          <p className="text-sm text-slate-200 mt-1.5 font-medium">
-            Here is today’s screening activity and patient flow.
+          <p className="text-sm text-slate-500 mt-1">
+            Here is today’s community screening activity, patient flow, and pending clinical reviews.
           </p>
         </div>
 
-        {/* Glossy 3D Glass Pill CTA Button */}
-        <div className="relative group">
-          {/* Ambient Sparkle Icons around button */}
-          <Sparkles className="w-4 h-4 text-emerald-300 absolute -top-2 -left-2 animate-pulse pointer-events-none" />
-          <Sparkles className="w-3 h-3 text-cyan-300 absolute -bottom-1 -right-2 animate-bounce pointer-events-none" />
-
-          <button
+        {/* Standardized Primary CTA Button */}
+        <div>
+          <Button
+            variant="primary"
+            size="md"
+            icon={<Plus className="w-4 h-4" />}
             onClick={() => setShowStartModal(true)}
-            className="inline-flex items-center justify-center gap-2 px-7 py-3 bg-gradient-to-r from-emerald-900/60 via-teal-950/70 to-emerald-900/60 hover:from-emerald-800/80 hover:to-teal-900/80 text-emerald-300 rounded-full text-sm font-extrabold shadow-[0_0_30px_rgba(20,184,166,0.35),inset_0_1px_1px_rgba(255,255,255,0.2)] border-2 border-emerald-400/60 backdrop-blur-xl transition-all transform hover:scale-105 active:scale-95"
           >
-            <Plus className="w-4 h-4 text-emerald-300 stroke-[3]" />
-            <span>+ New Screening</span>
-          </button>
+            + New Screening
+          </Button>
         </div>
       </div>
 
-      {/* ── 2. 4 GLOWING 3D NEON GLASS STAT CARDS (EXACT SCREENSHOT LAYOUT) ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Card 1: TODAY'S SCREENINGS (Glowing Neon Green) */}
-        <div className="glass-stat-green p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">
-              TODAY'S SCREENINGS
-            </span>
-            {/* 3D Glass Calendar Icon */}
-            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(34,197,94,0.3)] border border-emerald-400/40 transform group-hover:scale-110 transition-transform bg-transparent">
-              <img src="/images/glass_calendar_3d.jpg" alt="3D Calendar" className="w-full h-full object-cover mix-blend-screen" />
-            </div>
-          </div>
-
-          <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_0_12px_rgba(34,197,94,0.6)]">
-              {loading ? '—' : metrics.todayScreenings || 3}
-            </span>
-
-            {/* Glowing Green Wave Graph SVG */}
-            <svg className="w-24 h-9 text-emerald-400 opacity-90 filter drop-shadow-[0_0_6px_#22c55e]" viewBox="0 0 100 35" fill="none">
-              <path d="M0 25 Q 20 5, 40 20 T 80 10 T 100 15" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
-            </svg>
-          </div>
-        </div>
-
-        {/* Card 2: PATIENTS SCREENED (Glowing Neon Cyan) */}
-        <div className="glass-stat-cyan p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-cyan-300 uppercase tracking-wider">
-              PATIENTS SCREENED
-            </span>
-            {/* Overlapping Patient Avatars */}
-            <div className="flex items-center -space-x-2">
-              <div className="w-7 h-7 rounded-full border-2 border-cyan-400/60 overflow-hidden shadow-sm">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" />
-              </div>
-              <div className="w-7 h-7 rounded-full border-2 border-cyan-400/60 overflow-hidden shadow-sm">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" />
-              </div>
-              <div className="w-7 h-7 rounded-full border-2 border-cyan-400/60 overflow-hidden shadow-sm">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" />
+      {/* ── 4 CONSISTENT CLINICAL STAT CARDS ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Card 1: TODAY'S SCREENINGS */}
+        <Card className="border-l-4 border-l-emerald-500 hover:shadow-sm transition-shadow">
+          <CardContent className="p-5 flex flex-col justify-between h-full space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Today's Screenings
+              </span>
+              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+                <Calendar className="w-4 h-4" />
               </div>
             </div>
-          </div>
 
-          <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_0_12px_rgba(6,182,212,0.6)]">
-              {loading ? '—' : metrics.patientsScreened || 6}
-            </span>
+            <div className="flex items-baseline justify-between pt-1">
+              <span className="text-3xl font-bold tracking-tight text-slate-900">
+                {loading ? '—' : metrics.todayScreenings || 3}
+              </span>
 
-            {/* Cyan Bar Chart Histogram SVG */}
-            <svg className="w-20 h-9 text-cyan-400 opacity-90 filter drop-shadow-[0_0_6px_#06b6d4]" viewBox="0 0 80 30" fill="currentColor">
-              <rect x="5" y="15" width="8" height="15" rx="2" />
-              <rect x="20" y="8" width="8" height="22" rx="2" />
-              <rect x="35" y="18" width="8" height="12" rx="2" />
-              <rect x="50" y="4" width="8" height="26" rx="2" />
-              <rect x="65" y="12" width="8" height="18" rx="2" />
-            </svg>
-          </div>
-        </div>
-
-        {/* Card 3: AWAITING REVIEW (Glowing Neon Amber) */}
-        <div className="glass-stat-amber p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-amber-300 uppercase tracking-wider">
-              AWAITING REVIEW
-            </span>
-            {/* 3D Glass Clipboard Icon */}
-            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(245,158,11,0.3)] border border-amber-400/40 transform group-hover:scale-110 transition-transform bg-transparent">
-              <img src="/images/glass_clipboard_3d.jpg" alt="3D Clipboard" className="w-full h-full object-cover mix-blend-screen" />
+              {/* Green Trend SVG */}
+              <svg className="w-20 h-7 text-emerald-500 opacity-80" viewBox="0 0 100 35" fill="none">
+                <path d="M0 25 Q 20 5, 40 20 T 80 10 T 100 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+              </svg>
             </div>
-          </div>
+            <p className="text-xs text-slate-500">Active clinic sessions</p>
+          </CardContent>
+        </Card>
 
-          <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-amber-300 drop-shadow-[0_0_12px_rgba(245,158,11,0.6)]">
-              {loading ? '—' : metrics.awaitingReview || 2}
-            </span>
-
-            {/* Amber Wave Graph SVG */}
-            <svg className="w-24 h-9 text-amber-400 opacity-90 filter drop-shadow-[0_0_6px_#f59e0b]" viewBox="0 0 100 35" fill="none">
-              <path d="M0 20 Q 25 35, 50 15 T 80 25 T 100 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
-            </svg>
-          </div>
-        </div>
-
-        {/* Card 4: ACTIVE REFERRALS (Glowing Neon Sapphire / Blue) */}
-        <div className="glass-stat-blue p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-blue-300 uppercase tracking-wider">
-              ACTIVE REFERRALS
-            </span>
-            {/* 3D Glass DNA Icon */}
-            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.3)] border border-blue-400/40 transform group-hover:scale-110 transition-transform bg-transparent">
-              <img src="/images/glass_dna_3d.jpg" alt="3D DNA" className="w-full h-full object-cover mix-blend-screen" />
+        {/* Card 2: PATIENTS SCREENED */}
+        <Card className="border-l-4 border-l-teal-600 hover:shadow-sm transition-shadow">
+          <CardContent className="p-5 flex flex-col justify-between h-full space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Patients Screened
+              </span>
+              <div className="w-9 h-9 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center border border-teal-100">
+                <Users className="w-4 h-4" />
+              </div>
             </div>
-          </div>
 
-          <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-cyan-300 drop-shadow-[0_0_12px_rgba(59,130,246,0.6)]">
-              {loading ? '—' : metrics.activeReferrals || 2}
-            </span>
+            <div className="flex items-baseline justify-between pt-1">
+              <span className="text-3xl font-bold tracking-tight text-slate-900">
+                {loading ? '—' : metrics.patientsScreened || 6}
+              </span>
 
-            {/* Blue Bar Chart Histogram SVG */}
-            <svg className="w-20 h-9 text-blue-400 opacity-90 filter drop-shadow-[0_0_6px_#3b82f6]" viewBox="0 0 80 30" fill="currentColor">
-              <rect x="5" y="10" width="8" height="20" rx="2" />
-              <rect x="20" y="18" width="8" height="12" rx="2" />
-              <rect x="35" y="6" width="8" height="24" rx="2" />
-              <rect x="50" y="14" width="8" height="16" rx="2" />
-              <rect x="65" y="4" width="8" height="26" rx="2" />
-            </svg>
-          </div>
-        </div>
+              {/* Teal Bar Histogram */}
+              <svg className="w-16 h-7 text-teal-600 opacity-80" viewBox="0 0 80 30" fill="currentColor">
+                <rect x="5" y="15" width="8" height="15" rx="2" />
+                <rect x="20" y="8" width="8" height="22" rx="2" />
+                <rect x="35" y="18" width="8" height="12" rx="2" />
+                <rect x="50" y="4" width="8" height="26" rx="2" />
+                <rect x="65" y="12" width="8" height="18" rx="2" />
+              </svg>
+            </div>
+            <p className="text-xs text-slate-500">Registered community members</p>
+          </CardContent>
+        </Card>
+
+        {/* Card 3: AWAITING REVIEW */}
+        <Card className="border-l-4 border-l-amber-500 hover:shadow-sm transition-shadow">
+          <CardContent className="p-5 flex flex-col justify-between h-full space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Awaiting Review
+              </span>
+              <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+                <Clock className="w-4 h-4" />
+              </div>
+            </div>
+
+            <div className="flex items-baseline justify-between pt-1">
+              <span className="text-3xl font-bold tracking-tight text-slate-900">
+                {loading ? '—' : metrics.awaitingReview || 2}
+              </span>
+
+              {/* Amber Wave SVG */}
+              <svg className="w-20 h-7 text-amber-500 opacity-80" viewBox="0 0 100 35" fill="none">
+                <path d="M0 20 Q 25 35, 50 15 T 80 25 T 100 10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+              </svg>
+            </div>
+            <p className="text-xs text-slate-500">Doctor validation pending</p>
+          </CardContent>
+        </Card>
+
+        {/* Card 4: ACTIVE REFERRALS */}
+        <Card className="border-l-4 border-l-sky-600 hover:shadow-sm transition-shadow">
+          <CardContent className="p-5 flex flex-col justify-between h-full space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Active Referrals
+              </span>
+              <div className="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center border border-sky-100">
+                <Activity className="w-4 h-4" />
+              </div>
+            </div>
+
+            <div className="flex items-baseline justify-between pt-1">
+              <span className="text-3xl font-bold tracking-tight text-slate-900">
+                {loading ? '—' : metrics.activeReferrals || 2}
+              </span>
+
+              {/* Blue Bar Histogram */}
+              <svg className="w-16 h-7 text-sky-600 opacity-80" viewBox="0 0 80 30" fill="currentColor">
+                <rect x="5" y="10" width="8" height="20" rx="2" />
+                <rect x="20" y="18" width="8" height="12" rx="2" />
+                <rect x="35" y="6" width="8" height="24" rx="2" />
+                <rect x="50" y="14" width="8" height="16" rx="2" />
+                <rect x="65" y="4" width="8" height="26" rx="2" />
+              </svg>
+            </div>
+            <p className="text-xs text-slate-500">Connected to specialist clinic</p>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* ── 3. RECENT SCREENING ACTIVITY 3D GLASS TABLE (EXACT MATCH) ── */}
-      <div className="glass-table-container overflow-hidden shadow-2xl">
-        <div className="p-6 border-b border-teal-500/20 flex items-center justify-between bg-black/40">
+      {/* ── 3. RECENT SCREENING ACTIVITY STANDARDIZED TABLE ── */}
+      <Card>
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-base font-bold text-white tracking-tight">Recent Screening Activity</h2>
-            <p className="text-xs text-slate-300 mt-1 font-medium">Logged screenings from community clinics and camps</p>
+            <CardTitle className="text-base font-bold text-slate-900">
+              Recent Screening Activity
+            </CardTitle>
+            <CardDescription className="text-xs text-slate-500 mt-0.5">
+              Logged screenings from community clinics and primary health centers
+            </CardDescription>
           </div>
           <Link
             href="/history"
-            className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 transition-colors"
+            className="text-xs font-semibold text-teal-600 hover:text-teal-700 flex items-center gap-1 transition-colors"
           >
             <span>View all screenings</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
+        </CardHeader>
 
-        {loading ? (
-          <div className="p-12 text-center text-xs text-slate-300 font-medium">
-            Loading recent records...
-          </div>
-        ) : screenings.length === 0 ? (
-          <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-teal-500/10 text-teal-400 mx-auto flex items-center justify-center border border-teal-500/20">
-              <ClipboardCheck className="w-6 h-6" />
+        <CardContent className="p-0">
+          {loading ? (
+            <div className="p-12 text-center text-xs text-slate-400">
+              Loading recent screening records...
             </div>
-            <h3 className="text-sm font-bold text-white">No screenings recorded yet</h3>
-            <p className="text-xs text-slate-300 max-w-sm mx-auto">
-              Start your first patient screening session to record preliminary findings.
-            </p>
-            <button
-              onClick={() => setShowStartModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 rounded-xl text-xs font-bold shadow-md hover:scale-105 transition-transform"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Start First Screening</span>
-            </button>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
-                <tr>
-                  <th className="py-3.5 px-5">PATIENT</th>
-                  <th className="py-3.5 px-5">SCREENING TYPE</th>
-                  <th className="py-3.5 px-5">DATE & TIME</th>
-                  <th className="py-3.5 px-5">FINDING</th>
-                  <th className="py-3.5 px-5">REVIEW STATUS</th>
-                  <th className="py-3.5 px-5 text-right">ACTION</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-teal-500/15 text-slate-200">
+          ) : screenings.length === 0 ? (
+            <div className="p-6">
+              <EmptyState
+                icon={ClipboardCheck}
+                title="No screenings recorded yet"
+                description="Start your first patient screening session to record preliminary findings."
+                actionLabel="+ Start First Screening"
+                onAction={() => setShowStartModal(true)}
+              />
+            </div>
+          ) : (
+            <Table containerClassName="border-0 rounded-none shadow-none">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Patient</TableHead>
+                  <TableHead>Screening Type</TableHead>
+                  <TableHead>Date & Time</TableHead>
+                  <TableHead>Finding</TableHead>
+                  <TableHead>Review Status</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {screenings.slice(0, 8).map((record) => {
                   const type = (record as any).type || record.screeningType;
                   return (
-                    <tr key={record.screeningId} className="hover:bg-white/5 transition-colors">
-                      <td className="py-4 px-5">
+                    <TableRow key={record.screeningId}>
+                      <TableCell>
                         <Link
                           href={`/patients/${record.patientId}`}
-                          className="font-bold text-white hover:text-emerald-400 transition-colors block"
+                          className="font-semibold text-slate-900 hover:text-teal-600 transition-colors block"
                         >
                           {record.patientName || record.patientId}
                         </Link>
-                        <span className="text-[11px] font-mono text-slate-300 font-medium">
+                        <span className="text-[11px] font-mono text-slate-400">
                           {record.patientId}
                         </span>
-                      </td>
+                      </TableCell>
 
-                      <td className="py-4 px-5">
-                        <span className="inline-flex items-center gap-2 font-semibold text-slate-200 capitalize">
+                      <TableCell>
+                        <span className="inline-flex items-center gap-2 font-medium text-slate-700 capitalize text-xs">
                           {type === 'eye' ? (
-                            <Eye className="w-4 h-4 text-cyan-400" />
+                            <Eye className="w-4 h-4 text-teal-600" />
                           ) : (
-                            <Smile className="w-4 h-4 text-emerald-400" />
+                            <Smile className="w-4 h-4 text-emerald-600" />
                           )}
                           <span>{type === 'eye' ? 'Eye Screening' : 'Oral Screening'}</span>
                         </span>
-                      </td>
+                      </TableCell>
 
-                      <td className="py-4 px-5 text-slate-300 whitespace-nowrap font-medium">
+                      <TableCell className="text-slate-500 whitespace-nowrap text-xs font-medium">
                         {formatDate(record.createdAt)}
-                      </td>
+                      </TableCell>
 
-                      <td className="py-4 px-5 whitespace-nowrap">
-                        {getResultBadge(record)}
-                      </td>
+                      <TableCell className="whitespace-nowrap">
+                        <StatusBadge status={record.resultState || record.riskLevel || 'inconclusive'} />
+                      </TableCell>
 
-                      <td className="py-4 px-5 whitespace-nowrap">
-                        {getReviewBadge(record.reviewStatus)}
-                      </td>
+                      <TableCell className="whitespace-nowrap">
+                        <StatusBadge status={record.reviewStatus || 'pending'} />
+                      </TableCell>
 
-                      <td className="py-4 px-5 text-right whitespace-nowrap">
-                        <Link
-                          href={`/history?id=${record.screeningId}`}
-                          className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-bold text-xs group"
-                        >
-                          <span>View</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      <TableCell className="text-right whitespace-nowrap">
+                        <Link href={`/history?id=${record.screeningId}`}>
+                          <Button variant="outline" size="sm">
+                            <span>View</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Button>
                         </Link>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
 
-      {/* ── START SCREENING SELECTION MODAL ── */}
-      {showStartModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#0a1819] rounded-3xl border border-teal-500/30 max-w-lg w-full p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-teal-500/20">
-              <div>
-                <h3 className="text-lg font-bold text-white">Start a screening</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Select the clinical protocol for this patient session</p>
+      {/* ── STANDARDIZED START SCREENING SELECTION MODAL ── */}
+      <Modal
+        isOpen={showStartModal}
+        onClose={() => setShowStartModal(false)}
+        title="Start a Screening Session"
+        description="Select the clinical protocol for this patient encounter"
+        maxWidth="lg"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Eye Screening Card */}
+          <Link
+            href="/screening?type=eye"
+            onClick={() => setShowStartModal(false)}
+            className="group p-5 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/30 transition-all flex flex-col justify-between bg-white shadow-2xs"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform border border-teal-100">
+                <Eye className="w-5 h-5" />
               </div>
-              <button
-                onClick={() => setShowStartModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
-              >
-                ✕
-              </button>
+              <h4 className="font-semibold text-slate-900 text-sm">Eye Screening</h4>
+              <p className="text-xs text-teal-600 font-medium mt-0.5">Diabetic Retinopathy</p>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                Screen retinal fundus images for potential diabetic retinopathy and microaneurysms.
+              </p>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Eye Screening Card */}
-              <Link
-                href="/screening?type=eye"
-                onClick={() => setShowStartModal(false)}
-                className="group p-5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/20 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform border border-cyan-500/40">
-                    <Eye className="w-5 h-5" />
-                  </div>
-                  <h4 className="font-bold text-white text-sm">Eye Screening</h4>
-                  <p className="text-xs text-cyan-300 font-semibold mt-0.5">Diabetic Retinopathy</p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Screen retinal fundus images for potential DR-related findings.
-                  </p>
-                </div>
-                <div className="mt-4 flex items-center text-xs font-bold text-cyan-300 group-hover:translate-x-0.5 transition-transform">
-                  <span>Start Eye Screening</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </div>
-              </Link>
-
-              {/* Oral Screening Card */}
-              <Link
-                href="/screening?type=oral"
-                onClick={() => setShowStartModal(false)}
-                className="group p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/20 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform border border-emerald-500/40">
-                    <Smile className="w-5 h-5" />
-                  </div>
-                  <h4 className="font-bold text-white text-sm">Oral Screening</h4>
-                  <p className="text-xs text-emerald-300 font-semibold mt-0.5">Oral Visual Screening</p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Screen oral mucosa images for visual findings requiring review.
-                  </p>
-                </div>
-                <div className="mt-4 flex items-center text-xs font-bold text-emerald-300 group-hover:translate-x-0.5 transition-transform">
-                  <span>Start Oral Screening</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </div>
-              </Link>
+            <div className="mt-4 flex items-center text-xs font-semibold text-teal-600 group-hover:translate-x-0.5 transition-transform">
+              <span>Start Eye Screening</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </div>
-          </div>
+          </Link>
+
+          {/* Oral Screening Card */}
+          <Link
+            href="/screening?type=oral"
+            onClick={() => setShowStartModal(false)}
+            className="group p-5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all flex flex-col justify-between bg-white shadow-2xs"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform border border-emerald-100">
+                <Smile className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-slate-900 text-sm">Oral Screening</h4>
+              <p className="text-xs text-emerald-600 font-medium mt-0.5">Oral Cavity Inspection</p>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                Screen oral mucosa images for white/red patches, leukoplakia, and visual abnormalities.
+              </p>
+            </div>
+            <div className="mt-4 flex items-center text-xs font-semibold text-emerald-600 group-hover:translate-x-0.5 transition-transform">
+              <span>Start Oral Screening</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1" />
+            </div>
+          </Link>
         </div>
-      )}
+      </Modal>
     </div>
   );
 }
-
-
