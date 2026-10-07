@@ -34,7 +34,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/80 transition-colors">
+    <header className="sticky top-0 z-50 bg-[#fff9ec]/90 backdrop-blur-md border-b border-[#d8e2dc] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
@@ -44,7 +44,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-slate-100/70 p-1 rounded-xl border border-slate-200/60">
+          <nav className="hidden lg:flex items-center gap-1 bg-[#d8e2dc]/40 p-1 rounded-xl border border-[#d8e2dc]">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -52,13 +52,13 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 ${
+                  className={`flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-150 ${
                     isActive
-                      ? 'bg-white text-slate-900 shadow-xs border border-slate-200/70'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                      ? 'bg-[#5d2a42] text-[#fff9ec] shadow-xs border border-[#5d2a42]'
+                      : 'text-[#5d2a42]/85 hover:text-[#5d2a42] hover:bg-[#d8e2dc]/60'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-teal-600' : 'text-slate-400'}`} />
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#ffdccc]' : 'text-[#5d2a42]/70'}`} />
                   <span>{link.label}</span>
                 </Link>
               );
@@ -70,10 +70,10 @@ export default function Navbar() {
             {/* Quick Demo Launch Shortcut */}
             <Link
               href="/settings"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg text-indigo-700 bg-indigo-50 border border-indigo-200/70 hover:bg-indigo-100/70 transition"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg text-[#5d2a42] bg-[#ffdccc] border border-[#d8e2dc] hover:bg-[#ffdccc]/80 transition"
               title="Launch Hackathon Judge Demos"
             >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <Sparkles className="w-3.5 h-3.5 text-[#5d2a42]" />
               <span>Judge Demos</span>
             </Link>
 
@@ -81,20 +81,20 @@ export default function Navbar() {
             <button
               onClick={() => setIsOffline(!isOffline)}
               title="Click to toggle simulated field network condition"
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition shadow-2xs ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition shadow-xs ${
                 isOffline
-                  ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
-                  : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                  ? 'bg-amber-100 text-amber-900 border-amber-300'
+                  : 'bg-[#d8e2dc] text-[#5d2a42] border-[#5d2a42]/20'
               }`}
             >
               {isOffline ? (
                 <>
-                  <WifiOff className="w-3.5 h-3.5 text-amber-600" />
+                  <WifiOff className="w-3.5 h-3.5 text-amber-700" />
                   <span>Offline Active</span>
                 </>
               ) : (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
                   <span>Connected</span>
                 </>
               )}

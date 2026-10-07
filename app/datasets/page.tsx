@@ -31,9 +31,9 @@ export default function DatasetsAndModelsPage() {
 
   const formatMetric = (val: number | null | undefined, suffix = '%') => {
     if (val === null || val === undefined) {
-      return <span className="text-slate-400 font-normal italic">Not evaluated</span>;
+      return <span className="text-[#5d2a42]/60 font-normal italic">Not evaluated</span>;
     }
-    return <span className="font-bold text-slate-900">{val}{suffix}</span>;
+    return <span className="font-black text-[#5d2a42]">{val}{suffix}</span>;
   };
 
   return (
@@ -41,48 +41,48 @@ export default function DatasetsAndModelsPage() {
       
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Dataset & Model Specifications</h1>
-        <p className="text-xs text-slate-500">
+        <h1 className="text-3xl font-black text-[#5d2a42] tracking-tight">Dataset &amp; Model Specifications</h1>
+        <p className="text-xs text-[#5d2a42]/80 font-medium mt-1">
           Transparent clinical documentation on training cohorts, lightweight architectures, edge quantization, and honest ethical limitations.
         </p>
       </div>
 
-      {/* Datasets Section (Phase 4 & 27) */}
+      {/* Datasets Section */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Database className="w-4 h-4 text-teal-600" />
-          <h2 className="text-base font-bold text-slate-900">Curated Clinical Datasets (Publicly Available)</h2>
+          <Database className="w-5 h-5 text-[#5d2a42]" />
+          <h2 className="text-lg font-black text-[#5d2a42]">Curated Clinical Datasets (Publicly Available)</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {datasets.map((ds) => (
-            <div key={ds.name} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between space-y-4">
+            <div key={ds.name} className="bg-[#d8e2dc]/40 backdrop-blur-xl rounded-3xl border border-[#d8e2dc] p-6 shadow-md shadow-[#5d2a42]/5 flex flex-col justify-between space-y-4">
               <div className="space-y-3">
                 <div className="flex justify-between items-start gap-2">
-                  <h3 className="text-sm font-bold text-slate-900 leading-snug">{ds.name}</h3>
+                  <h3 className="text-sm font-black text-[#5d2a42] leading-snug">{ds.name}</h3>
                   <a
                     href={ds.kaggleUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-teal-600 hover:text-teal-800 shrink-0"
+                    className="text-[#5d2a42] hover:text-[#5d2a42]/70 shrink-0"
                     title="View Kaggle / Research Source"
                   >
                     <ExternalLink className="w-4 h-4" />
                   </a>
                 </div>
 
-                <div className="space-y-1.5 text-xs text-slate-600">
-                  <div><strong>Source:</strong> {ds.source}</div>
-                  <div><strong>Clinical Task:</strong> {ds.task}</div>
-                  <div><strong>Cohort Size:</strong> {ds.imageCount.toLocaleString()} clinician-annotated images</div>
-                  <div><strong>License:</strong> {ds.license}</div>
+                <div className="space-y-1.5 text-xs text-[#5d2a42]/85 font-medium">
+                  <div><strong className="text-[#5d2a42]">Source:</strong> {ds.source}</div>
+                  <div><strong className="text-[#5d2a42]">Clinical Task:</strong> {ds.task}</div>
+                  <div><strong className="text-[#5d2a42]">Cohort Size:</strong> {ds.imageCount.toLocaleString()} clinician-annotated images</div>
+                  <div><strong className="text-[#5d2a42]">License:</strong> {ds.license}</div>
                 </div>
 
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Supported Classes:</span>
+                  <span className="text-[10px] uppercase font-black text-[#5d2a42]/60 block mb-1">Supported Classes:</span>
                   <div className="flex flex-wrap gap-1">
                     {ds.classes.map((c) => (
-                      <span key={c} className="px-2 py-0.5 rounded bg-slate-100 text-[10px] text-slate-700 font-medium">
+                      <span key={c} className="px-2 py-0.5 rounded-md bg-[#ffdccc] text-[10px] text-[#5d2a42] font-extrabold border border-[#d8e2dc]">
                         {c}
                       </span>
                     ))}
@@ -90,84 +90,84 @@ export default function DatasetsAndModelsPage() {
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[11px] text-slate-600">
-                <strong className="text-slate-800">Known Limitation:</strong> {ds.limitations}
+              <div className="p-3 bg-[#ffdccc]/50 rounded-2xl border border-[#d8e2dc] text-[11px] text-[#5d2a42]/90 font-medium">
+                <strong className="text-[#5d2a42] font-black">Known Limitation:</strong> {ds.limitations}
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Lightweight Edge Models Section (Phase 27 & 28) */}
+      {/* Lightweight Edge Models Section */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Cpu className="w-4 h-4 text-teal-600" />
-          <h2 className="text-base font-bold text-slate-900">Lightweight Mobile Model Architectures (Edge INT8)</h2>
+          <Cpu className="w-5 h-5 text-[#5d2a42]" />
+          <h2 className="text-lg font-black text-[#5d2a42]">Lightweight Mobile Model Architectures (Edge INT8)</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {models.map((mod) => (
-            <div key={mod.modelName} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+            <div key={mod.modelName} className="bg-[#d8e2dc]/40 backdrop-blur-xl rounded-3xl border border-[#d8e2dc] p-6 shadow-md shadow-[#5d2a42]/5 space-y-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">{mod.modelName}</h3>
-                  <span className="text-xs text-teal-700 font-semibold">{mod.version} • {mod.task}</span>
+                  <h3 className="text-base font-black text-[#5d2a42]">{mod.modelName}</h3>
+                  <span className="text-xs text-[#5d2a42] font-black">{mod.version} • {mod.task}</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono text-[11px] font-bold border border-slate-200">
+                <span className="px-3 py-1 rounded-full bg-[#5d2a42] text-[#fff9ec] font-mono text-[11px] font-black shadow-xs">
                   {mod.sizeMb} MB
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-xl border border-slate-100">
+              <div className="grid grid-cols-2 gap-2 text-xs bg-[#fff9ec]/80 p-3.5 rounded-2xl border border-[#d8e2dc]">
                 <div>
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Architecture</span>
-                  <span className="font-semibold text-slate-800 text-[11px]">{mod.architecture}</span>
+                  <span className="text-[10px] text-[#5d2a42]/60 uppercase font-black block">Architecture</span>
+                  <span className="font-extrabold text-[#5d2a42] text-[11px]">{mod.architecture}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Input Tensor</span>
-                  <span className="font-semibold text-slate-800 text-[11px]">{mod.inputResolution}</span>
+                  <span className="text-[10px] text-[#5d2a42]/60 uppercase font-black block">Input Tensor</span>
+                  <span className="font-extrabold text-[#5d2a42] text-[11px]">{mod.inputResolution}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Target CPU Latency</span>
-                  <span className="font-semibold text-slate-800 text-[11px]">{mod.latencyArmCpuMs} ms (ARM Cortex)</span>
+                  <span className="text-[10px] text-[#5d2a42]/60 uppercase font-black block">Target CPU Latency</span>
+                  <span className="font-extrabold text-[#5d2a42] text-[11px]">{mod.latencyArmCpuMs} ms (ARM Cortex)</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Quantization</span>
-                  <span className="font-semibold text-slate-800 text-[11px]">{mod.quantization}</span>
+                  <span className="text-[10px] text-[#5d2a42]/60 uppercase font-black block">Quantization</span>
+                  <span className="font-extrabold text-[#5d2a42] text-[11px]">{mod.quantization}</span>
                 </div>
               </div>
 
-              {/* Phase 28: Metrics — If not measured, mark "Not evaluated" */}
+              {/* Metrics */}
               <div className="space-y-2">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                <span className="text-[10px] uppercase font-black text-[#5d2a42]/60 block">
                   Measured Evaluation Benchmarks (Holdout Test Cohort):
                 </span>
                 <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 text-center text-xs">
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-400 block">Accuracy</span>
+                  <div className="p-2 rounded-xl bg-[#ffdccc]/70 border border-[#d8e2dc]">
+                    <span className="text-[10px] text-[#5d2a42]/70 font-bold block">Accuracy</span>
                     {formatMetric(mod.metrics.accuracy)}
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-400 block">Sensitivity</span>
+                  <div className="p-2 rounded-lg bg-[#ffdccc]/70 border border-[#d8e2dc]">
+                    <span className="text-[10px] text-[#5d2a42]/70 font-bold block">Sensitivity</span>
                     {formatMetric(mod.metrics.sensitivity)}
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-400 block">Specificity</span>
+                  <div className="p-2 rounded-lg bg-[#ffdccc]/70 border border-[#d8e2dc]">
+                    <span className="text-[10px] text-[#5d2a42]/70 font-bold block">Specificity</span>
                     {formatMetric(mod.metrics.specificity)}
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-400 block">F1 Score</span>
+                  <div className="p-2 rounded-lg bg-[#ffdccc]/70 border border-[#d8e2dc]">
+                    <span className="text-[10px] text-[#5d2a42]/70 font-bold block">F1 Score</span>
                     {formatMetric(mod.metrics.f1Score, '')}
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-400 block">ROC-AUC</span>
+                  <div className="p-2 rounded-lg bg-[#ffdccc]/70 border border-[#d8e2dc]">
+                    <span className="text-[10px] text-[#5d2a42]/70 font-bold block">ROC-AUC</span>
                     {formatMetric(mod.metrics.rocAuc, '')}
                   </div>
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[11px] text-slate-600">
-                <strong className="text-slate-800">Biases & Clinical Limitations:</strong> {mod.biasesAndLimitations}
+              <div className="p-3.5 bg-[#ffdccc]/50 rounded-2xl border border-[#d8e2dc] text-[11px] text-[#5d2a42]/90 font-medium">
+                <strong className="text-[#5d2a42] font-black">Biases &amp; Clinical Limitations:</strong> {mod.biasesAndLimitations}
               </div>
             </div>
           ))}
