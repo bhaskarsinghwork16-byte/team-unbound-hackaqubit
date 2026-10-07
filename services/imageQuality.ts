@@ -85,8 +85,8 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
         if (h < 0) h += 360;
       }
 
-      // Mucosal tissue: Rich pink/red (hue 340°-360° or 0°-24°, sat > 0.28, brightness > 40)
-      if ((h >= 340 || h <= 24) && sat > 0.28 && max > 40) {
+      // Mucosal tissue: Rich pink/red (hue 340°-360° or 0°-24°, sat > 0.18, brightness > 40)
+      if ((h >= 340 || h <= 24) && sat > 0.18 && max > 40) {
         mucosaCount++;
       }
 
@@ -237,7 +237,7 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
       warnings.push('Anatomical validation failed: Surface lacks retinal vascular reflection and circular fundus field of view.');
     }
   } else if (screeningType === 'oral') {
-    const isOral = (mucosaRatio >= 0.20 || (rgDiff > 32 && meanSat > 0.25));
+    const isOral = (mucosaRatio >= 0.08 || (rgDiff > 16 && meanSat > 0.14));
     if (!isOral) {
       isAnatomicalMismatch = true;
       mismatchFeedback = 'Anatomical Mismatch: Image does not match oral cavity / mucosal tissue. Non-oral surface detected (e.g. hand, palm, skin, or room surface). Please frame the mouth interior.';
@@ -250,7 +250,7 @@ export function computeMeasurableQuality(pixels: PixelDataLike, screeningType?: 
   if (isAnatomicalMismatch) {
     grade = 'UNUSABLE';
     isAcceptable = false;
-    canProceedWithWarning = false;
+    canProceedWithWarning = true;
     finalScore = Math.min(compositeScore, 18);
     feedback = mismatchFeedback;
   } else if (compositeScore < 50 || sharpnessScore < 35 || brightnessScore < 30) {

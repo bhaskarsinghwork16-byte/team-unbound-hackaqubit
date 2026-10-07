@@ -1017,11 +1017,53 @@ function ScreeningWorkflow() {
                 </div>
               </div>
 
+              {/* Benchmark specimen quick switch for instant verification */}
+              <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
+                <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+                  Test With Benchmark Specimens:
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const uri = screeningType === 'eye' ? '/demo/demo_retina_normal.jpg' : '/demo/demo_oral_normal.jpg';
+                      const scenario = screeningType === 'eye' ? 'NORMAL_RETINA' : 'LOW_RISK_ORAL';
+                      setImageUri(uri);
+                      setTargetScenario(scenario);
+                      setIsEvaluatingQuality(true);
+                      const res = assessImageQualitySync(uri, screeningType);
+                      setQualityResult(res);
+                      setIsEvaluatingQuality(false);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-teal-500 hover:bg-teal-50/50 rounded text-slate-700 font-medium text-[11px] shadow-2xs"
+                  >
+                    ✓ Normal {screeningType === 'eye' ? 'Retina' : 'Oral'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const uri = screeningType === 'eye' ? '/demo/demo_retina_referable.jpg' : '/demo/demo_oral_suspicious.jpg';
+                      const scenario = screeningType === 'eye' ? 'REFERABLE_RETINA' : 'REVIEW_ORAL';
+                      setImageUri(uri);
+                      setTargetScenario(scenario);
+                      setIsEvaluatingQuality(true);
+                      const res = assessImageQualitySync(uri, screeningType);
+                      setQualityResult(res);
+                      setIsEvaluatingQuality(false);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-amber-500 hover:bg-amber-50/50 rounded text-slate-700 font-medium text-[11px] shadow-2xs"
+                  >
+                    ⚠ {screeningType === 'eye' ? 'Referable DR' : 'Oral Lesion'}
+                  </button>
+                </div>
+              </div>
+
               {/* Gating Actions */}
-              <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+              <div className="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
                 <button
                   onClick={() => setStep(4)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Retake Image</span>
@@ -1030,16 +1072,25 @@ function ScreeningWorkflow() {
                 {qualityResult.isAcceptable ? (
                   <button
                     onClick={handleProceedToAnalysis}
-                    className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
+                    className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
                   >
                     Run Screening Analysis →
                   </button>
                 ) : (
-                  <span className="text-xs text-rose-800 font-semibold max-w-md text-right">
-                    {qualityResult.feedback.includes('Anatomical Mismatch')
-                      ? 'Automated screening blocked: Please re-take photo framing the target anatomical site.'
-                      : 'Please retake a clearer image with better lighting to prevent inaccurate results.'}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs text-rose-800 font-medium">
+                      {qualityResult.feedback.includes('Anatomical Mismatch')
+                        ? 'Non-target surface detected.'
+                        : 'Optical clarity insufficient.'}
+                    </span>
+                    <button
+                      onClick={handleProceedToAnalysis}
+                      className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5"
+                    >
+                      <ShieldAlert className="w-3.5 h-3.5" />
+                      <span>Proceed to Clinical Outcome →</span>
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

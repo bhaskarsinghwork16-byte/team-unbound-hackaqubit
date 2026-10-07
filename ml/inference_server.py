@@ -98,9 +98,9 @@ def validate_specimen_cv(img_bgr: np.ndarray, task: str):
         if fundus_ratio < 0.15 and (rb_ratio < 2.0 or rg_diff < 25):
             return False, "Image does not match retinal fundus photography. Non-ophthalmic surface detected (e.g., hand, skin, or external object)."
     elif task == "oral":
-        mucosa_mask = ((h < 22) | (h > 160)) & (s > 0.28) & (v > 0.20)
+        mucosa_mask = ((h < 22) | (h > 160)) & (s > 0.18) & (v > 0.18)
         mucosa_ratio = np.mean(mucosa_mask)
-        if mucosa_ratio < 0.20 and (rg_diff < 30 or mean_sat < 0.24):
+        if mucosa_ratio < 0.08 and (rg_diff < 16 or mean_sat < 0.14):
             return False, "Image does not match oral cavity / mucosa tissue. Non-oral surface detected (e.g., hand, palm, skin, or room surface). Please frame mouth interior."
 
     return True, ""
