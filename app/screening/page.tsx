@@ -1389,7 +1389,7 @@ function ScreeningWorkflow() {
 
 export default function ScreeningPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Loading screening flow...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-xs text-[#5d2a42]/70 font-bold">Loading screening flow...</div>}>
       <ScreeningWorkflow />
     </Suspense>
   );
