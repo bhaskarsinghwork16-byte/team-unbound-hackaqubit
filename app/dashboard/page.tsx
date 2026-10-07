@@ -19,6 +19,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { ScreeningResult, OperationalMetrics } from '@/types';
+import CommunityScreeningHero from '@/components/CommunityScreeningHero';
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<OperationalMetrics>({
@@ -118,6 +119,9 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* ── HERO SECTION FOR HEALTHSCREEN (COMMUNITY SCREENING) ── */}
+      <CommunityScreeningHero />
+
       {/* ── HEADER & PRIMARY ACTION ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>

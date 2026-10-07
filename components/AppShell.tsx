@@ -12,19 +12,19 @@ import {
   Settings,
   Plus,
   Bell,
-  Wifi,
-  WifiOff,
   Menu,
   X,
-  UserCheck,
-  ChevronRight,
-  Shield,
-  Activity
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Eye
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
   const [isOnline, setIsOnline] = useState(true);
   const [mongoConnected, setMongoConnected] = useState<boolean | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -64,7 +64,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   // Helper to get current clean page title
   const getPageTitle = () => {
-    if (pathname === '/' || pathname === '/dashboard') return 'Clinical Overview';
+    if (pathname === '/dashboard') return 'Clinical Overview';
     if (pathname.startsWith('/patients')) return 'Patient Records';
     if (pathname.startsWith('/screening')) return 'New Patient Screening';
     if (pathname.startsWith('/history') || pathname.startsWith('/screenings')) return 'Screening History';
@@ -75,6 +75,54 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return 'Community Health';
   };
 
+  // ── IF WE ARE ON THE WEBSITE HOME LANDING PAGE (`/`) ──
+  // Do NOT render left sidebar initially! Render full website experience with Website Navbar & Dashboard button.
+  if (isHomePage) {
+    return (
+      <div className="min-h-screen bg-[#fff9ec] text-[#5d2a42] font-sans antialiased flex flex-col">
+        {/* ── PUBLIC WEBSITE TOP NAVBAR ── */}
+        <header className="sticky top-0 z-50 bg-[#fff9ec]/90 backdrop-blur-md border-b border-[#d8e2dc]/60 px-4 sm:px-8 py-3.5 transition-colors">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <BrandLogo size="md" showSubtitle={true} />
+            </div>
+
+            {/* Public Website Links */}
+            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-[#5d2a42]">
+              <a href="#hero" className="hover:opacity-80 transition-opacity">Platform</a>
+              <a href="#options" className="hover:opacity-80 transition-opacity">Modules</a>
+              <Link href="/screening" className="hover:opacity-80 transition-opacity flex items-center gap-1">
+                <Eye className="w-4 h-4 text-[#5d2a42]" />
+                <span>AI Screening</span>
+              </Link>
+              <Link href="/datasets" className="hover:opacity-80 transition-opacity">AI Models</Link>
+            </nav>
+
+            {/* Prominent Dashboard Button */}
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-xl text-xs sm:text-sm font-extrabold shadow-md transition-all transform hover:scale-[1.02] active:scale-95"
+              >
+                <LayoutDashboard className="w-4 h-4 text-[#ffdccc]" />
+                <span>Dashboard</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#ffdccc]" />
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        {/* Website Landing Main Container */}
+        <main className="flex-1 w-full max-w-7xl mx-auto">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  // ── IF WE ARE ON THE CLINICAL DASHBOARD (`/dashboard`, `/patients`, etc.) ──
+  // Show the official clinical layout WITH the left sidebar options!
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased flex flex-col lg:flex-row">
       {/* ── DESKTOP LEFT SIDEBAR ── */}
@@ -272,7 +320,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <Link
           href="/dashboard"
           className={`flex flex-col items-center gap-1 ${
-            pathname === '/dashboard' || pathname === '/' ? 'text-teal-600 font-bold' : ''
+            pathname === '/dashboard' ? 'text-teal-600 font-bold' : ''
           }`}
         >
           <LayoutDashboard className="w-4 h-4" />
