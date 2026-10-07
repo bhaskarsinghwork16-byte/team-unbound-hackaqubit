@@ -1,5 +1,814 @@
 [
   {
+    "screeningId": "SCR-670756",
+    "patientId": "SYNTH_TEST",
+    "type": "oral",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGQAZADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiig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+Gl/gl/0Ov8A5S7z/wCNUf8ADS/wS/6HX/yl3n/xqgD16ivIf+Gl/gl/0Ov/AJS7z/41Xr1ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB+cv7ZP/JyPir/tz/8ASOCvIa/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6/XiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "This appears to be a document or screenshot, not an oral cavity image.",
+      "warnings": [
+        "This appears to be a document or screenshot, not an oral cavity image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "oral",
+        "expectedType": "oral",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be a document or screenshot, not an oral cavity image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be a document or screenshot, not an oral cavity image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:54:30.756Z"
+  },
+  {
+    "screeningId": "SCR-670672",
+    "patientId": "SYNTH_TEST",
+    "type": "oral",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD12iiivCPoAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 85,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "Oral image detected, but it has severe motion blur. Please hold steady and retake.",
+      "warnings": [],
+      "validationStatus": "correct_type_poor_quality",
+      "typeValidation": {
+        "detectedType": "oral",
+        "expectedType": "oral",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Image Quality Insufficient",
+    "confidence": 0,
+    "recommendation": "Oral image detected, but it has severe motion blur. Please hold steady and retake.",
+    "clinicalCaveat": "Automated disease screening was blocked due to optical blur or underexposure to avoid inaccurate findings.",
+    "explanationSupported": false,
+    "explanationText": "Oral image detected, but it has severe motion blur. Please hold steady and retake.",
+    "modelVersion": "Optical-Quality-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:54:30.672Z"
+  },
+  {
+    "screeningId": "SCR-670626",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5FooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//2Q==",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "This appears to be skin or a hand photo, not a retinal image.",
+      "warnings": [
+        "This appears to be skin or a hand photo, not a retinal image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be skin or a hand photo, not a retinal image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be skin or a hand photo, not a retinal image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:54:30.626Z"
+  },
+  {
+    "screeningId": "SCR-670568",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDlKKKK+NPz8KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "This appears to be skin or a hand photo, not a retinal image.",
+      "warnings": [
+        "This appears to be skin or a hand photo, not a retinal image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be skin or a hand photo, not a retinal image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be skin or a hand photo, not a retinal image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:54:30.568Z"
+  },
+  {
+    "screeningId": "SCR-670494",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGQAZADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiig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+Gl/gl/0Ov8A5S7z/wCNUf8ADS/wS/6HX/yl3n/xqgD16ivIf+Gl/gl/0Ov/AJS7z/41Xr1ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB+cv7ZP/JyPir/tz/8ASOCvIa/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6/XiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "This appears to be a document or screenshot, not a retinal image.",
+      "warnings": [
+        "This appears to be a document or screenshot, not a retinal image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be a document or screenshot, not a retinal image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be a document or screenshot, not a retinal image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:54:30.494Z"
+  },
+  {
+    "screeningId": "SCR-670421",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD12iiivCPoAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "This appears to be an oral image. You selected Eye Screening.",
+      "warnings": [
+        "This appears to be an oral image. You selected Eye Screening."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be an oral image. You selected Eye Screening.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be an oral image. You selected Eye Screening.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:54:30.421Z"
+  },
+  {
+    "screeningId": "SCR-557085",
+    "patientId": "SYNTH_TEST",
+    "type": "oral",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGQAZADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiig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+Gl/gl/0Ov8A5S7z/wCNUf8ADS/wS/6HX/yl3n/xqgD16ivIf+Gl/gl/0Ov/AJS7z/41Xr1ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB+cv7ZP/JyPir/tz/8ASOCvIa/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6/XiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "Image verified and meets optical standards.",
+      "warnings": [
+        "This appears to be a document or screenshot, not an oral cavity image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "oral",
+        "expectedType": "oral",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be a document or screenshot, not an oral cavity image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be a document or screenshot, not an oral cavity image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:37.085Z"
+  },
+  {
+    "screeningId": "SCR-556863",
+    "patientId": "SYNTH_TEST",
+    "type": "oral",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD12iiivCPoAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 85,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "Image verified and meets optical standards.",
+      "warnings": [],
+      "validationStatus": "correct_type_poor_quality",
+      "typeValidation": {
+        "detectedType": "oral",
+        "expectedType": "oral",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Image Quality Insufficient",
+    "confidence": 0,
+    "recommendation": "Oral image detected, but it has severe motion blur. Please hold steady and retake.",
+    "clinicalCaveat": "Automated disease screening was blocked due to optical blur or underexposure to avoid inaccurate findings.",
+    "explanationSupported": false,
+    "explanationText": "Oral image detected, but it has severe motion blur. Please hold steady and retake.",
+    "modelVersion": "Optical-Quality-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:36.863Z"
+  },
+  {
+    "screeningId": "SCR-556716",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5FooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//2Q==",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "Image verified and meets optical standards.",
+      "warnings": [
+        "This appears to be skin or a hand photo, not a retinal image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be skin or a hand photo, not a retinal image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be skin or a hand photo, not a retinal image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:36.716Z"
+  },
+  {
+    "screeningId": "SCR-556616",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDlKKKK+NPz8KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "Image verified and meets optical standards.",
+      "warnings": [
+        "This appears to be skin or a hand photo, not a retinal image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be skin or a hand photo, not a retinal image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be skin or a hand photo, not a retinal image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:36.616Z"
+  },
+  {
+    "screeningId": "SCR-556512",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGQAZADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiig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+Gl/gl/0Ov8A5S7z/wCNUf8ADS/wS/6HX/yl3n/xqgD16ivIf+Gl/gl/0Ov/AJS7z/41Xr1ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB+cv7ZP/JyPir/tz/8ASOCvIa/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6K/XiigD8h6/XiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "Image verified and meets optical standards.",
+      "warnings": [
+        "This appears to be a document or screenshot, not a retinal image."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be a document or screenshot, not a retinal image.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be a document or screenshot, not a retinal image.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:36.512Z"
+  },
+  {
+    "screeningId": "SCR-556441",
+    "patientId": "SYNTH_TEST",
+    "type": "eye",
+    "imageReference": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD12iiivCPoAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 85,
+        "brightness": 80,
+        "contrast": 82,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "Image verified and meets optical standards.",
+      "warnings": [
+        "This appears to be an oral image. You selected Eye Screening."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 85,
+        "reason": "Image type verified."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be an oral image. You selected Eye Screening.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be an oral image. You selected Eye Screening.",
+    "modelVersion": "Specimen-Type-Gate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:36.441Z"
+  },
+  {
+    "screeningId": "SCR-525216",
+    "patientId": "TEST_PT_1",
+    "type": "oral",
+    "imageReference": "/demo/demo_retina_normal.jpg",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 90,
+        "brightness": 75,
+        "contrast": 80,
+        "noiseLevel": 85,
+        "framing": 90
+      },
+      "feedback": "This appears to be a retinal image. You selected Oral Screening.",
+      "warnings": [
+        "Anatomical protocol mismatch: Retinal fundus image provided during oral cavity screening.",
+        "This appears to be a retinal image. You selected Oral Screening."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "oral",
+        "isValidType": false,
+        "typeConfidence": 96,
+        "reason": "This appears to be a retinal image. You selected Oral Screening."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be a retinal image. You selected Oral Screening.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be a retinal image. You selected Oral Screening.",
+    "modelVersion": "HealthScreen-SafetyGate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:05.216Z"
+  },
+  {
+    "screeningId": "SCR-525128",
+    "patientId": "TEST_PT_1",
+    "type": "oral",
+    "imageReference": "/demo/demo_oral_normal.jpg",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 89,
+      "isAcceptable": true,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 90,
+        "brightness": 86,
+        "contrast": 84,
+        "noiseLevel": 88,
+        "framing": 92
+      },
+      "feedback": "Oral cavity mucosa verified. Optical standards confirmed for AI screening.",
+      "warnings": [],
+      "validationStatus": "valid_usable",
+      "typeValidation": {
+        "detectedType": "oral",
+        "expectedType": "oral",
+        "isValidType": true,
+        "typeConfidence": 94,
+        "reason": "Valid oral cavity mucosal photograph detected."
+      }
+    },
+    "resultState": "no_abnormality",
+    "riskLevel": "lower_risk",
+    "prediction": "No obvious abnormality detected",
+    "confidence": 91,
+    "recommendation": "No obvious mucosal lesions detected. Maintain regular oral hygiene evaluation and self-checks.",
+    "clinicalCaveat": "Screening finding: Automated screening cannot guarantee complete absence of early microvascular or non-visualized pathology.",
+    "explanationSupported": true,
+    "explanationText": "Homogeneous pink mucosal surface. No signs of hyperkeratotic plaque or erythroplakic erythroderma.",
+    "heatmapCoordinates": [
+      {
+        "x": 250,
+        "y": 250,
+        "radius": 50,
+        "intensity": 0.3
+      }
+    ],
+    "modelVersion": "HealthScreen-Oral-v1.1-DemoHoldout",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:05.128Z"
+  },
+  {
+    "screeningId": "SCR-525059",
+    "patientId": "TEST_PT_1",
+    "type": "eye",
+    "imageReference": "/demo/demo_oral_normal.jpg",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 10,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 88,
+        "brightness": 85,
+        "contrast": 82,
+        "noiseLevel": 88,
+        "framing": 90
+      },
+      "feedback": "This appears to be an oral image. You selected Eye Screening.",
+      "warnings": [
+        "Anatomical protocol mismatch: Oral cavity mucosa image provided during eye screening.",
+        "This appears to be an oral image. You selected Eye Screening."
+      ],
+      "validationStatus": "wrong_image_type",
+      "typeValidation": {
+        "detectedType": "oral",
+        "expectedType": "eye",
+        "isValidType": false,
+        "typeConfidence": 95,
+        "reason": "This appears to be an oral image. You selected Eye Screening."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Wrong Image Type",
+    "confidence": 0,
+    "recommendation": "This appears to be an oral image. You selected Eye Screening.",
+    "clinicalCaveat": "Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.",
+    "explanationSupported": false,
+    "explanationText": "This appears to be an oral image. You selected Eye Screening.",
+    "modelVersion": "HealthScreen-SafetyGate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:05.059Z"
+  },
+  {
+    "screeningId": "SCR-524998",
+    "patientId": "TEST_PT_1",
+    "type": "eye",
+    "imageReference": "/demo/demo_retina_blurry.jpg",
+    "imageQuality": {
+      "grade": "UNUSABLE",
+      "score": 34,
+      "isAcceptable": false,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 22,
+        "brightness": 44,
+        "contrast": 38,
+        "noiseLevel": 42,
+        "framing": 45
+      },
+      "feedback": "Retinal image detected, but it is too blurry. Please retake with steady focus.",
+      "warnings": [
+        "Camera tremor detected during acquisition (Laplacian variance: 14.8 < 80 min)"
+      ],
+      "validationStatus": "correct_type_poor_quality",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 94,
+        "reason": "Valid retinal fundus photograph detected."
+      }
+    },
+    "resultState": "quality_insufficient",
+    "riskLevel": "inconclusive",
+    "prediction": "Screening Blocked: Image Quality Insufficient",
+    "confidence": 0,
+    "recommendation": "Retinal image detected, but it is too blurry. Please retake with steady focus.",
+    "clinicalCaveat": "Automated disease screening was blocked due to optical blur or underexposure to avoid inaccurate findings.",
+    "explanationSupported": false,
+    "explanationText": "Retinal image detected, but it is too blurry. Please retake with steady focus.",
+    "modelVersion": "HealthScreen-SafetyGate-v1.0",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:04.998Z"
+  },
+  {
+    "screeningId": "SCR-524918",
+    "patientId": "TEST_PT_1",
+    "type": "eye",
+    "imageReference": "/demo/demo_retina_normal.jpg",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 91,
+      "isAcceptable": true,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 92,
+        "brightness": 88,
+        "contrast": 86,
+        "noiseLevel": 90,
+        "framing": 94
+      },
+      "feedback": "Retinal fundus image verified. Optical standards confirmed for AI screening.",
+      "warnings": [],
+      "validationStatus": "valid_usable",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 95,
+        "reason": "Valid retinal fundus photograph detected."
+      }
+    },
+    "resultState": "no_abnormality",
+    "riskLevel": "lower_risk",
+    "prediction": "No obvious abnormality detected",
+    "confidence": 94,
+    "recommendation": "No visual signs of referable diabetic retinopathy identified at this time. Routine annual screening advised.",
+    "clinicalCaveat": "Screening finding: Automated screening cannot guarantee complete absence of early microvascular or non-visualized pathology.",
+    "explanationSupported": true,
+    "explanationText": "Standard fundus illumination. Distributed vascular arcade without pathological microaneurysms or hard exudates.",
+    "heatmapCoordinates": [
+      {
+        "x": 260,
+        "y": 240,
+        "radius": 45,
+        "intensity": 0.35
+      }
+    ],
+    "modelVersion": "HealthScreen-DR-v1.2-DemoHoldout",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T17:52:04.918Z"
+  },
+  {
+    "screeningId": "SCR-685239",
+    "patientId": "PT-1048",
+    "type": "eye",
+    "imageReference": "/demo/demo_retina_normal.jpg",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 89,
+      "isAcceptable": true,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 92,
+        "brightness": 88,
+        "contrast": 86,
+        "noiseLevel": 90,
+        "framing": 94
+      },
+      "measurements": {
+        "laplacianVariance": 184.2,
+        "meanLuminance": 126.5,
+        "stdDevLuminance": 52.8,
+        "noiseResidue": 4.1,
+        "width": 512,
+        "height": 512
+      },
+      "feedback": "High optical clarity: Sharp focus and balanced illumination across target field.",
+      "warnings": []
+    },
+    "resultState": "no_abnormality",
+    "riskLevel": "lower_risk",
+    "prediction": "No obvious abnormality detected",
+    "confidence": 94,
+    "recommendation": "No visual signs of referable diabetic retinopathy identified at this time. Routine annual screening advised.",
+    "clinicalCaveat": "Screening finding: Automated screening cannot guarantee complete absence of early microvascular or non-visualized pathology.",
+    "explanationSupported": true,
+    "explanationText": "Standard fundus illumination. Distributed vascular arcade without pathological microaneurysms or hard exudates.",
+    "heatmapCoordinates": [
+      {
+        "x": 260,
+        "y": 240,
+        "radius": 45,
+        "intensity": 0.35
+      }
+    ],
+    "modelVersion": "HealthScreen-DR-v1.2-DemoHoldout",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T16:31:25.239Z",
+    "patientName": "yash"
+  },
+  {
     "screeningId": "SCR-098486",
     "patientId": "PT-TEST-ORAL",
     "type": "oral",

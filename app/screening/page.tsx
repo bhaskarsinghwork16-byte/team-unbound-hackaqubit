@@ -42,11 +42,9 @@ function ScreeningWorkflow() {
 
   const urlPatientId = searchParams.get('patientId') || '';
   const urlType = (searchParams.get('type') as ScreeningType) || '';
-  const urlDemo = searchParams.get('demo') || '';
-  const [targetScenario, setTargetScenario] = useState<string>(urlDemo);
 
   // Stepper state: 1: Patient, 2: Consent, 3: Protocol, 4: Capture, 5: Quality, 6: Analysis, 7: Result, 8: Review
-  const [step, setStep] = useState<number>(urlPatientId || urlDemo ? (urlType || urlDemo ? 4 : 2) : 1);
+  const [step, setStep] = useState<number>(urlPatientId ? (urlType ? 4 : 2) : 1);
 
   // ── 01. PATIENT INTAKE STATE ──
   const [selectedPatient, setSelectedPatient] = useState<PatientRecord | null>(null);
@@ -70,6 +68,7 @@ function ScreeningWorkflow() {
 
   // ── 04. IMAGE CAPTURE STATE ──
   const [imageUri, setImageUri] = useState<string>('');
+  const [targetScenario, setTargetScenario] = useState<string>('');
   const [isCameraActive, setIsCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -107,36 +106,6 @@ function ScreeningWorkflow() {
         .catch(console.error);
     }
   }, [urlPatientId]);
-
-  // Load demo scenario if provided in query string
-  useEffect(() => {
-    if (urlDemo) {
-      const demoMap: Record<string, { type: ScreeningType; img: string; name: string }> = {
-        NORMAL_RETINA: { type: 'eye', img: '/demo/demo_retina_normal.jpg', name: 'Clear Retinal Specimen' },
-        REFERABLE_RETINA: { type: 'eye', img: '/demo/demo_retina_referable.jpg', name: 'Microvascular DR Specimen' },
-        LOW_RISK_ORAL: { type: 'oral', img: '/demo/demo_oral_normal.jpg', name: 'Normal Oral Mucosa Specimen' },
-        REVIEW_ORAL: { type: 'oral', img: '/demo/demo_oral_suspicious.jpg', name: 'Mucosal Lesion Specimen' },
-      };
-
-      const match = demoMap[urlDemo];
-      if (match) {
-        setScreeningType(match.type);
-        setImageUri(match.img);
-        setTargetScenario(urlDemo);
-        setConsentObtained(true);
-          setSelectedPatient({
-            patientId: `P-SPECIMEN-${urlDemo.slice(0, 4)}`,
-            name: `${match.name} (Verification)`,
-            age: 54,
-            sex: 'Female',
-            facilityId: 'FAC-CENTRAL',
-            registeredDate: new Date().toISOString(),
-            createdAt: new Date().toISOString(),
-          });
-        setStep(4);
-      }
-    }
-  }, [urlDemo]);
 
   // Handle patient searching
   useEffect(() => {
@@ -218,6 +187,9 @@ function ScreeningWorkflow() {
       const dataUrl = event.target?.result as string;
       if (dataUrl) {
         setImageUri(dataUrl);
+        setTargetScenario(''); // Clear previous mock scenario to ensure real validation
+        setQualityResult(null);
+        setResult(null);
       }
     };
     reader.readAsDataURL(file);
@@ -234,6 +206,9 @@ function ScreeningWorkflow() {
       ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
       setImageUri(dataUrl);
+      setTargetScenario(''); // Clear previous mock scenario to ensure real validation
+      setQualityResult(null);
+      setResult(null);
     }
     setIsCameraActive(false);
   };
@@ -245,10 +220,10 @@ function ScreeningWorkflow() {
     setIsEvaluatingQuality(true);
 
     try {
-      const evalResult = await assessImageInBrowser(imageUri, screeningType);
+      const evalResult = await assessImageInBrowser(imageUri);
       setQualityResult(evalResult);
     } catch {
-      setQualityResult(assessImageQualitySync(imageUri, screeningType));
+      setQualityResult(assessImageQualitySync(imageUri));
     } finally {
       setIsEvaluatingQuality(false);
     }
@@ -363,8 +338,8 @@ function ScreeningWorkflow() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* ── COMPACT CLINICAL STEPPER ── */}
-      <div className="bg-white border border-slate-200/90 rounded-xl px-4 py-3 shadow-2xs flex items-center justify-between text-xs overflow-x-auto">
+      {/* ── 3D DARK GLASS CLINICAL STEPPER ── */}
+      <div className="glass-container-3d px-5 py-3.5 flex items-center justify-between text-xs overflow-x-auto shadow-2xl">
         {[
           { num: 1, label: 'Patient' },
           { num: 2, label: 'Consent' },
@@ -379,23 +354,23 @@ function ScreeningWorkflow() {
           const isDone = step > s.num;
           return (
             <React.Fragment key={s.num}>
-              {idx > 0 && <span className="text-slate-300 mx-1">›</span>}
+              {idx > 0 && <span className="text-teal-500/40 mx-1 font-bold">›</span>}
               <div
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-md transition whitespace-nowrap ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition whitespace-nowrap ${
                   isActive
-                    ? 'bg-teal-50 text-teal-800 font-bold border border-teal-200'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(34,197,94,0.4)]'
                     : isDone
-                    ? 'text-teal-700 font-medium'
-                    : 'text-slate-400'
+                    ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30'
+                    : 'text-slate-400 opacity-60'
                 }`}
               >
                 <span
-                  className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
                     isActive
-                      ? 'bg-teal-600 text-white'
+                      ? 'bg-slate-950 text-emerald-300 font-extrabold'
                       : isDone
-                      ? 'bg-teal-100 text-teal-800'
-                      : 'bg-slate-100 text-slate-400'
+                      ? 'bg-emerald-400 text-slate-950 font-bold'
+                      : 'bg-white/10 text-slate-400'
                   }`}
                 >
                   {isDone ? '✓' : s.num}
@@ -411,7 +386,7 @@ function ScreeningWorkflow() {
           STEP 1: PATIENT SELECTION
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 1 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Patient Identification</h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -562,7 +537,7 @@ function ScreeningWorkflow() {
           STEP 2: PATIENT CONSENT
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 2 && selectedPatient && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900">Patient Consent</h2>
@@ -626,7 +601,7 @@ function ScreeningWorkflow() {
           STEP 3: SCREENING PROTOCOL SELECTION
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 3 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Select Screening Protocol</h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -696,7 +671,7 @@ function ScreeningWorkflow() {
           STEP 4: IMAGE CAPTURE / UPLOAD
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 4 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900">
@@ -828,86 +803,6 @@ function ScreeningWorkflow() {
             )}
           </div>
 
-          {/* QUICK LOAD TEST SPECIMENS */}
-          <div className="pt-4 border-t border-slate-100 space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-slate-700 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-                Quick Clinical Verification Specimens
-              </span>
-              <span className="text-[11px] text-slate-400">One-click evaluation</span>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left">
-              <button
-                type="button"
-                onClick={() => {
-                  setScreeningType('eye');
-                  setImageUri('/demo/demo_retina_normal.jpg');
-                  setTargetScenario('NORMAL_RETINA');
-                }}
-                className={`p-2.5 rounded-lg border text-xs transition ${
-                  imageUri === '/demo/demo_retina_normal.jpg'
-                    ? 'border-teal-600 bg-teal-50/60 font-semibold text-teal-900'
-                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
-                }`}
-              >
-                <div className="font-bold text-[11px]">Normal Retina</div>
-                <div className="text-[10px] text-slate-500">Fundus / Clear</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setScreeningType('eye');
-                  setImageUri('/demo/demo_retina_referable.jpg');
-                  setTargetScenario('REFERABLE_RETINA');
-                }}
-                className={`p-2.5 rounded-lg border text-xs transition ${
-                  imageUri === '/demo/demo_retina_referable.jpg'
-                    ? 'border-amber-600 bg-amber-50/60 font-semibold text-amber-900'
-                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
-                }`}
-              >
-                <div className="font-bold text-[11px]">Referable DR</div>
-                <div className="text-[10px] text-slate-500">Microvascular finding</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setScreeningType('oral');
-                  setImageUri('/demo/demo_oral_normal.jpg');
-                  setTargetScenario('LOW_RISK_ORAL');
-                }}
-                className={`p-2.5 rounded-lg border text-xs transition ${
-                  imageUri === '/demo/demo_oral_normal.jpg'
-                    ? 'border-teal-600 bg-teal-50/60 font-semibold text-teal-900'
-                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
-                }`}
-              >
-                <div className="font-bold text-[11px]">Normal Oral</div>
-                <div className="text-[10px] text-slate-500">Clear mucosa</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setScreeningType('oral');
-                  setImageUri('/demo/demo_oral_suspicious.jpg');
-                  setTargetScenario('REVIEW_ORAL');
-                }}
-                className={`p-2.5 rounded-lg border text-xs transition ${
-                  imageUri === '/demo/demo_oral_suspicious.jpg'
-                    ? 'border-amber-600 bg-amber-50/60 font-semibold text-amber-900'
-                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
-                }`}
-              >
-                <div className="font-bold text-[11px]">Oral Lesion</div>
-                <div className="text-[10px] text-slate-500">Leukoplakic plaque</div>
-              </button>
-            </div>
-          </div>
-
           {/* NEXT CTA */}
           <div className="flex items-center justify-between pt-4 border-t border-slate-100">
             <button
@@ -931,7 +826,7 @@ function ScreeningWorkflow() {
           STEP 5: IMAGE QUALITY ENGINE
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 5 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Optical Quality Gate</h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -946,38 +841,45 @@ function ScreeningWorkflow() {
             </div>
           ) : qualityResult ? (
             <div className="space-y-6">
-              {/* Quality Status Banner */}
+              {/* Quality Status Banner — 3 Specific Clinical States */}
               <div
                 className={`p-4 rounded-xl border flex items-center justify-between ${
-                  qualityResult.isAcceptable
+                  qualityResult.validationStatus === 'valid_usable'
                     ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900'
-                    : qualityResult.feedback.includes('Anatomical Mismatch')
+                    : qualityResult.validationStatus === 'wrong_image_type'
                     ? 'bg-rose-50/90 border-rose-200 text-rose-950'
                     : 'bg-amber-50/70 border-amber-200 text-amber-900'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  {qualityResult.isAcceptable ? (
+                  {qualityResult.validationStatus === 'valid_usable' ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                  ) : qualityResult.feedback.includes('Anatomical Mismatch') ? (
+                  ) : qualityResult.validationStatus === 'wrong_image_type' ? (
                     <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0" />
                   ) : (
                     <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
                   )}
                   <div>
                     <h3 className="font-bold text-xs">
-                      {qualityResult.isAcceptable
-                        ? 'Image Quality: Good (Passed Optical Gate)'
-                        : qualityResult.feedback.includes('Anatomical Mismatch')
-                        ? 'Anatomical Verification Failed: Non-Target Specimen'
-                        : 'Image Quality Needs Improvement'}
+                      {qualityResult.validationStatus === 'valid_usable'
+                        ? 'Image Verified & Ready for Screening'
+                        : qualityResult.validationStatus === 'wrong_image_type'
+                        ? 'Wrong Image Type (Screening Blocked)'
+                        : 'Correct Image Type, But Poor Quality (Retake Required)'}
                     </h3>
-                    <p className="text-[11px] opacity-90 mt-0.5">
+                    <p className="text-[11px] opacity-90 mt-0.5 font-medium">
                       {qualityResult.feedback}
                     </p>
+                    {qualityResult.validationStatus !== 'valid_usable' && (
+                      <p className="text-[10px] opacity-75 mt-0.5">
+                        {qualityResult.validationStatus === 'wrong_image_type'
+                          ? 'Automated disease screening is blocked for safety. Please capture the correct anatomical site.'
+                          : 'Blur or underexposure degrades optical accuracy. Please retake to proceed.'}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="text-right shrink-0">
+                <div className="text-right">
                   <span className="text-xl font-bold">{qualityResult.score}%</span>
                   <span className="text-[10px] block opacity-80 uppercase tracking-wider">Quality Score</span>
                 </div>
@@ -1021,7 +923,7 @@ function ScreeningWorkflow() {
               <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
                 <span className="font-semibold text-slate-700 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-                  Test With Benchmark Specimens:
+                  Or Test With Known Benchmark Specimen:
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
                   <button
@@ -1056,39 +958,54 @@ function ScreeningWorkflow() {
                   >
                     ⚠ {screeningType === 'eye' ? 'Referable DR' : 'Oral Lesion'}
                   </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const uri = screeningType === 'eye' ? '/demo/demo_retina_blurry.jpg' : '/demo/demo_retina_blurry.jpg';
+                      setImageUri(uri);
+                      setTargetScenario('');
+                      setIsEvaluatingQuality(true);
+                      const res = assessImageQualitySync(uri, screeningType);
+                      setQualityResult(res);
+                      setIsEvaluatingQuality(false);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-slate-400 rounded text-slate-500 font-medium text-[11px]"
+                  >
+                    Test Blurry Retake
+                  </button>
                 </div>
               </div>
 
               {/* Gating Actions */}
-              <div className="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
+              <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                 <button
                   onClick={() => setStep(4)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Retake Image</span>
                 </button>
 
-                {qualityResult.isAcceptable ? (
+                {qualityResult.validationStatus === 'valid_usable' && qualityResult.isAcceptable ? (
                   <button
                     onClick={handleProceedToAnalysis}
-                    className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
+                    className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
                   >
                     Run Screening Analysis →
                   </button>
                 ) : (
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <span className="text-xs text-rose-800 font-medium">
-                      {qualityResult.feedback.includes('Anatomical Mismatch')
-                        ? 'Non-target surface detected.'
-                        : 'Optical clarity insufficient.'}
+                      {qualityResult.validationStatus === 'wrong_image_type'
+                        ? 'Screening model blocked (Wrong image type).'
+                        : 'Screening model blocked (Retake required).'}
                     </span>
                     <button
-                      onClick={handleProceedToAnalysis}
-                      className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5"
+                      onClick={() => setStep(4)}
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5"
                     >
-                      <ShieldAlert className="w-3.5 h-3.5" />
-                      <span>Proceed to Clinical Outcome →</span>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Retake with Correct Image →</span>
                     </button>
                   </div>
                 )}
@@ -1147,7 +1064,7 @@ function ScreeningWorkflow() {
           STEP 7: CLINICAL SCREENING REPORT & RESULT
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 7 && result && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200/80 gap-3">
             <div>
@@ -1167,9 +1084,7 @@ function ScreeningWorkflow() {
           {/* MAIN FINDING BANNER (NO FAKE DIAGNOSIS) */}
           <div
             className={`p-5 rounded-xl border ${
-              result.resultState === 'quality_insufficient' || result.prediction.toLowerCase().includes('invalid')
-                ? 'bg-rose-50/90 border-rose-200 text-rose-950'
-                : result.resultState === 'potential_finding' || result.riskLevel === 'higher_risk'
+              result.resultState === 'potential_finding' || result.riskLevel === 'higher_risk'
                 ? 'bg-amber-50/80 border-amber-200 text-amber-950'
                 : result.resultState === 'no_abnormality' || result.riskLevel === 'lower_risk'
                 ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
@@ -1179,7 +1094,7 @@ function ScreeningWorkflow() {
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-[11px] uppercase font-bold tracking-wider opacity-80 block">
-                  {result.resultState === 'quality_insufficient' ? 'Protocol Safety Gate' : 'Algorithm Finding'}
+                  Algorithm Finding
                 </span>
                 <h3 className="text-lg font-bold">
                   {result.prediction}
@@ -1201,11 +1116,7 @@ function ScreeningWorkflow() {
 
             {/* Caveat warning */}
             <div className="mt-4 pt-3 border-t border-black/5 text-[11px] opacity-80 flex items-center gap-1.5">
-              {result.resultState === 'quality_insufficient' ? (
-                <ShieldAlert className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-              ) : (
-                <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-              )}
+              <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
               <span>
                 {result.clinicalCaveat || 'Decision support only. Not a medical diagnosis.'}
               </span>
@@ -1224,9 +1135,7 @@ function ScreeningWorkflow() {
             <div className="sm:col-span-2 text-xs space-y-2 text-slate-600">
               <h4 className="font-bold text-slate-900">Analyzed Image Specimen</h4>
               <p>
-                {result.resultState === 'quality_insufficient' || !result.imageQuality?.isAcceptable
-                  ? `Specimen rejected (${result.imageQuality?.score || 15}% score). Protocol validation failed — non-target anatomical surface detected.`
-                  : `Optical quality confirmed at ${result.imageQuality?.score || 90}%. Specimen permanently linked to patient chart #${result.patientId}.`}
+                Optical quality confirmed at {result.imageQuality?.score || 90}%. Specimen permanently linked to patient chart #{result.patientId}.
               </p>
               <div className="text-[11px] font-mono text-slate-500">
                 Model: {result.modelVersion}
@@ -1268,7 +1177,7 @@ function ScreeningWorkflow() {
           STEP 8: HUMAN CLINICAL REVIEW
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 8 && result && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900">Human Clinician Verification</h2>

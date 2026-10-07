@@ -76,32 +76,70 @@ def decode_image(image_data_or_path: str) -> np.ndarray:
 
     raise ValueError(f"Image could not be resolved from: {image_data_or_path[:60]}...")
 
-def validate_specimen_cv(img_bgr: np.ndarray, task: str):
+def classify_specimen_cv(img_bgr: np.ndarray) -> tuple[str, dict]:
     """
-    Validates that the input image matches the expected anatomical protocol.
-    Rejects out-of-distribution photos (e.g. hands, skin, furniture, clothing).
+    Lightweight Computer Vision Specimen Classifier.
+    Accurately distinguishes:
+    - 'retina': Retinal fundus photography
+    - 'oral': Oral cavity mucosa
+    - 'document': Documents, text pages, screenshots
+    - 'skin_hand': Hands, palms, skin
+    - 'face': External face photos
+    - 'random_object': General objects
     """
+    h, w, c = img_bgr.shape
     hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
-    h, s, v = hsv[:, :, 0], hsv[:, :, 1].astype(float) / 255.0, hsv[:, :, 2].astype(float) / 255.0
-    r = img_bgr[:, :, 2].astype(float)
-    g = img_bgr[:, :, 1].astype(float)
+    h_ch = hsv[:, :, 0]
+    s_ch = hsv[:, :, 1].astype(float) / 255.0
+    v_ch = hsv[:, :, 2].astype(float) / 255.0
     b = img_bgr[:, :, 0].astype(float)
+    g = img_bgr[:, :, 1].astype(float)
+    r = img_bgr[:, :, 2].astype(float)
 
     mean_r, mean_g, mean_b = np.mean(r), np.mean(g), np.mean(b)
+    mean_sat = np.mean(s_ch)
     rg_diff = mean_r - mean_g
     rb_ratio = mean_r / (mean_b + 1e-4)
-    mean_sat = np.mean(s)
 
-    if task == "eye":
-        fundus_mask = (r > 1.35 * g) & (g > 1.05 * b) & (r / (b + 1.0) > 2.0)
-        fundus_ratio = np.mean(fundus_mask)
-        if fundus_ratio < 0.15 and (rb_ratio < 2.0 or rg_diff < 25):
-            return False, "Image does not match retinal fundus photography. Non-ophthalmic surface detected (e.g., hand, skin, or external object)."
-    elif task == "oral":
-        mucosa_mask = ((h < 22) | (h > 160)) & (s > 0.18) & (v > 0.18)
-        mucosa_ratio = np.mean(mucosa_mask)
-        if mucosa_ratio < 0.08 and (rg_diff < 16 or mean_sat < 0.14):
-            return False, "Image does not match oral cavity / mucosa tissue. Non-oral surface detected (e.g., hand, palm, skin, or room surface). Please frame mouth interior."
+    white_ratio = np.mean((r > 215) & (g > 215) & (b > 215))
+    fundus_pix = np.mean((r > 1.30 * g) & (g > 1.05 * b) & (r / (b + 1.0) > 2.5))
+    mucosa_pix = np.mean(((h_ch < 18) | (h_ch > 162)) & (s_ch > 0.18) & (r > g + 15) & (r > 55))
+
+    if white_ratio > 0.35 and mean_sat < 0.16:
+        return "document", {"white_ratio": white_ratio}
+    elif (rb_ratio > 2.8 and fundus_pix > 0.18) or (fundus_pix > 0.32 and rb_ratio > 2.2):
+        return "retina", {"fundus_pix": fundus_pix, "rb_ratio": rb_ratio}
+    elif mucosa_pix > 0.22 and rg_diff > 20 and mean_sat > 0.20 and rb_ratio < 2.8:
+        return "oral", {"mucosa_pix": mucosa_pix, "rg_diff": rg_diff}
+    elif (mean_sat < 0.16 and rg_diff < 18) or (rg_diff < 8) or (white_ratio > 0.22):
+        return "skin_hand", {"mean_sat": mean_sat, "rg_diff": rg_diff}
+    elif 0.10 <= mean_sat <= 0.25 and 10 <= rg_diff <= 25 and mucosa_pix < 0.15 and fundus_pix < 0.08:
+        return "face", {"mean_sat": mean_sat}
+    else:
+        return "random_object", {}
+
+def assess_image_quality_cv(img_bgr: np.ndarray, task: str) -> tuple[bool, str]:
+    """
+    Evaluates blur/sharpness and illumination on confirmed specimen.
+    Returns (is_acceptable, retake_reason).
+    """
+    gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+    lap_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+    mean_lum = np.mean(gray)
+
+    # Blurry check
+    if (task == "eye" and lap_var < 18.0) or (task == "oral" and lap_var < 5.0):
+        if task == "eye":
+            return False, "Retinal image detected, but it is too blurry. Please retake with steady focus."
+        else:
+            return False, "Oral image detected, but it has severe motion blur. Please hold steady and retake."
+
+    # Dark check
+    if mean_lum < 36.0:
+        if task == "eye":
+            return False, "Retinal image detected, but it is too dark / underexposed. Please retake with proper illumination."
+        else:
+            return False, "Oral image detected, but lighting is underexposed. Please retake with improved illumination."
 
     return True, ""
 
@@ -308,15 +346,49 @@ class InferenceHandler(BaseHTTPRequestHandler):
         try:
             img = decode_image(image_uri)
 
-            # Anatomical Domain / Out-of-Distribution Safety Gate
-            is_valid, reject_reason = validate_specimen_cv(img, task)
-            if not is_valid:
+            # STEP 1: Image Type Validation
+            detected_type, _ = classify_specimen_cv(img)
+            is_type_match = False
+            type_reason = ""
+
+            if task == "eye":
+                if detected_type == "retina":
+                    is_type_match = True
+                elif detected_type == "oral":
+                    type_reason = "This appears to be an oral image. You selected Eye Screening."
+                elif detected_type == "document":
+                    type_reason = "This appears to be a document or screenshot, not a retinal image."
+                elif detected_type == "skin_hand":
+                    type_reason = "This appears to be skin or a hand photo, not a retinal image."
+                elif detected_type == "face":
+                    type_reason = "This appears to be an external face photo, not an ophthalmic fundus image."
+                else:
+                    type_reason = "This does not appear to be a retinal image."
+            elif task == "oral":
+                if detected_type == "oral":
+                    is_type_match = True
+                elif detected_type == "retina":
+                    type_reason = "This appears to be a retinal image. You selected Oral Screening."
+                elif detected_type == "document":
+                    type_reason = "This appears to be a document or screenshot, not an oral cavity image."
+                elif detected_type == "skin_hand":
+                    type_reason = "This does not appear to be an oral cavity image (hand or palmar skin detected). Please frame the mouth interior."
+                elif detected_type == "face":
+                    type_reason = "This appears to be an external face photo. Please frame the oral cavity interior (tongue, cheek, palate, or gums)."
+                else:
+                    type_reason = "This does not appear to be an oral cavity image."
+
+            if not is_type_match:
+                # CRITICAL: Medical screening model MUST NOT run
                 result = {
-                    "class": "invalid_specimen",
+                    "class": "wrong_image_type",
+                    "validationStatus": "wrong_image_type",
                     "probability": 0.0,
-                    "modelVersion": "Anatomical-Safety-Gate-v1.0",
+                    "isAcceptable": False,
+                    "feedback": type_reason,
+                    "modelVersion": "Specimen-Type-Gate-v1.0",
                     "explanationSupported": False,
-                    "explanationText": reject_reason,
+                    "explanationText": type_reason,
                     "heatmapCoordinates": [],
                     "inferenceTimeMs": int((time.time() - t0) * 1000),
                     "task": task,
@@ -326,14 +398,42 @@ class InferenceHandler(BaseHTTPRequestHandler):
                 self._send_cors_headers()
                 self.end_headers()
                 self.wfile.write(json.dumps(result).encode("utf-8"))
-                print(f"[REJECT] Task: {task.upper()} -> Anatomical validation failed: {reject_reason}")
+                print(f"[REJECT: TYPE] Task: {task.upper()} -> {type_reason}")
                 return
 
+            # STEP 2: Image Quality Validation
+            quality_ok, quality_reason = assess_image_quality_cv(img, task)
+            if not quality_ok:
+                # CRITICAL: Medical screening model MUST NOT run
+                result = {
+                    "class": "poor_quality",
+                    "validationStatus": "correct_type_poor_quality",
+                    "probability": 0.0,
+                    "isAcceptable": False,
+                    "feedback": quality_reason,
+                    "modelVersion": "Optical-Quality-Gate-v1.0",
+                    "explanationSupported": False,
+                    "explanationText": quality_reason,
+                    "heatmapCoordinates": [],
+                    "inferenceTimeMs": int((time.time() - t0) * 1000),
+                    "task": task,
+                }
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write(json.dumps(result).encode("utf-8"))
+                print(f"[REJECT: QUALITY] Task: {task.upper()} -> {quality_reason}")
+                return
+
+            # STEP 3: Medical Screening Model (Only runs when both Step 1 & Step 2 pass!)
             if task == "oral":
                 result = analyze_oral_image(img)
             else:
                 result = analyze_retina_image(img)
 
+            result["validationStatus"] = "valid_usable"
+            result["isAcceptable"] = True
             result["inferenceTimeMs"] = int((time.time() - t0) * 1000)
             result["task"] = task
 

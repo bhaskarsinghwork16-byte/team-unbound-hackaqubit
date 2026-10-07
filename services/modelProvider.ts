@@ -355,8 +355,9 @@ export function mapModelOutputToScreeningResult(
   const screeningId = `SCR-${Date.now().toString().slice(-6)}`;
   const confidencePercent = Math.round(modelOutput.probability * 100);
 
-  // GATING 0: Anatomical Protocol Rejection Gate (Non-Target Surface like hand, skin, or room)
-  if (modelOutput.class === 'invalid_specimen') {
+  // GATING 0A: Wrong Image Type Validation Gate
+  if (modelOutput.class === 'wrong_image_type' || quality.validationStatus === 'wrong_image_type') {
+    const reasonText = modelOutput.explanationText || quality.feedback || 'Wrong image type for selected screening.';
     return {
       screeningId,
       patientId,
@@ -365,24 +366,24 @@ export function mapModelOutputToScreeningResult(
       imageQuality: {
         ...quality,
         grade: 'UNUSABLE',
-        score: Math.min(quality.score || 18, 18),
+        score: Math.min(quality.score || 10, 10),
         isAcceptable: false,
         canProceedWithWarning: false,
+        validationStatus: 'wrong_image_type',
+        feedback: reasonText,
         warnings: [
           ...(quality.warnings || []),
-          'Specimen rejection: Image does not match target anatomical protocol.',
+          reasonText,
         ],
       },
       resultState: 'quality_insufficient',
       riskLevel: 'inconclusive',
-      prediction: 'Invalid Clinical Specimen (Non-Target Surface)',
+      prediction: 'Screening Blocked: Wrong Image Type',
       confidence: 0,
-      recommendation: screeningType === 'oral'
-        ? 'The uploaded image does not match oral mucosal tissue (hand, palm, skin, or external surface detected). Automated clinical screening can only evaluate verified oral cavity photographs.'
-        : 'The uploaded image does not match retinal fundus photography (external surface detected). Automated clinical screening can only evaluate verified retinal fundus captures.',
-      clinicalCaveat: 'Anatomical protocol validation failed: Specimen rejected. Please frame the correct target anatomical site.',
+      recommendation: reasonText,
+      clinicalCaveat: 'Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.',
       explanationSupported: false,
-      explanationText: modelOutput.explanationText || 'Screening blocked: Surface does not match target anatomical protocol.',
+      explanationText: reasonText,
       modelVersion: modelOutput.modelVersion,
       modelMode,
       dataSource: modelMode,
@@ -391,22 +392,29 @@ export function mapModelOutputToScreeningResult(
     };
   }
 
-  // GATING 1: If image quality is UNUSABLE, disease inference is blocked!
-  if (quality.grade === 'UNUSABLE' || !quality.isAcceptable) {
+  // GATING 0B: Poor Image Quality Gate (Retake Required)
+  if (modelOutput.class === 'poor_quality' || quality.validationStatus === 'correct_type_poor_quality' || !quality.isAcceptable || quality.grade === 'UNUSABLE') {
+    const reasonText = modelOutput.explanationText || quality.feedback || 'Image quality insufficient for automated analysis. Please retake the image.';
     return {
       screeningId,
       patientId,
       type: screeningType,
       imageReference: imageUri,
-      imageQuality: quality,
+      imageQuality: {
+        ...quality,
+        isAcceptable: false,
+        canProceedWithWarning: false,
+        validationStatus: 'correct_type_poor_quality',
+        feedback: reasonText,
+      },
       resultState: 'quality_insufficient',
       riskLevel: 'inconclusive',
-      prediction: 'Unable to analyze reliably',
-      confidence: confidencePercent,
-      recommendation: 'Image quality insufficient for automated analysis. Please retake image with improved lighting and steady framing.',
-      clinicalCaveat: 'Automated screening was blocked due to optical degradation (motion blur or underexposure). Does not confirm or exclude pathology.',
+      prediction: 'Screening Blocked: Image Quality Insufficient',
+      confidence: 0,
+      recommendation: reasonText,
+      clinicalCaveat: 'Automated disease screening was blocked due to optical blur or underexposure to avoid inaccurate findings.',
       explanationSupported: false,
-      explanationText: 'Visual explanation is unavailable for degraded captures.',
+      explanationText: modelOutput.explanationText || quality.feedback || 'Visual explanation is unavailable for degraded captures.',
       modelVersion: modelOutput.modelVersion,
       modelMode,
       dataSource: modelMode,

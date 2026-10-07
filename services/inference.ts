@@ -27,20 +27,21 @@ export async function runScreeningInference(options: InferenceRunOptions): Promi
     modelMode = options.modelMode || (process.env.MODEL_MODE?.toLowerCase() === 'demo' ? 'demo' : 'real'),
   } = options;
 
-  // 1. Image Quality Assessment Gate (Pre-inference)
+  // 1. Image Type & Quality Validation Gate (Pre-inference)
   const quality = qualityOverride || assessImageQualitySync(imageUri, screeningType);
   const provider = getModelProvider(modelMode);
 
-  // If quality is UNUSABLE, disease inference is blocked immediately to avoid false negatives!
-  if (quality.grade === 'UNUSABLE' || !quality.isAcceptable) {
+  // CRITICAL: If image validation fails (wrong type OR poor quality), disease inference is BLOCKED!
+  if (!quality.isAcceptable || quality.validationStatus === 'wrong_image_type' || quality.validationStatus === 'correct_type_poor_quality' || quality.grade === 'UNUSABLE') {
     return mapModelOutputToScreeningResult(
       {
         task: screeningType,
-        class: 'unusable_quality',
+        class: quality.validationStatus === 'wrong_image_type' ? 'wrong_image_type' : 'poor_quality',
         probability: 0.0,
-        modelVersion: screeningType === 'eye' ? 'HealthScreen-DR-v1.2' : 'HealthScreen-Oral-v1.1',
+        modelVersion: screeningType === 'eye' ? 'HealthScreen-SafetyGate-v1.0' : 'HealthScreen-SafetyGate-v1.0',
         inferenceTimeMs: 0,
         explanationSupported: false,
+        explanationText: quality.feedback,
       },
       quality,
       patientId,
