@@ -83,6 +83,19 @@ export type PipelineValidationStatus =
   | 'wrong_image_type'           // Wrong image category -> reject and explain
   | 'correct_type_poor_quality'; // Correct image but poor quality -> ask for retake
 
+export interface ValidationApiResponse {
+  status: 'valid' | 'retake' | 'invalid';
+  imageType: 'retina' | 'oral' | 'unknown';
+  confidence: number | null;
+  quality: {
+    blur: number;
+    brightness: number;
+    contrast: number;
+    resolution: string;
+  };
+  reason: string;
+}
+
 /**
  * Quality Assessment Output
  */
@@ -97,6 +110,7 @@ export interface ImageQualityResult {
   warnings: string[];
   typeValidation?: ImageTypeValidationResult;
   validationStatus: PipelineValidationStatus;
+  validation?: ValidationApiResponse;
 }
 
 /**
