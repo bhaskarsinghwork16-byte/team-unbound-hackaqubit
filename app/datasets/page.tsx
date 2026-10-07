@@ -14,6 +14,7 @@ import {
   Zap
 } from 'lucide-react';
 import { DatasetMeta, ModelMeta } from '@/types';
+import FlexCarousel from '@/components/FlexCarousel';
 
 export default function DatasetsAndModelsPage() {
   const [datasets, setDatasets] = useState<DatasetMeta[]>([]);
@@ -45,6 +46,45 @@ export default function DatasetsAndModelsPage() {
         <p className="text-xs text-[#5d2a42]/80 font-medium mt-1">
           Transparent clinical documentation on training cohorts, lightweight architectures, edge quantization, and honest ethical limitations.
         </p>
+      </div>
+
+      {/* 3D WebGL Liquid FlexCarousel Dataset Options Carousel */}
+      <div className="w-full h-[340px] relative rounded-3xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-lg shadow-[#5d2a42]/5">
+        <FlexCarousel
+          items={[
+            {
+              src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&q=80&auto=format&fit=max',
+              alt: 'EyePACS Retinal Cohort',
+              title: '👁️ EyePACS Retinal Dataset',
+              subtitle: '35,126 Annotated Retinal Fundus Images'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1200&q=80&auto=format&fit=max',
+              alt: 'Oral Lesions India Dataset',
+              title: '👄 Oral Lesions India Cohort',
+              subtitle: '4,800 Clinician-Verified Oral Images'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
+              alt: 'MobileNetV3 Edge INT8 Model',
+              title: '⚡ MobileNetV3 INT8 Architecture',
+              subtitle: '1.4 MB Edge Quantized AI Model'
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1200&q=80&auto=format&fit=max',
+              alt: 'EfficientNet-B0 Edge INT8 Model',
+              title: '🧠 EfficientNet-B0 INT8 Model',
+              subtitle: '4.2 MB Multi-Task Classifier'
+            }
+          ]}
+          preset="liquid"
+          intro="rise"
+          cardHeight={0.65}
+          gap={14}
+          squeeze={0.2}
+          focusOnClick
+          captions
+        />
       </div>
 
       {/* Datasets Section */}

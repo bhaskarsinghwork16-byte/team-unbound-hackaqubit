@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import FolderFloat from './FolderFloat';
 import BloodVesselBackground from './BloodVesselBackground';
+import FlexCarousel from './FlexCarousel';
 
 const FOLDER_ITEMS = [
   { label: '📊 Clinical Overview', value: '/dashboard' },
@@ -226,9 +227,61 @@ export default function CommunityScreeningHero() {
           />
         </div>
 
-        <p className="text-xs text-[#5d2a42]/70 font-bold mt-12 flex items-center gap-1.5">
+        {/* 3D WebGL FlexCarousel Module Options Showcase */}
+        <div className="w-full max-w-5xl h-[360px] relative rounded-3xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-xl my-8">
+          <FlexCarousel
+            items={[
+              {
+                src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
+                alt: 'Clinical Dashboard Overview',
+                title: '📊 Clinical Overview',
+                subtitle: 'Real-time Screening Flow & Metrics'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&q=80&auto=format&fit=max',
+                alt: 'AI Patient Screening',
+                title: '👁️ AI Patient Screening',
+                subtitle: 'Offline Triage for Retinal & Oral Lesions'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80&auto=format&fit=max',
+                alt: 'Patient Directory',
+                title: '👥 Patient Directory',
+                subtitle: 'Encrypted Longitudinal Records'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1200&q=80&auto=format&fit=max',
+                alt: 'Specialist Referrals',
+                title: '⚕️ Specialist Referrals',
+                subtitle: 'District Hospital Escalation Pipeline'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1200&q=80&auto=format&fit=max',
+                alt: 'Dataset & Model Docs',
+                title: '🧬 AI Model Specs',
+                subtitle: 'Edge INT8 Quantized Architectures'
+              }
+            ]}
+            preset="liquid"
+            intro="rise"
+            cardHeight={0.65}
+            gap={16}
+            squeeze={0.2}
+            focusOnClick
+            captions
+            onSelect={(_idx, item) => {
+              if (item.title?.includes('Overview')) router.push('/dashboard');
+              else if (item.title?.includes('Screening')) router.push('/screening');
+              else if (item.title?.includes('Directory')) router.push('/patients');
+              else if (item.title?.includes('Referrals')) router.push('/referrals');
+              else if (item.title?.includes('Specs')) router.push('/datasets');
+            }}
+          />
+        </div>
+
+        <p className="text-xs text-[#5d2a42]/70 font-bold mt-4 flex items-center gap-1.5">
           <Sparkle className="w-3.5 h-3.5 text-[#5d2a42]" />
-          <span>Interactive Matter-JS Physics Enabled · Drag &amp; Throw Pills</span>
+          <span>3D WebGL Liquid Lens Options Carousel · Drag &amp; Scroll Cards</span>
         </p>
       </section>
     </div>

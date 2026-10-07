@@ -35,6 +35,7 @@ import {
   ReferralPriority 
 } from '@/types';
 import { assessImageInBrowser, assessImageQualitySync } from '@/services/imageQuality';
+import FlexCarousel from '@/components/FlexCarousel';
 
 function ScreeningWorkflow() {
   const searchParams = useSearchParams();
@@ -654,8 +655,52 @@ function ScreeningWorkflow() {
           <div>
             <h2 className="text-lg font-bold text-[#5d2a42]">Select Screening Protocol</h2>
             <p className="text-xs text-[#5d2a42]/70 mt-0.5">
-              Choose the examination protocol for this session
+              Choose the examination protocol for this session or click any module card below
             </p>
+          </div>
+
+          {/* Interactive WebGL Liquid FlexCarousel Options Viewer */}
+          <div className="w-full h-[300px] relative rounded-2xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-inner">
+            <FlexCarousel
+              items={[
+                {
+                  src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&q=80&auto=format&fit=max',
+                  alt: 'Retinal Eye Screening',
+                  title: '👁️ Retinal Eye Screening',
+                  subtitle: 'Diabetic Retinopathy & Optic Disc Assessment'
+                },
+                {
+                  src: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1200&q=80&auto=format&fit=max',
+                  alt: 'Oral Mucosa Screening',
+                  title: '👄 Oral Mucosal Screening',
+                  subtitle: 'Pre-Cancerous Lesion Pattern Detection'
+                },
+                {
+                  src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
+                  alt: 'Glaucoma Optical Check',
+                  title: '🔍 Glaucoma & Cataract',
+                  subtitle: 'Optic Cup-to-Disc Ratio Evaluation'
+                },
+                {
+                  src: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1200&q=80&auto=format&fit=max',
+                  alt: 'Conjunctival Pallor Check',
+                  title: '🩸 Conjunctival Pallor',
+                  subtitle: 'Non-Invasive Anemia Edge Screening'
+                }
+              ]}
+              preset="liquid"
+              intro="rise"
+              cardHeight={0.65}
+              gap={12}
+              squeeze={0.2}
+              focusOnClick
+              captions
+              onSelect={(index) => {
+                if (index === 0) setScreeningType('eye');
+                else setScreeningType('oral');
+                setStep(4);
+              }}
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
