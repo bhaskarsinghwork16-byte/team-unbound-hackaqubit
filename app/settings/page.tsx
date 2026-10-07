@@ -25,15 +25,22 @@ export default function SettingsPage() {
     connected: false,
     message: 'Checking status...',
   });
+  const [mlStatus, setMlStatus] = useState<{ connected: boolean; message: string; service: string }>({
+    connected: false,
+    message: 'Checking status...',
+    service: 'Python PyTorch Microservice',
+  });
 
   useEffect(() => {
     fetch('/api/health')
       .then((r) => r.json())
       .then((d) => {
         if (d.database) setMongoStatus(d.database);
+        if (d.mlService) setMlStatus(d.mlService);
       })
       .catch(() => {
         setMongoStatus({ connected: false, message: 'Local Secure File Storage Active' });
+        setMlStatus({ connected: false, message: 'Offline (Internal rules fallback)', service: 'PyTorch Microservice' });
       });
   }, []);
 
@@ -187,6 +194,29 @@ export default function SettingsPage() {
                 }`}
               >
                 {mongoStatus.connected ? '● MongoDB Connected' : '● Local Offline Storage Active'}
+              </span>
+            </div>
+
+            <div className="p-4 rounded-lg border flex items-center justify-between text-xs bg-slate-50 border-slate-200">
+              <div className="flex items-center gap-3">
+                <Cpu className="w-5 h-5 text-teal-600" />
+                <div>
+                  <div className="font-semibold text-slate-900">
+                    PyTorch Computer Vision Microservice (Port 5000)
+                  </div>
+                  <div className="text-slate-500 mt-0.5">
+                    {mlStatus.message}
+                  </div>
+                </div>
+              </div>
+              <span
+                className={`px-2.5 py-1 rounded-md font-semibold text-[11px] ${
+                  mlStatus.connected
+                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                    : 'bg-slate-100 text-slate-600 border border-slate-200'
+                }`}
+              >
+                {mlStatus.connected ? '● Live PyTorch ML Service' : '○ Offline / Standby'}
               </span>
             </div>
           </div>

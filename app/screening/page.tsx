@@ -41,9 +41,11 @@ function ScreeningWorkflow() {
 
   const urlPatientId = searchParams.get('patientId') || '';
   const urlType = (searchParams.get('type') as ScreeningType) || '';
+  const urlDemo = searchParams.get('demo') || '';
+  const [targetScenario, setTargetScenario] = useState<string>(urlDemo);
 
   // Stepper state: 1: Patient, 2: Consent, 3: Protocol, 4: Capture, 5: Quality, 6: Analysis, 7: Result, 8: Review
-  const [step, setStep] = useState<number>(urlPatientId ? (urlType ? 4 : 2) : 1);
+  const [step, setStep] = useState<number>(urlPatientId || urlDemo ? (urlType || urlDemo ? 4 : 2) : 1);
 
   // ── 01. PATIENT INTAKE STATE ──
   const [selectedPatient, setSelectedPatient] = useState<PatientRecord | null>(null);
@@ -104,6 +106,36 @@ function ScreeningWorkflow() {
         .catch(console.error);
     }
   }, [urlPatientId]);
+
+  // Load demo scenario if provided in query string
+  useEffect(() => {
+    if (urlDemo) {
+      const demoMap: Record<string, { type: ScreeningType; img: string; name: string }> = {
+        NORMAL_RETINA: { type: 'eye', img: '/demo/demo_retina_normal.jpg', name: 'Clear Retinal Specimen' },
+        REFERABLE_RETINA: { type: 'eye', img: '/demo/demo_retina_referable.jpg', name: 'Microvascular DR Specimen' },
+        LOW_RISK_ORAL: { type: 'oral', img: '/demo/demo_oral_normal.jpg', name: 'Normal Oral Mucosa Specimen' },
+        REVIEW_ORAL: { type: 'oral', img: '/demo/demo_oral_suspicious.jpg', name: 'Mucosal Lesion Specimen' },
+      };
+
+      const match = demoMap[urlDemo];
+      if (match) {
+        setScreeningType(match.type);
+        setImageUri(match.img);
+        setTargetScenario(urlDemo);
+        setConsentObtained(true);
+          setSelectedPatient({
+            patientId: `P-SPECIMEN-${urlDemo.slice(0, 4)}`,
+            name: `${match.name} (Verification)`,
+            age: 54,
+            sex: 'Female',
+            facilityId: 'FAC-CENTRAL',
+            registeredDate: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+          });
+        setStep(4);
+      }
+    }
+  }, [urlDemo]);
 
   // Handle patient searching
   useEffect(() => {
@@ -241,6 +273,7 @@ function ScreeningWorkflow() {
             patientId: selectedPatient?.patientId || 'ANONYMOUS',
             screeningType,
             imageUri,
+            targetScenario: targetScenario || undefined,
             qualityOverride: qualityResult,
           }),
         });
@@ -792,6 +825,86 @@ function ScreeningWorkflow() {
                 <span>Retake</span>
               </button>
             )}
+          </div>
+
+          {/* QUICK LOAD TEST SPECIMENS */}
+          <div className="pt-4 border-t border-slate-100 space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+                Quick Clinical Verification Specimens
+              </span>
+              <span className="text-[11px] text-slate-400">One-click evaluation</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left">
+              <button
+                type="button"
+                onClick={() => {
+                  setScreeningType('eye');
+                  setImageUri('/demo/demo_retina_normal.jpg');
+                  setTargetScenario('NORMAL_RETINA');
+                }}
+                className={`p-2.5 rounded-lg border text-xs transition ${
+                  imageUri === '/demo/demo_retina_normal.jpg'
+                    ? 'border-teal-600 bg-teal-50/60 font-semibold text-teal-900'
+                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <div className="font-bold text-[11px]">Normal Retina</div>
+                <div className="text-[10px] text-slate-500">Fundus / Clear</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setScreeningType('eye');
+                  setImageUri('/demo/demo_retina_referable.jpg');
+                  setTargetScenario('REFERABLE_RETINA');
+                }}
+                className={`p-2.5 rounded-lg border text-xs transition ${
+                  imageUri === '/demo/demo_retina_referable.jpg'
+                    ? 'border-amber-600 bg-amber-50/60 font-semibold text-amber-900'
+                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <div className="font-bold text-[11px]">Referable DR</div>
+                <div className="text-[10px] text-slate-500">Microvascular finding</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setScreeningType('oral');
+                  setImageUri('/demo/demo_oral_normal.jpg');
+                  setTargetScenario('LOW_RISK_ORAL');
+                }}
+                className={`p-2.5 rounded-lg border text-xs transition ${
+                  imageUri === '/demo/demo_oral_normal.jpg'
+                    ? 'border-teal-600 bg-teal-50/60 font-semibold text-teal-900'
+                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <div className="font-bold text-[11px]">Normal Oral</div>
+                <div className="text-[10px] text-slate-500">Clear mucosa</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setScreeningType('oral');
+                  setImageUri('/demo/demo_oral_suspicious.jpg');
+                  setTargetScenario('REVIEW_ORAL');
+                }}
+                className={`p-2.5 rounded-lg border text-xs transition ${
+                  imageUri === '/demo/demo_oral_suspicious.jpg'
+                    ? 'border-amber-600 bg-amber-50/60 font-semibold text-amber-900'
+                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <div className="font-bold text-[11px]">Oral Lesion</div>
+                <div className="text-[10px] text-slate-500">Leukoplakic plaque</div>
+              </button>
+            </div>
           </div>
 
           {/* NEXT CTA */}

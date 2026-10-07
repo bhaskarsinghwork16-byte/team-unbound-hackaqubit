@@ -154,7 +154,7 @@ export class RealModelProvider implements ModelProvider {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ task, image: imageUri }),
-        signal: AbortSignal.timeout(3500),
+        signal: AbortSignal.timeout(8000),
       });
 
       if (!response.ok) {
@@ -181,8 +181,8 @@ export class RealModelProvider implements ModelProvider {
 /**
  * Factory to retrieve active model provider based on configuration
  */
-export function getModelProvider(): ModelProvider {
-  const mode = process.env.MODEL_MODE?.toLowerCase() || 'demo';
+export function getModelProvider(preferredMode?: 'real' | 'demo'): ModelProvider {
+  const mode = preferredMode || process.env.MODEL_MODE?.toLowerCase() || 'demo';
   if (mode === 'real') {
     return new RealModelProvider();
   }

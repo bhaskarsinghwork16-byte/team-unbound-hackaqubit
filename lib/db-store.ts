@@ -457,6 +457,26 @@ export async function getAnalytics(): Promise<AnalyticsSummary> {
 /** Transparent Dataset Specifications (displayed in Settings only) */
 export const realDatasets: DatasetMeta[] = [
   {
+    name: 'EyePACS Diabetic Retinopathy Detection (Kaggle)',
+    source: 'EyePACS Telehealth Network / California Healthcare Foundation',
+    task: 'Large-Scale Multi-Stage DR Screening & Severity Detection',
+    classes: ['No DR (0)', 'Mild (1)', 'Moderate (2)', 'Severe (3)', 'Proliferative DR (4)'],
+    license: 'Research Open Access',
+    imageCount: 88702,
+    kaggleUrl: 'https://www.kaggle.com/c/diabetic-retinopathy-detection',
+    limitations: 'Heterogeneous clinical cohort with varying field cameras and resolutions. Ideal for deep representation pre-training.',
+  },
+  {
+    name: 'IDRiD (Indian Diabetic Retinopathy Image Dataset)',
+    source: 'IEEE DataPort / Eye Clinic Nanded, Maharashtra, India',
+    task: 'Pixel-Level Lesion Segmentation & Diabetic Macular Edema Grading',
+    classes: ['Microaneurysms', 'Hemorrhages', 'Hard Exudates', 'Soft Exudates', 'Clinical DR Grade 0-4'],
+    license: 'IEEE Open Access / Research License',
+    imageCount: 516,
+    kaggleUrl: 'https://ieee-dataport.org/open-access/indian-diabetic-retinopathy-image-dataset-idrid',
+    limitations: 'Acquired specifically from Indian rural/semi-urban patients with dedicated fundus imaging. Matches community health camp demographic.',
+  },
+  {
     name: 'APTOS 2019 Blindness Detection (Kaggle)',
     source: 'Asia Pacific Tele-Ophthalmology Society (Aravind Eye Hospital)',
     task: 'Diabetic Retinopathy Screening & Severity Grading (Fundus Photography)',
@@ -475,6 +495,16 @@ export const realDatasets: DatasetMeta[] = [
     imageCount: 1748,
     kaggleUrl: 'https://www.kaggle.com/datasets/google-brain/messidor-2-dr-grades',
     limitations: 'Acquired with high-resolution tabletop clinical fundus cameras. Does not contain smartphone camera shake artifacts.',
+  },
+  {
+    name: 'NDB-UFES Oral Cancer & Lesions Dataset',
+    source: 'Mendeley Data / Federal University of Espírito Santo',
+    task: 'Histopathologically Verified Oral Squamous Cell Carcinoma (OSCC) & Leukoplakia',
+    classes: ['Normal Oral Mucosa', 'Leukoplakia', 'Oral Squamous Cell Carcinoma'],
+    license: 'CC BY 4.0 Open Access',
+    imageCount: 1540,
+    kaggleUrl: 'https://data.mendeley.com/datasets/269cvc423m/1',
+    limitations: 'Biopsy-verified lesions with detailed clinical sociodemographic data. Essential for reducing false positives on harmless ulcers.',
   },
   {
     name: 'Oral Cancer & Pre-Cancerous Lesions Dataset',
