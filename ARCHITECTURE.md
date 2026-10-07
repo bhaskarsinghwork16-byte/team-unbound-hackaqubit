@@ -33,8 +33,9 @@ team unbound/
 ├── types/                     # [Contracts] Central TypeScript Interfaces & Enums
 │   └── index.ts               # ScreeningResult, QualityGrade, DatasetMeta, ModelMeta
 │
-├── js/ & index.html           # [Mobile Web Simulator] Vanilla JS Field Phone Prototype
-│   ├── js/app.js              # State machine for the smartphone mockup UI
+├── archive/prototype-web-simulator/ # [Mobile Web Simulator] Vanilla JS Field Phone Prototype
+│   ├── index.html             # Smartphone mockup UI
+│   ├── js/app.js              # State machine for the mockup UI
 │   └── server.js              # Standalone zero-dependency HTTP server
 │
 ├── lib/ & pubspec.yaml        # [Native Mobile] Flutter Android-First Client (Edge Target)
@@ -123,8 +124,8 @@ npm run start
 ```
 Visit: [http://localhost:3000](http://localhost:3000)
 
-### Standalone Mobile Phone Web Simulator (Port 3000):
+### Standalone Mobile Phone Web Simulator (Optional Prototype):
 ```bash
-node server.js
+node archive/prototype-web-simulator/server.js
 ```
 Visit: [http://localhost:3000](http://localhost:3000)
