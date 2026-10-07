@@ -24,7 +24,8 @@ import {
   Search,
   ArrowLeft,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 import { 
   ScreeningType, 
@@ -67,6 +68,7 @@ function ScreeningWorkflow() {
 
   // ── 04. IMAGE CAPTURE STATE ──
   const [imageUri, setImageUri] = useState<string>('');
+  const [targetScenario, setTargetScenario] = useState<string>('');
   const [isCameraActive, setIsCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -247,6 +249,7 @@ function ScreeningWorkflow() {
             patientId: selectedPatient?.patientId || 'ANONYMOUS',
             screeningType,
             imageUri,
+            targetScenario: targetScenario || undefined,
             qualityOverride: qualityResult,
           }),
         });
