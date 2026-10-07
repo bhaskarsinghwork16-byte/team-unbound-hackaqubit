@@ -77,32 +77,33 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   // ── IF WE ARE ON THE WEBSITE HOME LANDING PAGE (`/`) ──
   if (isHomePage) {
     return (
-      <div className="min-h-screen bg-[#fff9ec] text-[#5d2a42] font-sans antialiased flex flex-col">
+      <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased flex flex-col">
         {/* ── PUBLIC WEBSITE TOP NAVBAR ── */}
-        <header className="sticky top-0 z-50 bg-[#fff9ec]/90 backdrop-blur-md border-b border-[#d8e2dc]/60 px-4 sm:px-8 py-3.5 transition-colors">
+        <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5 transition-colors">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
               <BrandLogo size="md" showSubtitle={true} theme="light" />
             </div>
 
-            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-[#5d2a42]">
-              <a href="#hero" className="hover:opacity-80 transition-opacity">Platform</a>
-              <a href="#options" className="hover:opacity-80 transition-opacity">Modules</a>
-              <Link href="/screening" className="hover:opacity-80 transition-opacity flex items-center gap-1">
-                <Eye className="w-4 h-4 text-[#5d2a42]" />
+            {/* Public Navigation Links */}
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+              <a href="#hero" className="hover:text-teal-600 transition-colors">Platform</a>
+              <a href="#options" className="hover:text-teal-600 transition-colors">Modules</a>
+              <Link href="/screening" className="hover:text-teal-600 transition-colors flex items-center gap-1.5">
+                <Eye className="w-4 h-4 text-teal-600" />
                 <span>AI Screening</span>
               </Link>
-              <Link href="/datasets" className="hover:opacity-80 transition-opacity">AI Models</Link>
+              <Link href="/datasets" className="hover:text-teal-600 transition-colors">AI Models</Link>
             </nav>
 
             <div className="flex items-center gap-3">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-xl text-xs sm:text-sm font-extrabold shadow-md transition-all transform hover:scale-[1.02] active:scale-95"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-xs transition-all transform hover:scale-[1.02] active:scale-95"
               >
-                <LayoutDashboard className="w-4 h-4 text-[#ffdccc]" />
+                <LayoutDashboard className="w-4 h-4 text-teal-100" />
                 <span>Dashboard</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#ffdccc]" />
+                <ArrowRight className="w-3.5 h-3.5 text-teal-100" />
               </Link>
             </div>
           </div>

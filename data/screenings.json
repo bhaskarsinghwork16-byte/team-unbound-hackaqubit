@@ -1,5 +1,56 @@
 [
   {
+    "screeningId": "SCR-088760",
+    "patientId": "PT-1052",
+    "type": "eye",
+    "imageReference": "/demo/demo_retina_referable.jpg",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 91,
+      "isAcceptable": true,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 92,
+        "brightness": 88,
+        "contrast": 86,
+        "noiseLevel": 90,
+        "framing": 94
+      },
+      "feedback": "Retinal fundus image verified. Optical standards confirmed for AI screening.",
+      "warnings": [],
+      "validationStatus": "valid_usable",
+      "typeValidation": {
+        "detectedType": "retina",
+        "expectedType": "eye",
+        "isValidType": true,
+        "typeConfidence": 95,
+        "reason": "Valid retinal fundus photograph detected."
+      }
+    },
+    "resultState": "potential_finding",
+    "riskLevel": "higher_risk",
+    "prediction": "Potential DR-related finding detected",
+    "confidence": 85,
+    "recommendation": "Clinical review recommended: Consider referral to an ophthalmologist for comprehensive dilated fundus examination.",
+    "clinicalCaveat": "Screening finding: Optical patterns consistent with referable diabetic retinopathy identified. This is NOT a definitive clinical diagnosis.",
+    "explanationSupported": true,
+    "explanationText": "Retinal analysis identified focal microvascular exudates (665 candidate lesions) and localized microvascular alterations.",
+    "heatmapCoordinates": [
+      {
+        "x": 326,
+        "y": 262,
+        "radius": 80,
+        "intensity": 0.85
+      }
+    ],
+    "modelVersion": "DR-MobileNetV3-Live",
+    "modelMode": "real",
+    "dataSource": "real",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T19:08:08.760Z",
+    "patientName": "yash"
+  },
+  {
     "screeningId": "SCR-069113",
     "patientId": "PT-1051",
     "type": "oral",

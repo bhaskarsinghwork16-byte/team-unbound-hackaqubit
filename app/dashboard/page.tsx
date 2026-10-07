@@ -19,7 +19,6 @@ import {
   Sparkles
 } from 'lucide-react';
 import { ScreeningResult, OperationalMetrics } from '@/types';
-import CommunityScreeningHero from '@/components/CommunityScreeningHero';
 import {
   Button,
   Card,
@@ -92,33 +91,67 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* ── HERO SECTION FOR HEALTHSCREEN (COMMUNITY SCREENING SHOWCASE) ── */}
-      <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-2xs">
-        <CommunityScreeningHero />
-      </div>
+    <div className="space-y-6">
+      {/* ── CLINICAL OPERATIONS HERO BANNER ── */}
+      <div className="relative rounded-2xl bg-linear-to-r from-teal-900 via-teal-800 to-slate-900 text-white p-6 sm:p-8 overflow-hidden shadow-sm border border-teal-700/40">
+        {/* Ambient subtle glow circles */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-60 h-60 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
 
-      {/* ── HEADER & PRIMARY ACTION ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            {getGreeting()}, Dr. Sunita
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Here is today’s community screening activity, patient flow, and pending clinical reviews.
-          </p>
-        </div>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 border border-teal-400/30 text-xs font-medium text-teal-200">
+              <Activity className="w-3.5 h-3.5 text-teal-300" />
+              <span>Primary Health Centre #1 · Community Screening Ops</span>
+            </div>
 
-        {/* Standardized Primary CTA Button */}
-        <div>
-          <Button
-            variant="primary"
-            size="md"
-            icon={<Plus className="w-4 h-4" />}
-            onClick={() => setShowStartModal(true)}
-          >
-            + New Screening
-          </Button>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+              {getGreeting()}, Dr. Sunita
+            </h1>
+
+            <p className="text-sm text-teal-100/80 leading-relaxed font-normal">
+              Offline-first decision support active. Ready to triage patients for Diabetic Retinopathy and Oral Cavity findings with edge INT8 models.
+            </p>
+
+            {/* Quick status telemetry pills */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 text-teal-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Edge AI: Active
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 text-teal-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Dual Protocols (Eye & Oral)
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 text-teal-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Offline Field Sync Ready
+              </span>
+            </div>
+          </div>
+
+          {/* Quick CTA Actions */}
+          <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0">
+            <Button
+              variant="primary"
+              size="md"
+              icon={<Plus className="w-4 h-4" />}
+              onClick={() => setShowStartModal(true)}
+              className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold shadow-md border-0"
+            >
+              + New Patient Screening
+            </Button>
+            <Link href="/patients">
+              <Button
+                variant="outline"
+                size="md"
+                icon={<Users className="w-4 h-4" />}
+                className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20"
+              >
+                Browse Patient Directory
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
