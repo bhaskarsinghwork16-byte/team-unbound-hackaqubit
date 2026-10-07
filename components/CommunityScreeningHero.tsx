@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
@@ -30,19 +29,11 @@ import {
   ArrowUpRight,
   Shield,
   HelpCircle,
+  Users,
+  ClipboardList,
+  GitPullRequest,
+  BarChart2,
 } from 'lucide-react';
-import FolderFloat from './FolderFloat';
-
-const FOLDER_ITEMS = [
-  { label: '📊 Clinical Overview', value: '/dashboard' },
-  { label: '👁️ New AI Screening', value: '/screening' },
-  { label: '👥 Patient Directory', value: '/patients' },
-  { label: '📋 Screening History', value: '/history' },
-  { label: '⚕️ Specialist Referrals', value: '/referrals' },
-  { label: '📈 Operational Reports', value: '/reports' },
-  { label: '🧬 Dataset Docs', value: '/datasets' },
-  { label: '⚙️ System Settings', value: '/settings' },
-];
 
 // Interactive demo cases for the live hero simulator
 interface DemoCase {
@@ -114,18 +105,85 @@ const DEMO_CASES: DemoCase[] = [
   },
 ];
 
+const CLINICAL_MODULES = [
+  {
+    title: 'Diabetic Retinopathy Optical Screening',
+    tag: 'AI Protocol #1',
+    description: 'Autonomous retinal fundus screening with automated Laplacian blur verification and 5-tier DR severity staging.',
+    href: '/screening?type=eye',
+    icon: Eye,
+    iconBg: 'bg-teal-50 border-teal-200 text-teal-700',
+    tagColor: 'bg-teal-50 text-teal-800 border-teal-200',
+  },
+  {
+    title: 'Oral Mucosal Lesion Screening',
+    tag: 'AI Protocol #2',
+    description: 'Visual screening of oral mucosa and tongue for suspicious leukoplakia, erythroplakia, and mucosal abnormalities.',
+    href: '/screening?type=oral',
+    icon: Smile,
+    iconBg: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+    tagColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  },
+  {
+    title: 'Community Patient Directory',
+    tag: 'Records & Intake',
+    description: 'Longitudinal health records, demographic search, and past screening encounters for registered community members.',
+    href: '/patients',
+    icon: Users,
+    iconBg: 'bg-sky-50 border-sky-200 text-sky-700',
+    tagColor: 'bg-sky-50 text-sky-800 border-sky-200',
+  },
+  {
+    title: 'Screening History & Audit Trail',
+    tag: 'Encounters',
+    description: 'Historical archive of completed screenings, optical confidence scores, and clinician review stamps.',
+    href: '/history',
+    icon: ClipboardList,
+    iconBg: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+    tagColor: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+  },
+  {
+    title: 'Closed-Loop Specialist Referrals',
+    tag: 'Secondary Care',
+    description: 'Escalate higher-risk findings to district ophthalmologists and oncologists with printable referral slips.',
+    href: '/referrals',
+    icon: GitPullRequest,
+    iconBg: 'bg-rose-50 border-rose-200 text-rose-700',
+    tagColor: 'bg-rose-50 text-rose-800 border-rose-200',
+  },
+  {
+    title: 'Operational Reports & CSV Export',
+    tag: 'Health Dept Analytics',
+    description: 'Real-time community health camp metrics, disease prevalence breakdowns, and one-click data export.',
+    href: '/reports',
+    icon: BarChart2,
+    iconBg: 'bg-amber-50 border-amber-200 text-amber-700',
+    tagColor: 'bg-amber-50 text-amber-800 border-amber-200',
+  },
+  {
+    title: 'Validation Datasets & Evidence',
+    tag: 'Model Robustness',
+    description: 'Clinical validation cohorts (APTOS 2019, Messidor-2, and Indian rural camps) with sensitivity metrics.',
+    href: '/datasets',
+    icon: Database,
+    iconBg: 'bg-cyan-50 border-cyan-200 text-cyan-700',
+    tagColor: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+  },
+  {
+    title: 'Edge System & Diagnostics',
+    tag: 'Field Operations',
+    description: 'PyTorch INT8 inference status, offline JSON store synchronization, and judge evaluation demo mode.',
+    href: '/settings',
+    icon: Sliders,
+    iconBg: 'bg-slate-100 border-slate-200 text-slate-700',
+    tagColor: 'bg-slate-100 text-slate-800 border-slate-200',
+  },
+];
+
 export default function CommunityScreeningHero() {
-  const router = useRouter();
-  const [activeProtocolTab, setActiveProtocolTab] = useState<'eye' | 'oral'>('eye');
   const [selectedCaseId, setSelectedCaseId] = useState<string>('case-eye-normal');
 
   const activeCase = DEMO_CASES.find((c) => c.id === selectedCaseId) || DEMO_CASES[0];
-
-  const handlePillSelect = (value: string) => {
-    if (value) {
-      router.push(value);
-    }
-  };
 
   return (
     <div id="hero" className="w-full bg-slate-50 text-slate-900 font-sans relative overflow-hidden bg-dot-grid">
@@ -442,31 +500,60 @@ export default function CommunityScreeningHero() {
         </div>
       </section>
 
-      {/* ── SEGMENT 3: INTERACTIVE MODULE DIRECTORY (PHYSICAL FOLDER ENVELOPE) ── */}
-      <section id="modules" className="py-16 sm:py-20 border-t border-slate-200 relative z-10 flex flex-col items-center text-center px-4 sm:px-8">
-        <div className="max-w-2xl mx-auto space-y-3 mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-xs font-semibold text-teal-800">
-            <Layers className="w-3.5 h-3.5 text-teal-600" />
-            <span>Interactive Module Directory</span>
+      {/* ── SEGMENT 3: MODERN CLINICAL WORKFLOWS DIRECTORY (REPLACED ODD FOLDER) ── */}
+      <section id="modules" className="py-16 sm:py-24 border-t border-slate-200 relative z-10 px-4 sm:px-8 lg:px-12 bg-slate-50/60">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-xs font-bold text-teal-900">
+              <Layers className="w-3.5 h-3.5 text-teal-600" />
+              <span>Full Clinical Platform Directory</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              Explore HealthScreen Workflows
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed font-normal">
+              Direct access to all clinical screening protocols, longitudinal patient records, specialist escalations, and edge operational settings.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
-            Explore HealthScreen Workflows
-          </h2>
-          <p className="text-sm text-slate-600 leading-relaxed">
-            Hover over or tap the interactive case folder to pull out all modules, patient logs, and clinical protocols.
-          </p>
-        </div>
 
-        {/* Physical Matter.js FolderFloat Envelope in Unified Teal Palette */}
-        <div className="w-full flex items-center justify-center py-4">
-          <FolderFloat
-            items={FOLDER_ITEMS}
-            label="HealthScreen Workflows"
-            sublabel="Hover / Tap to open"
-            onSelect={handlePillSelect}
-            trigger="hover"
-            physics={true}
-          />
+          {/* Clean Modern 4x2 Responsive Card Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {CLINICAL_MODULES.map((module) => {
+              const Icon = module.icon;
+              return (
+                <Link
+                  key={module.href}
+                  href={module.href}
+                  className="group p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-teal-400 transition-all duration-200 flex flex-col justify-between"
+                >
+                  <div className="space-y-3.5">
+                    <div className="flex items-center justify-between">
+                      <div className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-transform group-hover:scale-105 ${module.iconBg}`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${module.tagColor}`}>
+                        {module.tag}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm group-hover:text-teal-700 transition-colors leading-snug">
+                        {module.title}
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                        {module.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-teal-600">
+                    <span>Open Module</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
     </div>
