@@ -21,6 +21,7 @@ import {
   Eye
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
+import SectionPixelTransition from './SectionPixelTransition';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -323,7 +324,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Page children content */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto relative z-10">
-          {children}
+          <SectionPixelTransition>{children}</SectionPixelTransition>
         </main>
       </div>
 
