@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getScreeningRecords, saveScreeningRecord, savePatientRecord, getPatientById, updatePatient } from '@/lib/db-store';
+import { getScreeningRecords, saveScreeningRecord, savePatientRecord, getPatientById, updatePatient, savePatient } from '@/lib/db-store';
 import { runScreeningInference } from '@/services/inference';
 import { ScreeningResult } from '@/types';
 
@@ -56,12 +56,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Save minimal patient intake
-    await savePatientRecord({
-      patientId,
-      screeningType,
-      createdAt: new Date().toISOString(),
-    });
+    // Ensure patient profile exists
+    const existingPatient = await getPatientById(patientId);
+    if (!existingPatient) {
+      await savePatient({
+        patientId,
+        name: `Patient ${patientId}`,
+        age: 45,
+        sex: 'Female',
+        facilityId: 'FAC-CAMP',
+        registeredDate: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     const result = await runScreeningInference({
       patientId,

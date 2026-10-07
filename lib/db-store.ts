@@ -95,12 +95,21 @@ export async function getPatientById(patientId: string): Promise<PatientRecord |
   const db = await getDatabase();
   if (db) {
     try {
-      const doc = await db.collection('patients').findOne({ patientId });
+      const doc = await db.collection('patients').findOne({ patientId, name: { $exists: true } }) ||
+                  await db.collection('patients').findOne({ patientId });
       if (doc) return doc as unknown as PatientRecord;
     } catch { /* fall through */ }
   }
   const list = readLocalJson<PatientRecord>(PATIENTS_FILE, []);
-  return list.find((p) => p.patientId === patientId) || null;
+  const matching = list.filter((p) => p.patientId === patientId);
+  if (matching.length === 0) return null;
+  // If multiple exist, prioritize record with a populated name
+  const withName = matching.find((p) => !!p.name);
+  if (withName) {
+    const bare = matching.find((p) => !p.name);
+    return bare ? { ...bare, ...withName } : withName;
+  }
+  return matching[0];
 }
 
 /** Save a new patient record */
@@ -146,13 +155,22 @@ export async function savePatientRecord(patient: PatientInfo): Promise<PatientIn
   const db = await getDatabase();
   if (db) {
     try {
-      await db.collection('patients').insertOne(patient);
+      await db.collection('patients').updateOne(
+        { patientId: patient.patientId },
+        { $setOnInsert: patient },
+        { upsert: true }
+      );
       return patient;
     } catch (err) {
       console.warn('[DB] Failed inserting patient into MongoDB, using local file store:', err);
     }
   }
   const list = readLocalJson<PatientInfo>(PATIENTS_FILE, []);
+  const existingIdx = list.findIndex((p) => p.patientId === patient.patientId);
+  if (existingIdx !== -1) {
+    // Already exists — preserve full patient demographic profile
+    return list[existingIdx];
+  }
   list.unshift(patient);
   writeLocalJson(PATIENTS_FILE, list);
   return patient;

@@ -151,8 +151,11 @@ export default function PatientProfilePage() {
   const timelineItems: TimelineItem[] = [
     ...screenings.map((s) => ({ type: 'screening' as const, date: s.createdAt, data: s })),
     ...referrals.map((r) => ({ type: 'referral' as const, date: r.createdAt, data: r })),
-    { type: 'registration' as const, date: patient.registeredDate, data: null },
+    { type: 'registration' as const, date: patient.registeredDate || patient.createdAt || new Date().toISOString(), data: null },
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const displayName = patient.name || (patient.patientId ? `Patient ${patient.patientId}` : 'Unnamed Patient');
+  const initials = (patient.name || patient.patientId || 'PT').slice(0, 2).toUpperCase();
 
   return (
     <div className="space-y-6 max-w-6xl">
@@ -170,12 +173,12 @@ export default function PatientProfilePage() {
         <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="w-14 h-14 rounded-xl bg-teal-50 border border-teal-200/80 text-teal-800 flex items-center justify-center font-bold text-lg shrink-0">
-              {patient.name.slice(0, 2).toUpperCase()}
+              {initials}
             </div>
             <div>
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-xl font-bold tracking-tight text-slate-900">
-                  {patient.name}
+                  {displayName}
                 </h1>
                 <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-mono font-semibold">
                   {patient.patientId}
@@ -191,7 +194,7 @@ export default function PatientProfilePage() {
               {/* Metadata pill strip */}
               <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-500 mt-2">
                 <span>
-                  <strong>Age/Sex:</strong> {patient.age} yrs · {patient.sex}
+                  <strong>Age/Sex:</strong> {patient.age ?? '—'} yrs · {patient.sex || 'Not recorded'}
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
@@ -206,7 +209,7 @@ export default function PatientProfilePage() {
                 <span>•</span>
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                  Registered {formatDate(patient.registeredDate)}
+                  Registered {formatDate(patient.registeredDate || patient.createdAt)}
                 </span>
               </div>
             </div>
