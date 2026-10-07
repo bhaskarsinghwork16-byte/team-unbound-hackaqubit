@@ -118,89 +118,79 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* ── HERO SECTION FOR HEALTHSCREEN (COMMUNITY SCREENING) ── */}
-      <CommunityScreeningHero />
-
       {/* ── HEADER & PRIMARY ACTION ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#d8e2dc]">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
+          <h1 className="text-3xl font-black tracking-tight text-[#5d2a42] flex items-center gap-2">
             <span>{getGreeting()}, Dr. Sunita</span>
           </h1>
-          <p className="text-sm text-slate-200 mt-1.5 font-medium">
+          <p className="text-sm text-[#5d2a42]/85 mt-1 font-bold">
             Here is today’s screening activity and patient flow.
           </p>
         </div>
 
-        {/* Glossy 3D Glass Pill CTA Button */}
+        {/* Action CTA Button */}
         <div className="relative group">
-          {/* Ambient Sparkle Icons around button */}
-          <Sparkles className="w-4 h-4 text-emerald-300 absolute -top-2 -left-2 animate-pulse pointer-events-none" />
-          <Sparkles className="w-3 h-3 text-cyan-300 absolute -bottom-1 -right-2 animate-bounce pointer-events-none" />
-
+          <Sparkles className="w-4 h-4 text-[#5d2a42] absolute -top-2 -left-2 animate-pulse pointer-events-none" />
           <button
             onClick={() => setShowStartModal(true)}
-            className="inline-flex items-center justify-center gap-2 px-7 py-3 bg-gradient-to-r from-emerald-900/60 via-teal-950/70 to-emerald-900/60 hover:from-emerald-800/80 hover:to-teal-900/80 text-emerald-300 rounded-full text-sm font-extrabold shadow-[0_0_30px_rgba(20,184,166,0.35),inset_0_1px_1px_rgba(255,255,255,0.2)] border-2 border-emerald-400/60 backdrop-blur-xl transition-all transform hover:scale-105 active:scale-95"
+            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-2xl text-sm font-black shadow-lg shadow-[#5d2a42]/20 border border-[#ffdccc] transition-all transform hover:scale-105 active:scale-95"
           >
-            <Plus className="w-4 h-4 text-emerald-300 stroke-[3]" />
+            <Plus className="w-4 h-4 text-[#ffdccc] stroke-[3]" />
             <span>+ New Screening</span>
           </button>
         </div>
       </div>
 
-      {/* ── 2. 4 GLOWING 3D NEON GLASS STAT CARDS (EXACT SCREENSHOT LAYOUT) ── */}
+      {/* ── 2. 4 GLOWING STAT CARDS (HERO COLOR PALETTE) ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Card 1: TODAY'S SCREENINGS (Glowing Neon Green) */}
-        <div className="glass-stat-green p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
+        {/* Card 1: TODAY'S SCREENINGS */}
+        <div className="bg-[#ffdccc] p-5 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">
+            <span className="text-xs font-black text-[#5d2a42] uppercase tracking-wider">
               TODAY'S SCREENINGS
             </span>
-            {/* 3D Glass Calendar Icon */}
-            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(34,197,94,0.3)] border border-emerald-400/40 transform group-hover:scale-110 transition-transform bg-transparent">
-              <img src="/images/glass_calendar_3d.jpg" alt="3D Calendar" className="w-full h-full object-cover mix-blend-screen" />
+            <div className="w-10 h-10 rounded-2xl bg-[#5d2a42]/10 flex items-center justify-center text-[#5d2a42] border border-[#5d2a42]/20">
+              <Calendar className="w-5 h-5 text-[#5d2a42]" />
             </div>
           </div>
 
           <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_0_12px_rgba(34,197,94,0.6)]">
+            <span className="text-4xl font-black tracking-tight text-[#5d2a42]">
               {loading ? '—' : metrics.todayScreenings || 3}
             </span>
 
-            {/* Glowing Green Wave Graph SVG */}
-            <svg className="w-24 h-9 text-emerald-400 opacity-90 filter drop-shadow-[0_0_6px_#22c55e]" viewBox="0 0 100 35" fill="none">
+            <svg className="w-24 h-9 text-[#5d2a42] opacity-80" viewBox="0 0 100 35" fill="none">
               <path d="M0 25 Q 20 5, 40 20 T 80 10 T 100 15" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
             </svg>
           </div>
         </div>
 
-        {/* Card 2: PATIENTS SCREENED (Glowing Neon Cyan) */}
-        <div className="glass-stat-cyan p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
+        {/* Card 2: PATIENTS SCREENED */}
+        <div className="bg-[#d8e2dc]/60 backdrop-blur-xl p-5 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-cyan-300 uppercase tracking-wider">
+            <span className="text-xs font-black text-[#5d2a42] uppercase tracking-wider">
               PATIENTS SCREENED
             </span>
-            {/* Overlapping Patient Avatars */}
             <div className="flex items-center -space-x-2">
-              <div className="w-7 h-7 rounded-full border-2 border-cyan-400/60 overflow-hidden shadow-sm">
+              <div className="w-7 h-7 rounded-full border-2 border-[#5d2a42] overflow-hidden shadow-xs">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" />
               </div>
-              <div className="w-7 h-7 rounded-full border-2 border-cyan-400/60 overflow-hidden shadow-sm">
+              <div className="w-7 h-7 rounded-full border-2 border-[#5d2a42] overflow-hidden shadow-xs">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" />
               </div>
-              <div className="w-7 h-7 rounded-full border-2 border-cyan-400/60 overflow-hidden shadow-sm">
+              <div className="w-7 h-7 rounded-full border-2 border-[#5d2a42] overflow-hidden shadow-xs">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
 
           <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_0_12px_rgba(6,182,212,0.6)]">
+            <span className="text-4xl font-black tracking-tight text-[#5d2a42]">
               {loading ? '—' : metrics.patientsScreened || 6}
             </span>
 
-            {/* Cyan Bar Chart Histogram SVG */}
-            <svg className="w-20 h-9 text-cyan-400 opacity-90 filter drop-shadow-[0_0_6px_#06b6d4]" viewBox="0 0 80 30" fill="currentColor">
+            <svg className="w-20 h-9 text-[#5d2a42] opacity-80" viewBox="0 0 80 30" fill="currentColor">
               <rect x="5" y="15" width="8" height="15" rx="2" />
               <rect x="20" y="8" width="8" height="22" rx="2" />
               <rect x="35" y="18" width="8" height="12" rx="2" />
@@ -210,49 +200,45 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 3: AWAITING REVIEW (Glowing Neon Amber) */}
-        <div className="glass-stat-amber p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
+        {/* Card 3: AWAITING REVIEW */}
+        <div className="bg-[#ffdccc]/70 p-5 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-amber-300 uppercase tracking-wider">
+            <span className="text-xs font-black text-[#5d2a42] uppercase tracking-wider">
               AWAITING REVIEW
             </span>
-            {/* 3D Glass Clipboard Icon */}
-            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(245,158,11,0.3)] border border-amber-400/40 transform group-hover:scale-110 transition-transform bg-transparent">
-              <img src="/images/glass_clipboard_3d.jpg" alt="3D Clipboard" className="w-full h-full object-cover mix-blend-screen" />
+            <div className="w-10 h-10 rounded-2xl bg-[#5d2a42]/10 flex items-center justify-center text-[#5d2a42] border border-[#5d2a42]/20">
+              <Clock className="w-5 h-5 text-[#5d2a42]" />
             </div>
           </div>
 
           <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-amber-300 drop-shadow-[0_0_12px_rgba(245,158,11,0.6)]">
+            <span className="text-4xl font-black tracking-tight text-[#5d2a42]">
               {loading ? '—' : metrics.awaitingReview || 2}
             </span>
 
-            {/* Amber Wave Graph SVG */}
-            <svg className="w-24 h-9 text-amber-400 opacity-90 filter drop-shadow-[0_0_6px_#f59e0b]" viewBox="0 0 100 35" fill="none">
+            <svg className="w-24 h-9 text-[#5d2a42] opacity-80" viewBox="0 0 100 35" fill="none">
               <path d="M0 20 Q 25 35, 50 15 T 80 25 T 100 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
             </svg>
           </div>
         </div>
 
-        {/* Card 4: ACTIVE REFERRALS (Glowing Neon Sapphire / Blue) */}
-        <div className="glass-stat-blue p-5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
+        {/* Card 4: ACTIVE REFERRALS */}
+        <div className="bg-[#d8e2dc] p-5 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 flex flex-col justify-between space-y-3 relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-blue-300 uppercase tracking-wider">
+            <span className="text-xs font-black text-[#5d2a42] uppercase tracking-wider">
               ACTIVE REFERRALS
             </span>
-            {/* 3D Glass DNA Icon */}
-            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.3)] border border-blue-400/40 transform group-hover:scale-110 transition-transform bg-transparent">
-              <img src="/images/glass_dna_3d.jpg" alt="3D DNA" className="w-full h-full object-cover mix-blend-screen" />
+            <div className="w-10 h-10 rounded-2xl bg-[#5d2a42]/10 flex items-center justify-center text-[#5d2a42] border border-[#5d2a42]/20">
+              <GitPullRequest className="w-5 h-5 text-[#5d2a42]" />
             </div>
           </div>
 
           <div className="flex items-baseline justify-between pt-1">
-            <span className="text-4xl font-extrabold tracking-tight text-cyan-300 drop-shadow-[0_0_12px_rgba(59,130,246,0.6)]">
+            <span className="text-4xl font-black tracking-tight text-[#5d2a42]">
               {loading ? '—' : metrics.activeReferrals || 2}
             </span>
 
-            {/* Blue Bar Chart Histogram SVG */}
-            <svg className="w-20 h-9 text-blue-400 opacity-90 filter drop-shadow-[0_0_6px_#3b82f6]" viewBox="0 0 80 30" fill="currentColor">
+            <svg className="w-20 h-9 text-[#5d2a42] opacity-80" viewBox="0 0 80 30" fill="currentColor">
               <rect x="5" y="10" width="8" height="20" rx="2" />
               <rect x="20" y="18" width="8" height="12" rx="2" />
               <rect x="35" y="6" width="8" height="24" rx="2" />
@@ -263,100 +249,101 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── 3. RECENT SCREENING ACTIVITY 3D GLASS TABLE (EXACT MATCH) ── */}
-      <div className="glass-table-container overflow-hidden shadow-2xl">
-        <div className="p-6 border-b border-teal-500/20 flex items-center justify-between bg-black/40">
+      {/* ── 3. RECENT SCREENING ACTIVITY TABLE (HIGH-CONTRAST HEADERS) ── */}
+      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-[#d8e2dc] overflow-hidden shadow-xl shadow-[#5d2a42]/5">
+        <div className="p-6 border-b border-[#d8e2dc] flex items-center justify-between bg-[#fff9ec]">
           <div>
-            <h2 className="text-base font-bold text-white tracking-tight">Recent Screening Activity</h2>
-            <p className="text-xs text-slate-300 mt-1 font-medium">Logged screenings from community clinics and camps</p>
+            <h2 className="text-lg font-black text-[#5d2a42] tracking-tight">Recent Screening Activity</h2>
+            <p className="text-xs text-[#5d2a42]/80 mt-1 font-bold">Logged screenings from community clinics and camps</p>
           </div>
           <Link
             href="/history"
-            className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 transition-colors"
+            className="text-xs font-black text-[#5d2a42] hover:underline flex items-center gap-1.5 transition-colors"
           >
             <span>View all screenings</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-xs text-slate-300 font-medium">
+          <div className="p-12 text-center text-xs text-[#5d2a42] font-black">
             Loading recent records...
           </div>
         ) : screenings.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-teal-500/10 text-teal-400 mx-auto flex items-center justify-center border border-teal-500/20">
+            <div className="w-12 h-12 rounded-full bg-[#ffdccc] text-[#5d2a42] mx-auto flex items-center justify-center border border-[#d8e2dc]">
               <ClipboardCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-bold text-white">No screenings recorded yet</h3>
-            <p className="text-xs text-slate-300 max-w-sm mx-auto">
+            <h3 className="text-sm font-black text-[#5d2a42]">No screenings recorded yet</h3>
+            <p className="text-xs text-[#5d2a42]/80 max-w-sm mx-auto font-bold">
               Start your first patient screening session to record preliminary findings.
             </p>
             <button
               onClick={() => setShowStartModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 rounded-xl text-xs font-bold shadow-md hover:scale-105 transition-transform"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5d2a42] text-[#fff9ec] rounded-2xl text-xs font-black shadow-md hover:scale-105 transition-transform"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4 text-[#ffdccc]" />
               <span>Start First Screening</span>
             </button>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
+              {/* HIGH CONTRAST DARK PLUM TABLE COLUMN HEADINGS */}
+              <thead className="bg-[#5d2a42] text-[#fff9ec] uppercase tracking-wider font-black border-b border-[#d8e2dc]">
                 <tr>
-                  <th className="py-3.5 px-5">PATIENT</th>
-                  <th className="py-3.5 px-5">SCREENING TYPE</th>
-                  <th className="py-3.5 px-5">DATE & TIME</th>
-                  <th className="py-3.5 px-5">FINDING</th>
-                  <th className="py-3.5 px-5">REVIEW STATUS</th>
-                  <th className="py-3.5 px-5 text-right">ACTION</th>
+                  <th className="py-4 px-6 text-[#fff9ec] font-black">PATIENT</th>
+                  <th className="py-4 px-6 text-[#fff9ec] font-black">SCREENING TYPE</th>
+                  <th className="py-4 px-6 text-[#fff9ec] font-black">DATE &amp; TIME</th>
+                  <th className="py-4 px-6 text-[#fff9ec] font-black">FINDING</th>
+                  <th className="py-4 px-6 text-[#fff9ec] font-black">REVIEW STATUS</th>
+                  <th className="py-4 px-6 text-[#fff9ec] font-black text-right">ACTION</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-teal-500/15 text-slate-200">
+              <tbody className="divide-y divide-[#d8e2dc] text-[#5d2a42] font-bold">
                 {screenings.slice(0, 8).map((record) => {
                   const type = (record as any).type || record.screeningType;
                   return (
-                    <tr key={record.screeningId} className="hover:bg-white/5 transition-colors">
-                      <td className="py-4 px-5">
+                    <tr key={record.screeningId} className="hover:bg-[#ffdccc]/30 transition-colors">
+                      <td className="py-4 px-6">
                         <Link
                           href={`/patients/${record.patientId}`}
-                          className="font-bold text-white hover:text-emerald-400 transition-colors block"
+                          className="font-black text-[#5d2a42] hover:underline block text-sm"
                         >
                           {record.patientName || record.patientId}
                         </Link>
-                        <span className="text-[11px] font-mono text-slate-300 font-medium">
+                        <span className="text-[11px] font-mono text-[#5d2a42]/80 font-bold">
                           {record.patientId}
                         </span>
                       </td>
 
-                      <td className="py-4 px-5">
-                        <span className="inline-flex items-center gap-2 font-semibold text-slate-200 capitalize">
+                      <td className="py-4 px-6">
+                        <span className="inline-flex items-center gap-2 font-black text-[#5d2a42] capitalize">
                           {type === 'eye' ? (
-                            <Eye className="w-4 h-4 text-cyan-400" />
+                            <Eye className="w-4 h-4 text-[#5d2a42]" />
                           ) : (
-                            <Smile className="w-4 h-4 text-emerald-400" />
+                            <Smile className="w-4 h-4 text-[#5d2a42]" />
                           )}
                           <span>{type === 'eye' ? 'Eye Screening' : 'Oral Screening'}</span>
                         </span>
                       </td>
 
-                      <td className="py-4 px-5 text-slate-300 whitespace-nowrap font-medium">
+                      <td className="py-4 px-6 text-[#5d2a42] whitespace-nowrap font-bold">
                         {formatDate(record.createdAt)}
                       </td>
 
-                      <td className="py-4 px-5 whitespace-nowrap">
+                      <td className="py-4 px-6 whitespace-nowrap">
                         {getResultBadge(record)}
                       </td>
 
-                      <td className="py-4 px-5 whitespace-nowrap">
+                      <td className="py-4 px-6 whitespace-nowrap">
                         {getReviewBadge(record.reviewStatus)}
                       </td>
 
-                      <td className="py-4 px-5 text-right whitespace-nowrap">
+                      <td className="py-4 px-6 text-right whitespace-nowrap">
                         <Link
                           href={`/history?id=${record.screeningId}`}
-                          className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-bold text-xs group"
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-[#ffdccc] text-[#5d2a42] rounded-xl font-black text-xs hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all group"
                         >
                           <span>View</span>
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -373,16 +360,16 @@ export default function DashboardPage() {
 
       {/* ── START SCREENING SELECTION MODAL ── */}
       {showStartModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#0a1819] rounded-3xl border border-teal-500/30 max-w-lg w-full p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-teal-500/20">
+        <div className="fixed inset-0 z-50 bg-[#5d2a42]/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#fff9ec] rounded-3xl border border-[#d8e2dc] max-w-lg w-full p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-[#d8e2dc]">
               <div>
-                <h3 className="text-lg font-bold text-white">Start a screening</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Select the clinical protocol for this patient session</p>
+                <h3 className="text-xl font-black text-[#5d2a42]">Start a screening</h3>
+                <p className="text-xs text-[#5d2a42]/80 mt-0.5 font-bold">Select the clinical protocol for this patient session</p>
               </div>
               <button
                 onClick={() => setShowStartModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
+                className="text-[#5d2a42] hover:bg-[#d8e2dc]/40 p-1.5 rounded-xl text-lg font-black"
               >
                 ✕
               </button>
@@ -393,19 +380,19 @@ export default function DashboardPage() {
               <Link
                 href="/screening?type=eye"
                 onClick={() => setShowStartModal(false)}
-                className="group p-5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/20 transition-all flex flex-col justify-between"
+                className="group p-5 rounded-3xl bg-[#ffdccc] border border-[#d8e2dc] hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform border border-cyan-500/40">
-                    <Eye className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-2xl bg-[#5d2a42] text-[#fff9ec] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <Eye className="w-5 h-5 text-[#ffdccc]" />
                   </div>
-                  <h4 className="font-bold text-white text-sm">Eye Screening</h4>
-                  <p className="text-xs text-cyan-300 font-semibold mt-0.5">Diabetic Retinopathy</p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  <h4 className="font-black text-sm">Eye Screening</h4>
+                  <p className="text-xs font-extrabold opacity-90 mt-0.5">Diabetic Retinopathy</p>
+                  <p className="text-xs opacity-80 mt-2 leading-relaxed font-bold">
                     Screen retinal fundus images for potential DR-related findings.
                   </p>
                 </div>
-                <div className="mt-4 flex items-center text-xs font-bold text-cyan-300 group-hover:translate-x-0.5 transition-transform">
+                <div className="mt-4 flex items-center text-xs font-black group-hover:translate-x-0.5 transition-transform">
                   <span>Start Eye Screening</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </div>
@@ -415,19 +402,19 @@ export default function DashboardPage() {
               <Link
                 href="/screening?type=oral"
                 onClick={() => setShowStartModal(false)}
-                className="group p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/20 transition-all flex flex-col justify-between"
+                className="group p-5 rounded-3xl bg-[#d8e2dc] border border-[#d8e2dc] hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform border border-emerald-500/40">
-                    <Smile className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-2xl bg-[#5d2a42] text-[#fff9ec] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <Smile className="w-5 h-5 text-[#ffdccc]" />
                   </div>
-                  <h4 className="font-bold text-white text-sm">Oral Screening</h4>
-                  <p className="text-xs text-emerald-300 font-semibold mt-0.5">Oral Visual Screening</p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  <h4 className="font-black text-sm">Oral Screening</h4>
+                  <p className="text-xs font-extrabold opacity-90 mt-0.5">Oral Visual Screening</p>
+                  <p className="text-xs opacity-80 mt-2 leading-relaxed font-bold">
                     Screen oral mucosa images for visual findings requiring review.
                   </p>
                 </div>
-                <div className="mt-4 flex items-center text-xs font-bold text-emerald-300 group-hover:translate-x-0.5 transition-transform">
+                <div className="mt-4 flex items-center text-xs font-black group-hover:translate-x-0.5 transition-transform">
                   <span>Start Oral Screening</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </div>

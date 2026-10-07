@@ -94,34 +94,34 @@ function HistoryContent() {
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-[#d8e2dc]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="pixel text-[10px] bg-emerald-500/15 text-emerald-300 px-3 py-0.5 rounded-full border border-emerald-500/30 font-bold tracking-wide">
+            <span className="pixel text-[10px] bg-[#ffdccc] text-[#5d2a42] px-3 py-0.5 rounded-full border border-[#d8e2dc] font-black tracking-wide">
               CLINICAL REPOSITORY
             </span>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Screening Records</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 className="text-3xl font-black text-[#5d2a42] tracking-tight">Screening Records</h1>
+          <p className="text-xs text-[#5d2a42]/80 mt-1 font-bold">
             Permanent patient screening repository persisted in database storage.
           </p>
         </div>
 
-        <span className="pixel text-xs font-bold px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+        <span className="pixel text-xs font-black px-4 py-1.5 rounded-full bg-[#5d2a42] text-[#fff9ec] border border-[#ffdccc] shadow-md shadow-[#5d2a42]/20">
           {filtered.length} {filtered.length === 1 ? 'SCREENING' : 'SCREENINGS'}
         </span>
       </div>
 
-      {/* ── SEARCH & FILTER CONTROLS (3D DARK GLASS) ── */}
-      <div className="glass-container-3d p-4 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+      {/* ── SEARCH & FILTER CONTROLS ── */}
+      <div className="bg-white/90 backdrop-blur-xl p-4 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-teal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#5d2a42] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by Patient Name, ID, or clinical finding..."
-            className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-teal-400 transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#fff9ec] border border-[#d8e2dc] rounded-2xl text-xs text-[#5d2a42] font-bold placeholder-[#5d2a42]/60 focus:outline-none focus:border-[#5d2a42] transition"
           />
         </div>
 
@@ -199,15 +199,15 @@ function HistoryContent() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
+              <thead className="bg-[#5d2a42] text-[#fff9ec] uppercase tracking-wider font-black border-b border-[#d8e2dc]">
                 <tr>
-                  <th className="py-3.5 px-5">PATIENT / ID</th>
-                  <th className="py-3.5 px-5">SCREENING TYPE</th>
-                  <th className="py-3.5 px-5">DATE & TIME</th>
-                  <th className="py-3.5 px-5">QUALITY SCORE</th>
-                  <th className="py-3.5 px-5">FINDING</th>
-                  <th className="py-3.5 px-5">REVIEW STATUS</th>
-                  <th className="py-3.5 px-5 text-right">ACTIONS</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">PATIENT / ID</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">SCREENING TYPE</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">DATE &amp; TIME</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">QUALITY SCORE</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">FINDING</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">REVIEW STATUS</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black text-right">ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-teal-500/15 text-slate-200">

@@ -114,31 +114,31 @@ export default function PatientsPage() {
               PATIENT DIRECTORY
             </span>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-white">Patients</h1>
-          <p className="text-sm text-slate-300 font-medium mt-1">
+          <h1 className="text-3xl font-black tracking-tight text-[#5d2a42]">Patients Directory</h1>
+          <p className="text-xs text-[#5d2a42]/80 font-bold mt-1">
             Find patients and view their longitudinal screening history.
           </p>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 rounded-full text-xs font-extrabold shadow-[0_0_20px_rgba(20,184,166,0.35)] transition-all transform hover:scale-105 border border-emerald-300/40"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-2xl text-xs font-black shadow-md shadow-[#5d2a42]/20 transition-all border border-[#ffdccc]"
         >
-          <Plus className="w-4 h-4 text-slate-950 stroke-[3]" />
+          <Plus className="w-4 h-4 text-[#ffdccc] stroke-[3]" />
           <span>+ Add Patient</span>
         </button>
       </div>
 
-      {/* ── SEARCH & FILTER CONTROLS (3D DARK GLASS) ── */}
-      <div className="glass-container-3d p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+      {/* ── SEARCH & FILTER CONTROLS ── */}
+      <div className="bg-white/90 backdrop-blur-xl p-4 rounded-3xl border border-[#d8e2dc] shadow-md shadow-[#5d2a42]/5 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-teal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#5d2a42] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search by name, patient ID, or phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-teal-500/30 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#fff9ec] border border-[#d8e2dc] rounded-2xl text-xs text-[#5d2a42] font-bold placeholder-[#5d2a42]/60 focus:outline-none focus:border-[#5d2a42] transition"
           />
         </div>
 
@@ -205,14 +205,14 @@ export default function PatientsPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-black/60 text-slate-300 uppercase tracking-wider font-bold border-b border-teal-500/20">
+              <thead className="bg-[#5d2a42] text-[#fff9ec] uppercase tracking-wider font-black border-b border-[#d8e2dc]">
                 <tr>
-                  <th className="py-3.5 px-5">PATIENT</th>
-                  <th className="py-3.5 px-5">DEMOGRAPHICS</th>
-                  <th className="py-3.5 px-5">CONTACT & LOCATION</th>
-                  <th className="py-3.5 px-5">REGISTERED DATE</th>
-                  <th className="py-3.5 px-5">FOLLOW-UP</th>
-                  <th className="py-3.5 px-5 text-right">ACTIONS</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">PATIENT</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">DEMOGRAPHICS</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">CONTACT &amp; LOCATION</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">REGISTERED DATE</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black">FOLLOW-UP</th>
+                  <th className="py-4 px-5 text-[#fff9ec] font-black text-right">ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-teal-500/15 text-slate-200">
