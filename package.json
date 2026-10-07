@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/matter-js": "^0.20.2",
+    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "framer-motion": "^14.0.0",
     "lucide-react": "^0.453.0",
     "matter-js": "^0.20.0",
     "mongodb": "^6.9.0",
