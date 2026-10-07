@@ -26,6 +26,7 @@ import {
   OperationalMetrics,
   ReportsSummary,
 } from '@/types';
+import { encryptObject, decryptObject } from './security/encryption';
 
 /* ──────────────────────────────────────────────────────────────────────────────
  * FILE I/O HELPERS
@@ -54,7 +55,13 @@ function readLocalJson<T>(filePath: string, fallback: T[]): T[] {
   try {
     if (fs.existsSync(filePath)) {
       const content = fs.readFileSync(filePath, 'utf-8');
-      return JSON.parse(content) as T[];
+      try {
+        const decrypted = decryptObject(content);
+        return decrypted as T[];
+      } catch (decryptionError) {
+        // Fallback for unencrypted legacy data
+        return JSON.parse(content) as T[];
+      }
     }
   } catch (err) {
     console.warn(`[Local Store] Could not read ${filePath}:`, (err as Error).message);
@@ -66,7 +73,8 @@ function readLocalJson<T>(filePath: string, fallback: T[]): T[] {
 function writeLocalJson<T>(filePath: string, data: T[]): void {
   ensureDataDir();
   try {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    const encrypted = encryptObject(data);
+    fs.writeFileSync(filePath, encrypted, 'utf-8');
   } catch (err) {
     console.warn(`[Local Store] Could not write ${filePath}:`, (err as Error).message);
   }

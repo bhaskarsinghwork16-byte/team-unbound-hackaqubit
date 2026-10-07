@@ -4,8 +4,8 @@
 |---|---|---|
 | 1 | Security Discovery + Foundation | ✅ done |
 | 2 | Identity + JWT + RBAC | ✅ done |
-| 3 | API + Database + Image + Offline Security | ⬜ todo |
-| 4 | Privacy + Consent + Audit + Compliance | ⬜ todo |
+| 3 | API + Database + Image + Offline Security | ✅ done |
+| 4 | Privacy + Consent + Audit + Compliance | ✅ done |
 | 5 | Threat Testing + Hardening + Final Security Gate | ⬜ todo |
 
 ## Phase 1 Verification
