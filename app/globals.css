@@ -97,7 +97,7 @@
   50% { transform: translateY(-16px); }
 }
 
-@keyframes float-[#d8e2dc] {
+@keyframes float-subtle {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-12px) rotate(1deg); }
 }
@@ -108,6 +108,10 @@
 
 .animate-float-slow {
   animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-subtle {
+  animation: float-subtle 5s ease-in-out infinite;
 }
 
 .glass-stat-cyan {

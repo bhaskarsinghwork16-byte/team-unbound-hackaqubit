@@ -1,5 +1,56 @@
 [
   {
+    "screeningId": "SCR-069113",
+    "patientId": "PT-1051",
+    "type": "oral",
+    "imageReference": "/demo/demo_oral_suspicious.jpg",
+    "imageQuality": {
+      "grade": "GOOD",
+      "score": 89,
+      "isAcceptable": true,
+      "canProceedWithWarning": false,
+      "metrics": {
+        "sharpness": 90,
+        "brightness": 86,
+        "contrast": 84,
+        "noiseLevel": 88,
+        "framing": 92
+      },
+      "feedback": "Oral cavity mucosa verified. Optical standards confirmed for AI screening.",
+      "warnings": [],
+      "validationStatus": "valid_usable",
+      "typeValidation": {
+        "detectedType": "oral",
+        "expectedType": "oral",
+        "isValidType": true,
+        "typeConfidence": 94,
+        "reason": "Valid oral cavity mucosal photograph detected."
+      }
+    },
+    "resultState": "potential_finding",
+    "riskLevel": "higher_risk",
+    "prediction": "Potential oral mucosal finding detected",
+    "confidence": 85,
+    "recommendation": "Clinical review recommended: Consider referral to an oral physician or dental specialist for clinical biopsy evaluation.",
+    "clinicalCaveat": "Screening finding: Surface irregularity noted. This is a preliminary risk triage and NOT a cancer diagnosis. Histological verification required.",
+    "explanationSupported": true,
+    "explanationText": "Peak attention focused over irregular mucosal texture and sharp borders characteristic of suspicious leukoplakia/erythroplakia.",
+    "heatmapCoordinates": [
+      {
+        "x": 310,
+        "y": 290,
+        "radius": 80,
+        "intensity": 0.88
+      }
+    ],
+    "modelVersion": "HealthScreen-Oral-v1.1-DemoHoldout",
+    "modelMode": "demo",
+    "dataSource": "demo",
+    "deviceInfo": "Edge Telemedicine Unit",
+    "createdAt": "2026-10-07T18:01:09.113Z",
+    "patientName": "yxsh"
+  },
+  {
     "screeningId": "SCR-670756",
     "patientId": "SYNTH_TEST",
     "type": "oral",
