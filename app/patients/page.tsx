@@ -16,7 +16,6 @@ import {
   X
 } from 'lucide-react';
 import { PatientRecord } from '@/types';
-import FlexCarousel from '@/components/FlexCarousel';
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState<PatientRecord[]>([]);
@@ -128,45 +127,6 @@ export default function PatientsPage() {
           <Plus className="w-4 h-4 text-[#ffdccc] stroke-[3]" />
           <span>+ Add Patient</span>
         </button>
-      </div>
-
-      {/* ── 3D WEBGL FLEXCAROUSEL PATIENT COHORTS CAROUSEL ── */}
-      <div className="w-full h-[320px] relative rounded-3xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-md shadow-[#5d2a42]/5">
-        <FlexCarousel
-          items={[
-            {
-              src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80&auto=format&fit=max',
-              alt: 'Meera Devi Patient Record',
-              title: '👤 Meera Devi (PID-4091)',
-              subtitle: 'Follow-up Scheduled · Retinal DR Check'
-            },
-            {
-              src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80&auto=format&fit=max',
-              alt: 'Ramesh Kumar Patient Record',
-              title: '👤 Ramesh Kumar (PID-3810)',
-              subtitle: 'Potential Finding · Referred to Specialist'
-            },
-            {
-              src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80&auto=format&fit=max',
-              alt: 'Sunita Sharma Patient Record',
-              title: '👤 Sunita Sharma (PID-2940)',
-              subtitle: 'No Abnormality · Annual Screening'
-            },
-            {
-              src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=1200&q=80&auto=format&fit=max',
-              alt: 'Anil Verma Patient Record',
-              title: '👤 Anil Verma (PID-1049)',
-              subtitle: 'Urgent Referral · ENT Consult'
-            }
-          ]}
-          preset="liquid"
-          intro="rise"
-          cardHeight={0.65}
-          gap={14}
-          squeeze={0.2}
-          focusOnClick
-          captions
-        />
       </div>
 
       {/* ── SEARCH & FILTER CONTROLS ── */}

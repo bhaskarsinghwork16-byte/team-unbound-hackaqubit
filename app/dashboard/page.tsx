@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { ScreeningResult, OperationalMetrics } from '@/types';
 import CommunityScreeningHero from '@/components/CommunityScreeningHero';
+import FlexCarousel from '@/components/FlexCarousel';
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<OperationalMetrics>({
@@ -246,6 +247,62 @@ export default function DashboardPage() {
               <rect x="65" y="4" width="8" height="26" rx="2" />
             </svg>
           </div>
+        </div>
+      </div>
+
+      {/* ── 3D WEBGL FLEXCAROUSEL CLINICAL GRAPH & TELEMETRY SHOWCASE ── */}
+      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-[#d8e2dc] p-6 shadow-xl shadow-[#5d2a42]/5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-black text-[#5d2a42] tracking-tight flex items-center gap-2">
+              <Activity className="w-5 h-5 text-[#5d2a42]" />
+              <span>Overview Clinical Activity &amp; Visual Graph Telemetry</span>
+            </h2>
+            <p className="text-xs text-[#5d2a42]/80 mt-0.5 font-bold">
+              Interactive 3D WebGL telemetry graph highlighting camp encounter velocity, model accuracy curves, and referral pipelines.
+            </p>
+          </div>
+          <span className="self-start sm:self-auto px-3 py-1 bg-[#ffdccc] text-[#5d2a42] rounded-full text-xs font-black border border-[#d8e2dc]">
+            Live Graph Telemetry
+          </span>
+        </div>
+
+        <div className="w-full h-[340px] relative rounded-2xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-inner">
+          <FlexCarousel
+            items={[
+              {
+                src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=max',
+                alt: 'Daily Encounter Velocity Graph',
+                title: '📈 Daily Screening Encounter Velocity',
+                subtitle: 'Peak Camp Encounters · 98.4% Precision'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
+                alt: 'Retinal vs Oral Case Ratio',
+                title: '👁️ Retinal & Oral Case Breakdown',
+                subtitle: 'Multi-Modal Edge Model Triage Graph'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80&auto=format&fit=max',
+                alt: 'Offline Engine Latency Curve',
+                title: '⚡ Offline Inference Response Curve',
+                subtitle: '< 2.8 Sec ARM Cortex Benchmarks'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1200&q=80&auto=format&fit=max',
+                alt: 'Specialist Escalation Heatmap',
+                title: '⚕️ Specialist Escalation Pipeline',
+                subtitle: 'District Hospital Referral Velocity'
+              }
+            ]}
+            preset="liquid"
+            intro="rise"
+            cardHeight={0.65}
+            gap={14}
+            squeeze={0.2}
+            focusOnClick
+            captions
+          />
         </div>
       </div>
 
