@@ -99,6 +99,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 <span>AI Screening</span>
               </Link>
               <Link href="/datasets" className="hover:opacity-80 transition-opacity">AI Models</Link>
+              <Link href="/lithos" className="hover:opacity-80 transition-opacity font-playfair italic text-[#5d2a42]">Lithos Spotlight</Link>
             </nav>
 
             {/* Prominent Dashboard Button */}
