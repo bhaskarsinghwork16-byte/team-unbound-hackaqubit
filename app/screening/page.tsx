@@ -24,7 +24,8 @@ import {
   Search,
   ArrowLeft,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 import { 
   ScreeningType, 
@@ -244,10 +245,10 @@ function ScreeningWorkflow() {
     setIsEvaluatingQuality(true);
 
     try {
-      const evalResult = await assessImageInBrowser(imageUri);
+      const evalResult = await assessImageInBrowser(imageUri, screeningType);
       setQualityResult(evalResult);
     } catch {
-      setQualityResult(assessImageQualitySync(imageUri));
+      setQualityResult(assessImageQualitySync(imageUri, screeningType));
     } finally {
       setIsEvaluatingQuality(false);
     }
@@ -950,12 +951,16 @@ function ScreeningWorkflow() {
                 className={`p-4 rounded-xl border flex items-center justify-between ${
                   qualityResult.isAcceptable
                     ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900'
+                    : qualityResult.feedback.includes('Anatomical Mismatch')
+                    ? 'bg-rose-50/90 border-rose-200 text-rose-950'
                     : 'bg-amber-50/70 border-amber-200 text-amber-900'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {qualityResult.isAcceptable ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  ) : qualityResult.feedback.includes('Anatomical Mismatch') ? (
+                    <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0" />
                   ) : (
                     <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
                   )}
@@ -963,6 +968,8 @@ function ScreeningWorkflow() {
                     <h3 className="font-bold text-xs">
                       {qualityResult.isAcceptable
                         ? 'Image Quality: Good (Passed Optical Gate)'
+                        : qualityResult.feedback.includes('Anatomical Mismatch')
+                        ? 'Anatomical Verification Failed: Non-Target Specimen'
                         : 'Image Quality Needs Improvement'}
                     </h3>
                     <p className="text-[11px] opacity-90 mt-0.5">
@@ -970,7 +977,7 @@ function ScreeningWorkflow() {
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-right shrink-0">
                   <span className="text-xl font-bold">{qualityResult.score}%</span>
                   <span className="text-[10px] block opacity-80 uppercase tracking-wider">Quality Score</span>
                 </div>
@@ -1028,8 +1035,10 @@ function ScreeningWorkflow() {
                     Run Screening Analysis →
                   </button>
                 ) : (
-                  <span className="text-xs text-amber-800 font-medium">
-                    Please retake a clearer image with better lighting to prevent inaccurate results.
+                  <span className="text-xs text-rose-800 font-semibold max-w-md text-right">
+                    {qualityResult.feedback.includes('Anatomical Mismatch')
+                      ? 'Automated screening blocked: Please re-take photo framing the target anatomical site.'
+                      : 'Please retake a clearer image with better lighting to prevent inaccurate results.'}
                   </span>
                 )}
               </div>
@@ -1107,7 +1116,9 @@ function ScreeningWorkflow() {
           {/* MAIN FINDING BANNER (NO FAKE DIAGNOSIS) */}
           <div
             className={`p-5 rounded-xl border ${
-              result.resultState === 'potential_finding' || result.riskLevel === 'higher_risk'
+              result.resultState === 'quality_insufficient' || result.prediction.toLowerCase().includes('invalid')
+                ? 'bg-rose-50/90 border-rose-200 text-rose-950'
+                : result.resultState === 'potential_finding' || result.riskLevel === 'higher_risk'
                 ? 'bg-amber-50/80 border-amber-200 text-amber-950'
                 : result.resultState === 'no_abnormality' || result.riskLevel === 'lower_risk'
                 ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
@@ -1117,7 +1128,7 @@ function ScreeningWorkflow() {
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-[11px] uppercase font-bold tracking-wider opacity-80 block">
-                  Algorithm Finding
+                  {result.resultState === 'quality_insufficient' ? 'Protocol Safety Gate' : 'Algorithm Finding'}
                 </span>
                 <h3 className="text-lg font-bold">
                   {result.prediction}
@@ -1139,7 +1150,11 @@ function ScreeningWorkflow() {
 
             {/* Caveat warning */}
             <div className="mt-4 pt-3 border-t border-black/5 text-[11px] opacity-80 flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+              {result.resultState === 'quality_insufficient' ? (
+                <ShieldAlert className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+              ) : (
+                <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+              )}
               <span>
                 {result.clinicalCaveat || 'Decision support only. Not a medical diagnosis.'}
               </span>
@@ -1158,7 +1173,9 @@ function ScreeningWorkflow() {
             <div className="sm:col-span-2 text-xs space-y-2 text-slate-600">
               <h4 className="font-bold text-slate-900">Analyzed Image Specimen</h4>
               <p>
-                Optical quality confirmed at {result.imageQuality?.score || 90}%. Specimen permanently linked to patient chart #{result.patientId}.
+                {result.resultState === 'quality_insufficient' || !result.imageQuality?.isAcceptable
+                  ? `Specimen rejected (${result.imageQuality?.score || 15}% score). Protocol validation failed — non-target anatomical surface detected.`
+                  : `Optical quality confirmed at ${result.imageQuality?.score || 90}%. Specimen permanently linked to patient chart #${result.patientId}.`}
               </p>
               <div className="text-[11px] font-mono text-slate-500">
                 Model: {result.modelVersion}

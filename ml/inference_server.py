@@ -76,6 +76,35 @@ def decode_image(image_data_or_path: str) -> np.ndarray:
 
     raise ValueError(f"Image could not be resolved from: {image_data_or_path[:60]}...")
 
+def validate_specimen_cv(img_bgr: np.ndarray, task: str):
+    """
+    Validates that the input image matches the expected anatomical protocol.
+    Rejects out-of-distribution photos (e.g. hands, skin, furniture, clothing).
+    """
+    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
+    h, s, v = hsv[:, :, 0], hsv[:, :, 1].astype(float) / 255.0, hsv[:, :, 2].astype(float) / 255.0
+    r = img_bgr[:, :, 2].astype(float)
+    g = img_bgr[:, :, 1].astype(float)
+    b = img_bgr[:, :, 0].astype(float)
+
+    mean_r, mean_g, mean_b = np.mean(r), np.mean(g), np.mean(b)
+    rg_diff = mean_r - mean_g
+    rb_ratio = mean_r / (mean_b + 1e-4)
+    mean_sat = np.mean(s)
+
+    if task == "eye":
+        fundus_mask = (r > 1.35 * g) & (g > 1.05 * b) & (r / (b + 1.0) > 2.0)
+        fundus_ratio = np.mean(fundus_mask)
+        if fundus_ratio < 0.15 and (rb_ratio < 2.0 or rg_diff < 25):
+            return False, "Image does not match retinal fundus photography. Non-ophthalmic surface detected (e.g., hand, skin, or external object)."
+    elif task == "oral":
+        mucosa_mask = ((h < 22) | (h > 160)) & (s > 0.28) & (v > 0.20)
+        mucosa_ratio = np.mean(mucosa_mask)
+        if mucosa_ratio < 0.20 and (rg_diff < 30 or mean_sat < 0.24):
+            return False, "Image does not match oral cavity / mucosa tissue. Non-oral surface detected (e.g., hand, palm, skin, or room surface). Please frame mouth interior."
+
+    return True, ""
+
 def analyze_retina_image(img_bgr: np.ndarray):
     """
     Combines PyTorch MobileNetV3 with Computer Vision Retinal Feature Analysis
@@ -278,6 +307,28 @@ class InferenceHandler(BaseHTTPRequestHandler):
         t0 = time.time()
         try:
             img = decode_image(image_uri)
+
+            # Anatomical Domain / Out-of-Distribution Safety Gate
+            is_valid, reject_reason = validate_specimen_cv(img, task)
+            if not is_valid:
+                result = {
+                    "class": "invalid_specimen",
+                    "probability": 0.0,
+                    "modelVersion": "Anatomical-Safety-Gate-v1.0",
+                    "explanationSupported": False,
+                    "explanationText": reject_reason,
+                    "heatmapCoordinates": [],
+                    "inferenceTimeMs": int((time.time() - t0) * 1000),
+                    "task": task,
+                }
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write(json.dumps(result).encode("utf-8"))
+                print(f"[REJECT] Task: {task.upper()} -> Anatomical validation failed: {reject_reason}")
+                return
+
             if task == "oral":
                 result = analyze_oral_image(img)
             else:

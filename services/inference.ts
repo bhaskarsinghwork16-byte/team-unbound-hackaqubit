@@ -24,11 +24,11 @@ export async function runScreeningInference(options: InferenceRunOptions): Promi
     confidenceThreshold = 0.60,
     targetScenario,
     qualityOverride,
-    modelMode = (process.env.MODEL_MODE?.toLowerCase() === 'real' ? 'real' : 'demo'),
+    modelMode = options.modelMode || (process.env.MODEL_MODE?.toLowerCase() === 'demo' ? 'demo' : 'real'),
   } = options;
 
   // 1. Image Quality Assessment Gate (Pre-inference)
-  const quality = qualityOverride || assessImageQualitySync(imageUri);
+  const quality = qualityOverride || assessImageQualitySync(imageUri, screeningType);
   const provider = getModelProvider(modelMode);
 
   // If quality is UNUSABLE, disease inference is blocked immediately to avoid false negatives!
