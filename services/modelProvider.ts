@@ -357,6 +357,7 @@ export function mapModelOutputToScreeningResult(
 
   // GATING 0A: Wrong Image Type Validation Gate
   if (modelOutput.class === 'wrong_image_type' || quality.validationStatus === 'wrong_image_type') {
+    const reasonText = modelOutput.explanationText || quality.feedback || 'Wrong image type for selected screening.';
     return {
       screeningId,
       patientId,
@@ -369,19 +370,20 @@ export function mapModelOutputToScreeningResult(
         isAcceptable: false,
         canProceedWithWarning: false,
         validationStatus: 'wrong_image_type',
+        feedback: reasonText,
         warnings: [
           ...(quality.warnings || []),
-          modelOutput.explanationText || quality.feedback || 'Wrong image type for selected screening.',
+          reasonText,
         ],
       },
       resultState: 'quality_insufficient',
       riskLevel: 'inconclusive',
       prediction: 'Screening Blocked: Wrong Image Type',
       confidence: 0,
-      recommendation: modelOutput.explanationText || quality.feedback || 'This image does not match the required clinical examination. Please retake the capture.',
+      recommendation: reasonText,
       clinicalCaveat: 'Automated disease screening was withheld. Pathology prediction is prohibited on non-target images.',
       explanationSupported: false,
-      explanationText: modelOutput.explanationText || quality.feedback || 'Image type validation failed.',
+      explanationText: reasonText,
       modelVersion: modelOutput.modelVersion,
       modelMode,
       dataSource: modelMode,
@@ -392,6 +394,7 @@ export function mapModelOutputToScreeningResult(
 
   // GATING 0B: Poor Image Quality Gate (Retake Required)
   if (modelOutput.class === 'poor_quality' || quality.validationStatus === 'correct_type_poor_quality' || !quality.isAcceptable || quality.grade === 'UNUSABLE') {
+    const reasonText = modelOutput.explanationText || quality.feedback || 'Image quality insufficient for automated analysis. Please retake the image.';
     return {
       screeningId,
       patientId,
@@ -402,12 +405,13 @@ export function mapModelOutputToScreeningResult(
         isAcceptable: false,
         canProceedWithWarning: false,
         validationStatus: 'correct_type_poor_quality',
+        feedback: reasonText,
       },
       resultState: 'quality_insufficient',
       riskLevel: 'inconclusive',
       prediction: 'Screening Blocked: Image Quality Insufficient',
       confidence: 0,
-      recommendation: modelOutput.explanationText || quality.feedback || 'Image quality insufficient for automated analysis. Please retake the image.',
+      recommendation: reasonText,
       clinicalCaveat: 'Automated disease screening was blocked due to optical blur or underexposure to avoid inaccurate findings.',
       explanationSupported: false,
       explanationText: modelOutput.explanationText || quality.feedback || 'Visual explanation is unavailable for degraded captures.',

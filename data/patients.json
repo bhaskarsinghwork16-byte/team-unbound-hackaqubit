@@ -1,5 +1,19 @@
 [
   {
+    "patientId": "SYNTH_TEST",
+    "screeningType": "eye",
+    "createdAt": "2026-10-07T17:52:36.401Z",
+    "lastScreeningDate": "2026-10-07T17:54:30.756Z",
+    "updatedAt": "2026-10-07T17:54:30.762Z"
+  },
+  {
+    "patientId": "TEST_PT_1",
+    "screeningType": "eye",
+    "createdAt": "2026-10-07T17:52:04.910Z",
+    "lastScreeningDate": "2026-10-07T17:52:05.216Z",
+    "updatedAt": "2026-10-07T17:52:05.226Z"
+  },
+  {
     "patientId": "PT-1049",
     "name": "dev",
     "age": 33,
