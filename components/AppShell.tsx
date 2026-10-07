@@ -25,6 +25,7 @@ import {
   CheckCircle2,
   Sparkles,
   Search,
+  Database,
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
@@ -95,6 +96,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     { label: 'Screening History', href: '/history', icon: ClipboardList },
     { label: 'Referrals & Triage', href: '/referrals', icon: GitPullRequest },
     { label: 'Operational Reports', href: '/reports', icon: BarChart2 },
+    { label: 'Database Explorer', href: '/database', icon: Database },
     { label: 'System Settings', href: '/settings', icon: Settings },
   ];
 
@@ -106,6 +108,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     if (pathname.startsWith('/history') || pathname.startsWith('/screenings')) return 'Screening History';
     if (pathname.startsWith('/referrals')) return 'Specialist Referrals';
     if (pathname.startsWith('/reports') || pathname.startsWith('/analytics')) return 'Operational Analytics';
+    if (pathname.startsWith('/database')) return 'Database & Collections Explorer';
     if (pathname.startsWith('/settings')) return 'System Settings';
     if (pathname.startsWith('/datasets')) return 'Dataset Documentation';
     return 'Community Health';
