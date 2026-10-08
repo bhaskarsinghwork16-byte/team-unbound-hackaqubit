@@ -32,8 +32,8 @@ function isRateLimited(ip: string): boolean {
 // Public API paths — no JWT needed
 const PUBLIC_API_PATHS = ['/api/auth/login', '/api/auth/refresh', '/api/auth/logout', '/api/health'];
 
-// Public page paths — no JWT needed (login page itself)
-const PUBLIC_PAGE_PATHS = ['/login'];
+// Public page paths — no JWT needed (landing page and login page)
+const PUBLIC_PAGE_PATHS = ['/login', '/'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
