@@ -176,27 +176,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        {/* Offline / Storage Status Notice */}
-        <div className="px-4 py-3 border-t border-[#d8e2dc] bg-[#d8e2dc]/30">
-          <div className="flex items-center justify-between text-xs text-[#5d2a42]">
-            <span className="flex items-center gap-2 font-bold">
-              <span
-                className={`w-2.5 h-2.5 rounded-full ${
-                  mongoConnected
-                    ? 'bg-emerald-500 shadow-[0_0_8px_#22c55e]'
-                    : isOnline
-                    ? 'bg-emerald-500 shadow-[0_0_8px_#22c55e]'
-                    : 'bg-amber-500'
-                }`}
-              />
-              <span className="flex items-center gap-1.5 text-xs text-[#5d2a42] font-extrabold">
-                <Shield className="w-3.5 h-3.5 text-[#5d2a42]" />
-                <span>Local File Storage</span>
-              </span>
-            </span>
-            <span className="text-[10px] font-mono text-[#5d2a42] font-bold bg-[#ffdccc] px-2 py-0.5 rounded-md border border-[#d8e2dc]">v1.4.0</span>
-          </div>
-        </div>
+
 
         {/* User profile footer */}
         <div className="p-3 border-t border-[#d8e2dc] flex items-center gap-3 bg-[#ffdccc]/40">
