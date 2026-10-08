@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { 
   Plus, 
   ArrowRight, 
@@ -13,10 +14,11 @@ import {
   HelpCircle, 
   Users, 
   ClipboardCheck, 
-  GitPullRequest,
   Calendar,
   Activity,
-  Sparkles
+  Layers,
+  Sparkles,
+  Zap
 } from 'lucide-react';
 import { ScreeningResult, OperationalMetrics } from '@/types';
 import CommunityScreeningHero from '@/components/CommunityScreeningHero';
@@ -320,7 +322,6 @@ export default function DashboardPage() {
             <span>View all screenings</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-        </div>
 
         {loading ? (
           <div className="p-12 text-center text-xs text-[#5d2a42] font-black">
@@ -477,11 +478,9 @@ export default function DashboardPage() {
                 </div>
               </Link>
             </div>
-          </div>
+          </Link>
         </div>
-      )}
+      </Modal>
     </div>
   );
 }
-
-

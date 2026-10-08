@@ -22,6 +22,23 @@ import {
   Check
 } from 'lucide-react';
 import { PatientRecord, ScreeningResult, ReferralRecord } from '@/types';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  Badge,
+  StatusBadge,
+  EmptyState
+} from '@/components/ui';
 
 export default function PatientProfilePage() {
   const params = useParams();
@@ -187,6 +204,20 @@ export default function PatientProfilePage() {
                   </span>
                 )}
               </div>
+              <div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h1 className="text-xl font-bold tracking-tight text-slate-900">
+                    {patient.name}
+                  </h1>
+                  <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-mono font-semibold">
+                    {patient.patientId}
+                  </span>
+                  {patient.needsFollowUp ? (
+                    <Badge variant="warning">Follow-up Due</Badge>
+                  ) : (
+                    <Badge variant="success">Up to Date</Badge>
+                  )}
+                </div>
 
               {/* Metadata pill strip */}
               <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-[#5d2a42]/85 font-bold mt-2">
@@ -238,8 +269,9 @@ export default function PatientProfilePage() {
       {/* ── TABS NAVIGATION ── */}
       <div className="flex border-b border-[#d8e2dc] gap-6 text-xs font-black">
         <button
+          type="button"
           onClick={() => setActiveTab('timeline')}
-          className={`pb-3 relative transition ${
+          className={`pb-3 relative transition-colors ${
             activeTab === 'timeline'
               ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
               : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
@@ -248,8 +280,9 @@ export default function PatientProfilePage() {
           Care Timeline ({timelineItems.length})
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab('screenings')}
-          className={`pb-3 relative transition ${
+          className={`pb-3 relative transition-colors ${
             activeTab === 'screenings'
               ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
               : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
@@ -258,8 +291,9 @@ export default function PatientProfilePage() {
           Screening Records ({screenings.length})
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab('referrals')}
-          className={`pb-3 relative transition ${
+          className={`pb-3 relative transition-colors ${
             activeTab === 'referrals'
               ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
               : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
@@ -268,8 +302,9 @@ export default function PatientProfilePage() {
           Specialist Referrals ({referrals.length})
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab('notes')}
-          className={`pb-3 relative transition ${
+          className={`pb-3 relative transition-colors ${
             activeTab === 'notes'
               ? 'text-[#5d2a42] border-b-2 border-[#5d2a42] font-black'
               : 'text-[#5d2a42]/60 hover:text-[#5d2a42]'
@@ -329,6 +364,12 @@ export default function PatientProfilePage() {
                           <span className="text-[11px] text-[#5d2a42]/80 font-bold">
                             Confidence: {s.confidence}%
                           </span>
+                        </div>
+
+                        {s.recommendation && (
+                          <p className="text-xs text-slate-600 mt-2 bg-white p-2.5 rounded-lg border border-slate-200/70">
+                            <strong>Clinical Recommendation:</strong> {s.recommendation}
+                          </p>
                         )}
                       </div>
 
@@ -348,12 +389,10 @@ export default function PatientProfilePage() {
                         </Link>
                       </div>
                     </div>
-                  </div>
-                );
-              }
+                  );
+                }
 
-              if (item.type === 'referral') {
-                const r = item.data;
+                // Registration event
                 return (
                   <div key={`r-${r.referralId}`} className="relative group">
                     <span className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-[#5d2a42] border-2 border-white ring-4 ring-[#5d2a42]/20" />

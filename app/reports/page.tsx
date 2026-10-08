@@ -11,7 +11,6 @@ import {
   HelpCircle, 
   FileText, 
   Download, 
-  Layers, 
   ShieldCheck, 
   Users, 
   GitPullRequest
@@ -69,7 +68,7 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* ── HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-[#d8e2dc]">
         <div>
@@ -84,13 +83,15 @@ export default function ReportsPage() {
           </p>
         </div>
 
-        <button
+        <Button
+          variant="primary"
+          size="md"
+          icon={<Download className="w-4 h-4" />}
           onClick={handleExportCSV}
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-full text-xs font-extrabold shadow-sm transition-all"
         >
-          <Download className="w-4 h-4 stroke-[3]" />
-          <span>Export Encounters CSV</span>
-        </button>
+          Export Encounters CSV
+        </Button>
       </div>
 
       {/* ── 3D WEBGL FLEXCAROUSEL OPERATIONAL TELEMETRY CAROUSEL ── */}
@@ -216,8 +217,8 @@ export default function ReportsPage() {
                     />
                   </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Clinical Finding Breakdown */}
             <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-4 shadow-sm">
@@ -248,8 +249,8 @@ export default function ReportsPage() {
                   </span>
                   <span className="font-black text-[#5d2a42] text-sm">{report.outcomesBreakdown.inconclusive}</span>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* ── REFERRALS STATUS BREAKDOWN ── */}
@@ -278,8 +279,8 @@ export default function ReportsPage() {
                 <span className="text-[11px] text-[#5d2a42] font-bold block">Completed</span>
                 <span className="text-lg font-black text-[#5d2a42] mt-1 block">{report.referralsBreakdown.completed}</span>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>

@@ -7,12 +7,20 @@ interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg';
   showSubtitle?: boolean;
   showTagline?: boolean;
+  theme?: 'light' | 'dark';
 }
 
-export default function BrandLogo({ size = 'md', showSubtitle, showTagline }: BrandLogoProps) {
+export default function BrandLogo({
+  size = 'md',
+  showSubtitle,
+  showTagline,
+  theme = 'light',
+}: BrandLogoProps) {
   const displaySubtitle = showSubtitle ?? showTagline ?? true;
-  const iconDimensions = size === 'sm' ? 'w-7 h-7' : size === 'lg' ? 'w-10 h-10' : 'w-8 h-8';
-  const titleSize = size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-lg' : 'text-base';
+  const iconDimensions = size === 'sm' ? 'w-8 h-8' : size === 'lg' ? 'w-11 h-11' : 'w-9 h-9';
+  const titleSize = size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-xl' : 'text-base';
+
+  const isLight = theme === 'light';
 
   return (
     <Link href="/dashboard" className="flex items-center gap-3 group select-none">

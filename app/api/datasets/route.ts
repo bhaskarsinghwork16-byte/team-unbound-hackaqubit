@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
-import { realDatasets } from '@/lib/db-store';
+import { getDatasets } from '@/lib/db-store';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const datasets = await getDatasets();
   return NextResponse.json({
     success: true,
-    count: realDatasets.length,
-    data: realDatasets,
+    count: datasets.length,
+    data: datasets,
   });
 }
+

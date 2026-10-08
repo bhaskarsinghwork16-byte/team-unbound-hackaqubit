@@ -25,7 +25,10 @@ import {
   ReferralRecord,
   OperationalMetrics,
   ReportsSummary,
+  ScreeningProgram,
+  ScreeningCamp,
 } from '@/types';
+import { encryptObject, decryptObject } from './security/encryption';
 
 /* ──────────────────────────────────────────────────────────────────────────────
  * FILE I/O HELPERS
@@ -38,6 +41,8 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const SCREENINGS_FILE = path.join(DATA_DIR, 'screenings.json');
 const PATIENTS_FILE = path.join(DATA_DIR, 'patients.json');
 const REFERRALS_FILE = path.join(DATA_DIR, 'referrals.json');
+const PROGRAMS_FILE = path.join(DATA_DIR, 'programs.json');
+const CAMPS_FILE = path.join(DATA_DIR, 'camps.json');
 
 /** Ensure data/ directory exists before read/write */
 function ensureDataDir(): void {
@@ -54,7 +59,13 @@ function readLocalJson<T>(filePath: string, fallback: T[]): T[] {
   try {
     if (fs.existsSync(filePath)) {
       const content = fs.readFileSync(filePath, 'utf-8');
-      return JSON.parse(content) as T[];
+      try {
+        const decrypted = decryptObject(content);
+        return decrypted as T[];
+      } catch (decryptionError) {
+        // Fallback for unencrypted legacy data
+        return JSON.parse(content) as T[];
+      }
     }
   } catch (err) {
     console.warn(`[Local Store] Could not read ${filePath}:`, (err as Error).message);
@@ -66,7 +77,8 @@ function readLocalJson<T>(filePath: string, fallback: T[]): T[] {
 function writeLocalJson<T>(filePath: string, data: T[]): void {
   ensureDataDir();
   try {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    const encrypted = encryptObject(data);
+    fs.writeFileSync(filePath, encrypted, 'utf-8');
   } catch (err) {
     console.warn(`[Local Store] Could not write ${filePath}:`, (err as Error).message);
   }
@@ -338,6 +350,133 @@ export async function updateReferralStatus(
 }
 
 /* ──────────────────────────────────────────────────────────────────────────────
+ * PROGRAM CRUD
+ * ────────────────────────────────────────────────────────────────────────── */
+
+export async function getPrograms(): Promise<ScreeningProgram[]> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const docs = await db.collection('programs').find({}).sort({ createdAt: -1 }).toArray();
+      return docs as unknown as ScreeningProgram[];
+    } catch (err) {
+      console.warn('[DB] MongoDB programs query failed, using local:', (err as Error).message);
+    }
+  }
+  return readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+}
+
+export async function getProgramById(programId: string): Promise<ScreeningProgram | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const doc = await db.collection('programs').findOne({ programId });
+      if (doc) return doc as unknown as ScreeningProgram;
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+  return list.find((p) => p.programId === programId) || null;
+}
+
+export async function saveProgram(program: ScreeningProgram): Promise<ScreeningProgram> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('programs').insertOne(program);
+      return program;
+    } catch (err) {
+      console.warn('[DB] Mongo insert program failed, using local:', (err as Error).message);
+    }
+  }
+  const list = readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+  list.unshift(program);
+  writeLocalJson(PROGRAMS_FILE, list);
+  return program;
+}
+
+export async function updateProgram(programId: string, updates: Partial<ScreeningProgram>): Promise<ScreeningProgram | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('programs').updateOne({ programId }, { $set: updates });
+      return await getProgramById(programId);
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+  const idx = list.findIndex((p) => p.programId === programId);
+  if (idx === -1) return null;
+  list[idx] = { ...list[idx], ...updates, updatedAt: new Date().toISOString() };
+  writeLocalJson(PROGRAMS_FILE, list);
+  return list[idx];
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * CAMP CRUD
+ * ────────────────────────────────────────────────────────────────────────── */
+
+export async function getCamps(programId?: string): Promise<ScreeningCamp[]> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const query = programId ? { programId } : {};
+      const docs = await db.collection('camps').find(query).sort({ createdAt: -1 }).toArray();
+      return docs as unknown as ScreeningCamp[];
+    } catch (err) {
+      console.warn('[DB] MongoDB camps query failed, using local:', (err as Error).message);
+    }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  if (programId) {
+    return list.filter((c) => c.programId === programId);
+  }
+  return list;
+}
+
+export async function getCampById(campId: string): Promise<ScreeningCamp | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const doc = await db.collection('camps').findOne({ campId });
+      if (doc) return doc as unknown as ScreeningCamp;
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  return list.find((c) => c.campId === campId) || null;
+}
+
+export async function saveCamp(camp: ScreeningCamp): Promise<ScreeningCamp> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('camps').insertOne(camp);
+      return camp;
+    } catch (err) {
+      console.warn('[DB] Mongo insert camp failed, using local:', (err as Error).message);
+    }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  list.unshift(camp);
+  writeLocalJson(CAMPS_FILE, list);
+  return camp;
+}
+
+export async function updateCamp(campId: string, updates: Partial<ScreeningCamp>): Promise<ScreeningCamp | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('camps').updateOne({ campId }, { $set: updates });
+      return await getCampById(campId);
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  const idx = list.findIndex((c) => c.campId === campId);
+  if (idx === -1) return null;
+  list[idx] = { ...list[idx], ...updates, updatedAt: new Date().toISOString() };
+  writeLocalJson(CAMPS_FILE, list);
+  return list[idx];
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
  * OPERATIONAL METRICS (Overview Dashboard)
  * Computes real values from stored data — never fabricates.
  * ────────────────────────────────────────────────────────────────────────── */
@@ -577,3 +716,60 @@ export const realModels: ModelMeta[] = [
     biasesAndLimitations: 'Evaluated on 400 holdout mucosal patches. Detects superficial color and texture anomalies. Cannot evaluate subsurface invasion or lymph node involvement. Biopsy strictly required.',
   },
 ];
+
+/**
+ * Fetch clinical dataset specifications directly from MongoDB Atlas 'datasets' collection,
+ * falling back to static realDatasets when offline.
+ */
+export async function getDatasets(): Promise<DatasetMeta[]> {
+  try {
+    const db = await getDatabase();
+    if (db) {
+      const records = await db.collection('datasets').find({}, { projection: { _id: 0 } }).toArray();
+      if (records && records.length > 0) {
+        return records as unknown as DatasetMeta[];
+      }
+    }
+  } catch (err) {
+    console.warn('[DB Store] Error fetching datasets from MongoDB Atlas, falling back to local:', (err as Error).message);
+  }
+  return realDatasets;
+}
+
+/**
+ * Fetch model specifications directly from MongoDB Atlas 'models' collection,
+ * falling back to static realModels when offline.
+ */
+export async function getModels(): Promise<ModelMeta[]> {
+  try {
+    const db = await getDatabase();
+    if (db) {
+      const records = await db.collection('models').find({}, { projection: { _id: 0 } }).toArray();
+      if (records && records.length > 0) {
+        return records as unknown as ModelMeta[];
+      }
+    }
+  } catch (err) {
+    console.warn('[DB Store] Error fetching models from MongoDB Atlas, falling back to local:', (err as Error).message);
+  }
+  return realModels;
+}
+
+/**
+ * Fetch Kaggle clinical validation cohort directly from MongoDB Atlas 'kaggle_cohort' collection.
+ */
+export async function getKaggleCohort(): Promise<any[]> {
+  try {
+    const db = await getDatabase();
+    if (db) {
+      const records = await db.collection('kaggle_cohort').find({}, { projection: { _id: 0 } }).toArray();
+      if (records && records.length > 0) {
+        return records;
+      }
+    }
+  } catch (err) {
+    console.warn('[DB Store] Error fetching kaggle_cohort from MongoDB Atlas:', (err as Error).message);
+  }
+  return [];
+}
+

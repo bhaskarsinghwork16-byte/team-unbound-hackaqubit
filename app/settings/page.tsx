@@ -23,6 +23,16 @@ import {
   ArrowRight,
   Check
 } from 'lucide-react';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Badge,
+  Input
+} from '@/components/ui';
 
 const PRESET_AVATARS = [
   { id: 'female_dr_1', name: 'Dr. Sunita Rao (Primary)', url: '/images/dr_sunita_avatar.jpg' },
@@ -173,7 +183,7 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       {/* ── HEADER ── */}
-      <div className="pb-2">
+      <div className="pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-[10px] bg-[#ffdccc] text-[#5d2a42] px-3 py-0.5 rounded-full border border-[#fec89a] font-bold tracking-wide">
             SYSTEM PARAMETERS
@@ -188,6 +198,7 @@ export default function SettingsPage() {
       {/* ── TABS ── */}
       <div className="flex border-b border-[#d8e2dc] gap-6 text-xs font-bold">
         <button
+          type="button"
           onClick={() => setActiveTab('facility')}
           className={`pb-3 relative transition flex items-center gap-1.5 ${
             activeTab === 'facility'
@@ -199,6 +210,7 @@ export default function SettingsPage() {
           Manager Profile & Facility
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab('safety')}
           className={`pb-3 relative transition flex items-center gap-1.5 ${
             activeTab === 'safety'
@@ -210,6 +222,7 @@ export default function SettingsPage() {
           Clinical Safety Gates
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab('system')}
           className={`pb-3 relative transition flex items-center gap-1.5 ${
             activeTab === 'system'
@@ -480,8 +493,8 @@ export default function SettingsPage() {
                   className="w-full px-3.5 py-2.5 bg-[#fff9ec] border border-[#d8e2dc] rounded-xl text-[#5d2a42] font-mono font-bold"
                 />
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* STORAGE & DB STATUS */}
           <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-4 shadow-sm">
@@ -501,6 +514,9 @@ export default function SettingsPage() {
                     {mongoStatus.message}
                   </div>
                 </div>
+                <Badge variant={mongoStatus.connected ? 'success' : 'info'}>
+                  {mongoStatus.connected ? '● MongoDB Connected' : '● Local Offline Storage Active'}
+                </Badge>
               </div>
               <span
                 className={`px-3 py-1.5 rounded-full font-extrabold text-[11px] ${

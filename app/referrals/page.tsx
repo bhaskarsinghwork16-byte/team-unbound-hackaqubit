@@ -2,18 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { 
   GitPullRequest, 
-  Search, 
-  Filter, 
-  AlertCircle, 
-  CheckCircle2, 
-  Clock, 
-  ArrowRight,
   ExternalLink,
-  ChevronDown,
   Building,
-  User
+  User,
+  Filter,
+  AlertCircle,
+  Clock,
+  CheckCircle2,
+  Activity,
+  ArrowRight
 } from 'lucide-react';
 import { ReferralRecord, ReferralStatus, ReferralPriority } from '@/types';
 import FlexCarousel from '@/components/FlexCarousel';
@@ -130,6 +130,12 @@ export default function ReferralsPage() {
             Clinical specialist referrals and community follow-up tracker.
           </p>
         </div>
+
+        <Link href="/screening">
+          <Button variant="primary" size="sm" icon={<Activity className="w-4 h-4" />}>
+            <span>+ New Screening Triage</span>
+          </Button>
+        </Link>
       </div>
 
       {/* ── 3D WEBGL FLEXCAROUSEL REFERRAL HUBS CAROUSEL ── */}
@@ -250,8 +256,8 @@ export default function ReferralsPage() {
                   <tr key={r.referralId} className="hover:bg-[#ffdccc]/20 transition-colors">
                     <td className="py-3.5 px-5 font-mono font-black text-[#5d2a42] whitespace-nowrap">
                       {r.referralId}
-                    </td>
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <Link
                         href={`/patients/${r.patientId}`}
                         className="font-bold text-[#5d2a42] hover:underline block transition-colors"
@@ -275,11 +281,11 @@ export default function ReferralsPage() {
                     </td>
                     <td className="py-3.5 px-5 text-[#5d2a42] max-w-xs font-medium">
                       <span className="line-clamp-2">{r.reason}</span>
-                    </td>
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       {getPriorityBadge(r.priority)}
-                    </td>
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <select
                         value={r.status}
                         disabled={updatingId === r.referralId}
@@ -295,14 +301,14 @@ export default function ReferralsPage() {
                     </td>
                     <td className="py-3.5 px-5 text-[#5d2a42]/70 whitespace-nowrap font-bold">
                       {formatDate(r.createdAt)}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

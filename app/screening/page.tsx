@@ -43,6 +43,8 @@ function ScreeningWorkflow() {
 
   const urlPatientId = searchParams.get('patientId') || '';
   const urlType = (searchParams.get('type') as ScreeningType) || '';
+  const urlProgramId = searchParams.get('programId') || undefined;
+  const urlCampId = searchParams.get('campId') || undefined;
 
   // Stepper state: 1: Patient, 2: Consent, 3: Protocol, 4: Capture, 5: Quality, 6: Analysis, 7: Result, 8: Review
   const [step, setStep] = useState<number>(urlPatientId ? (urlType ? 4 : 2) : 1);
@@ -301,6 +303,8 @@ function ScreeningWorkflow() {
             imageUri,
             targetScenario: targetScenario || undefined,
             qualityOverride: qualityResult,
+            programId: urlProgramId,
+            campId: urlCampId,
           }),
         });
 
@@ -406,7 +410,7 @@ function ScreeningWorkflow() {
             <React.Fragment key={s.num}>
               {idx > 0 && <span className="text-[#5d2a42]/30 mx-1 font-bold">›</span>}
               <div
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition whitespace-nowrap ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap ${
                   isActive
                     ? 'bg-[#5d2a42] text-[#fff9ec] font-extrabold shadow-sm'
                     : isDone

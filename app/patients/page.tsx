@@ -16,6 +16,26 @@ import {
   X
 } from 'lucide-react';
 import { PatientRecord } from '@/types';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  Input,
+  Select,
+  StatusBadge,
+  Badge,
+  EmptyState,
+  Modal
+} from '@/components/ui';
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState<PatientRecord[]>([]);
@@ -104,10 +124,23 @@ export default function PatientsPage() {
     }
   };
 
+  const calculatePriorityScore = (p: PatientRecord) => {
+    let score = 0;
+    if (p.needsFollowUp) score += 60;
+    if (p.age > 60) score += 25;
+    else if (p.age > 40) score += 10;
+    
+    // Additional metrics if riskContext exists
+    if (p.riskContext && p.riskContext.length > 0) {
+      score += p.riskContext.length * 15;
+    }
+    return Math.min(score, 100);
+  };
+
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] bg-[#ffdccc] text-[#5d2a42] px-2.5 py-0.5 rounded-full border border-[#fec89a] font-bold tracking-wide">
@@ -172,8 +205,8 @@ export default function PatientsPage() {
                 : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
             }`}
           >
-            Follow-up Required
-          </button>
+            + Add Patient
+          </Button>
         </div>
       </div>
 
@@ -198,8 +231,18 @@ export default function PatientsPage() {
               onClick={() => setShowAddModal(true)}
               className="inline-flex items-center gap-2 px-4 py-2 bg-[#5d2a42] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs hover:scale-105 transition-transform"
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Add Patient</span>
+              Recently Screened
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter('followup')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                filter === 'followup'
+                  ? 'bg-white text-slate-900 shadow-2xs font-semibold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Follow-up Required
             </button>
           </div>
         ) : (
@@ -238,8 +281,8 @@ export default function PatientsPage() {
                     </td>
                     <td className="py-4 px-5 text-[#5d2a42] whitespace-nowrap font-bold">
                       {formatDate(p.registeredDate)}
-                    </td>
-                    <td className="py-4 px-5 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       {p.needsFollowUp ? (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30 text-xs font-black shadow-xs">
                           <AlertCircle className="w-3.5 h-3.5 text-[#5d2a42]" />
@@ -252,7 +295,20 @@ export default function PatientsPage() {
                         </span>
                       )}
                     </td>
-                    <td className="py-4 px-5 text-right whitespace-nowrap space-x-3">
+                    <td className="py-3.5 px-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="w-12 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full ${calculatePriorityScore(p) > 50 ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                            style={{ width: `${calculatePriorityScore(p)}%` }}
+                          />
+                        </div>
+                        <span className={`text-xs font-bold ${calculatePriorityScore(p) > 50 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                          {calculatePriorityScore(p)}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4 text-right whitespace-nowrap space-x-2">
                       <Link
                         href={`/screening?patientId=${p.patientId}`}
                         className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-[#ffdccc] text-[#5d2a42] font-black text-xs border border-[#5d2a42]/20 hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all"
@@ -266,11 +322,27 @@ export default function PatientsPage() {
                         <span>Record</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ── STANDARDIZED ADD PATIENT MODAL ── */}
+      <Modal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        title="Register New Patient"
+        description="Create a verified clinical patient record for community health screening"
+        maxWidth="lg"
+      >
+        {formError && (
+          <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+            <span>{formError}</span>
           </div>
         )}
       </div>
@@ -382,8 +454,8 @@ export default function PatientsPage() {
               </div>
             </form>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
     </div>
   );
 }

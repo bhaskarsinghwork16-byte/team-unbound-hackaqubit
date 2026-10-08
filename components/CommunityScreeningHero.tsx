@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Plus,
@@ -14,7 +14,6 @@ import {
   Sparkles,
   Award,
   Cpu,
-  Lock,
   Layers,
   Sparkle,
   Activity,
@@ -195,60 +194,163 @@ export default function CommunityScreeningHero() {
     };
   };
 
-  const handlePillSelect = (value: string) => {
-    if (value) {
-      router.push(value);
-    }
-  };
+const DEMO_CASES: DemoCase[] = [
+  {
+    id: 'case-eye-normal',
+    name: 'Normal Retinal Fundus',
+    type: 'eye',
+    sampleThumb: '👁️ Clear Retinal Disc',
+    gateStatus: 'pass',
+    gateMessage: 'Valid Fundus Image · Optical Quality Passed',
+    blurScore: 242,
+    aiPrediction: 'No Diabetic Retinopathy (Grade 0)',
+    confidence: 96.8,
+    severity: 'normal',
+    recommendation: 'Routine annual diabetic eye screening recommended.',
+  },
+  {
+    id: 'case-eye-npdr',
+    name: 'Retinopathy with Exudates',
+    type: 'eye',
+    sampleThumb: '👁️ Fundus with Microaneurysms',
+    gateStatus: 'pass',
+    gateMessage: 'Valid Fundus Image · Optical Quality Passed',
+    blurScore: 198,
+    aiPrediction: 'Moderate NPDR (Grade 2)',
+    confidence: 92.4,
+    severity: 'moderate',
+    recommendation: 'Escalate to Tele-Ophthalmology for slit-lamp verification within 30 days.',
+  },
+  {
+    id: 'case-oral-lesion',
+    name: 'Oral Mucosal White Patch',
+    type: 'oral',
+    sampleThumb: '👄 Buccal Mucosa Inspection',
+    gateStatus: 'pass',
+    gateMessage: 'Valid Oral Cavity · Chromaticity Passed',
+    blurScore: 185,
+    aiPrediction: 'Suspicious Mucosal Lesion (Potential Leukoplakia)',
+    confidence: 89.1,
+    severity: 'suspicious',
+    recommendation: 'Urgent referral to District Dental Surgeon / Oncologist for biopsy.',
+  },
+  {
+    id: 'case-invalid-blur',
+    name: 'Out-of-Focus / Defocused Image',
+    type: 'eye',
+    sampleThumb: '⚠️ Blurred Lens Capture',
+    gateStatus: 'fail',
+    gateMessage: 'Optical Gate REJECTED: Laplacian variance 42.1 (Threshold 100)',
+    blurScore: 42,
+    aiPrediction: 'Model Inference Blocked (Low Quality)',
+    confidence: 0,
+    severity: 'invalid',
+    recommendation: 'Recapture image. Ensure camera lens is steady and focused on the retina.',
+  },
+];
+
+const CLINICAL_MODULES = [
+  {
+    title: 'Diabetic Retinopathy Optical Screening',
+    tag: 'AI Protocol #1',
+    description: 'Autonomous retinal fundus screening with automated Laplacian blur verification and 5-tier DR severity staging.',
+    href: '/screening?type=eye',
+    icon: Eye,
+    iconBg: 'bg-teal-50 border-teal-200 text-teal-700',
+    tagColor: 'bg-teal-50 text-teal-800 border-teal-200',
+  },
+  {
+    title: 'Oral Mucosal Lesion Screening',
+    tag: 'AI Protocol #2',
+    description: 'Visual screening of oral mucosa and tongue for suspicious leukoplakia, erythroplakia, and mucosal abnormalities.',
+    href: '/screening?type=oral',
+    icon: Smile,
+    iconBg: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+    tagColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  },
+  {
+    title: 'Community Patient Directory',
+    tag: 'Records & Intake',
+    description: 'Longitudinal health records, demographic search, and past screening encounters for registered community members.',
+    href: '/patients',
+    icon: Users,
+    iconBg: 'bg-sky-50 border-sky-200 text-sky-700',
+    tagColor: 'bg-sky-50 text-sky-800 border-sky-200',
+  },
+  {
+    title: 'Screening History & Audit Trail',
+    tag: 'Encounters',
+    description: 'Historical archive of completed screenings, optical confidence scores, and clinician review stamps.',
+    href: '/history',
+    icon: ClipboardList,
+    iconBg: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+    tagColor: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+  },
+  {
+    title: 'Closed-Loop Specialist Referrals',
+    tag: 'Secondary Care',
+    description: 'Escalate higher-risk findings to district ophthalmologists and oncologists with printable referral slips.',
+    href: '/referrals',
+    icon: GitPullRequest,
+    iconBg: 'bg-rose-50 border-rose-200 text-rose-700',
+    tagColor: 'bg-rose-50 text-rose-800 border-rose-200',
+  },
+  {
+    title: 'Operational Reports & CSV Export',
+    tag: 'Health Dept Analytics',
+    description: 'Real-time community health camp metrics, disease prevalence breakdowns, and one-click data export.',
+    href: '/reports',
+    icon: BarChart2,
+    iconBg: 'bg-amber-50 border-amber-200 text-amber-700',
+    tagColor: 'bg-amber-50 text-amber-800 border-amber-200',
+  },
+  {
+    title: 'Validation Datasets & Evidence',
+    tag: 'Model Robustness',
+    description: 'Clinical validation cohorts (APTOS 2019, Messidor-2, and Indian rural camps) with sensitivity metrics.',
+    href: '/datasets',
+    icon: Database,
+    iconBg: 'bg-cyan-50 border-cyan-200 text-cyan-700',
+    tagColor: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+  },
+  {
+    title: 'Edge System & Diagnostics',
+    tag: 'Field Operations',
+    description: 'PyTorch INT8 inference status, offline JSON store synchronization, and judge evaluation demo mode.',
+    href: '/settings',
+    icon: Sliders,
+    iconBg: 'bg-slate-100 border-slate-200 text-slate-700',
+    tagColor: 'bg-slate-100 text-slate-800 border-slate-200',
+  },
+];
+
+export default function CommunityScreeningHero() {
+  const [selectedCaseId, setSelectedCaseId] = useState<string>('case-eye-normal');
+
+  const activeCase = DEMO_CASES.find((c) => c.id === selectedCaseId) || DEMO_CASES[0];
 
   return (
-    <div id="hero" className="w-full bg-[#fff9ec] text-[#5d2a42] px-6 sm:px-10 lg:px-16 font-sans relative overflow-hidden">
-      {/* Moving Medical Blood Vessel SVG Background */}
-      <BloodVesselBackground />
+    <div id="hero" className="w-full bg-slate-50 text-slate-900 font-sans relative overflow-hidden bg-dot-grid">
+      {/* Ambient Lighting Gradient Blobs */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-mesh-radial pointer-events-none" />
+      <div className="absolute top-20 right-10 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-80 left-10 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Background Decorative Glow Blobs */}
-      <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-[#d8e2dc]/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-[60vh] left-10 w-[500px] h-[500px] bg-[#ffdccc]/50 rounded-full blur-3xl pointer-events-none" />
-
-      {/* ── SEGMENT 1: MAIN HERO SECTION WITH RANDOM FLOATING CIRCULAR BUTTONS ── */}
-      <section className="min-h-[90vh] py-16 sm:py-20 lg:py-24 flex flex-col justify-center relative z-10 mb-16 lg:mb-24">
-        
-        {/* ── RANDOM FLOATING CIRCLE BUTTON 1: ACCURACY (Top Left) ── */}
-        <div className="absolute -top-4 left-2 sm:left-10 z-30 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#ffdccc] border-2 border-[#d8e2dc] shadow-xl animate-float flex flex-col items-center justify-center text-center p-1.5 transition-transform hover:scale-110 select-none">
-          <ShieldCheck className="w-4 h-4 text-[#5d2a42]" />
-          <span className="text-xs sm:text-sm font-black text-[#5d2a42] mt-0.5 leading-none">98.4%</span>
-          <span className="text-[9px] font-extrabold text-[#5d2a42]/85 mt-0.5">Accuracy</span>
-        </div>
-
-        {/* ── RANDOM FLOATING CIRCLE BUTTON 2: INFERENCE (Center Bottom Left) ── */}
-        <div className="absolute -bottom-8 left-6 sm:left-1/3 z-30 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#d8e2dc]/95 backdrop-blur-md border-2 border-[#5d2a42]/20 shadow-xl animate-float-slow flex flex-col items-center justify-center text-center p-1.5 transition-transform hover:scale-110 select-none">
-          <Zap className="w-4 h-4 text-[#5d2a42]" />
-          <span className="text-xs sm:text-sm font-black text-[#5d2a42] mt-0.5 leading-none">&lt; 3 sec</span>
-          <span className="text-[9px] font-extrabold text-[#5d2a42]/85 mt-0.5">Inference</span>
-        </div>
-
-        {/* ── RANDOM FLOATING CIRCLE BUTTON 3: DUAL AI (Top Center Right) ── */}
-        <div className="absolute -top-6 right-1/4 sm:right-1/3 z-30 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#ffdccc] border-2 border-[#d8e2dc] shadow-xl animate-float flex flex-col items-center justify-center text-center p-1.5 transition-transform hover:scale-110 select-none">
-          <Eye className="w-4 h-4 text-[#5d2a42]" />
-          <span className="text-xs sm:text-sm font-black text-[#5d2a42] mt-0.5 leading-none">Dual AI</span>
-          <span className="text-[9px] font-extrabold text-[#5d2a42]/85 mt-0.5">Eye &amp; Oral</span>
-        </div>
-
-        {/* ── RANDOM FLOATING CIRCLE BUTTON 4: 100% OFFLINE (Bottom Right) ── */}
-        <div className="absolute -bottom-6 right-4 sm:right-20 z-30 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#d8e2dc]/95 backdrop-blur-md border-2 border-[#5d2a42]/20 shadow-xl animate-float-slow flex flex-col items-center justify-center text-center p-1.5 transition-transform hover:scale-110 select-none">
-          <Smile className="w-4 h-4 text-[#5d2a42]" />
-          <span className="text-xs sm:text-sm font-black text-[#5d2a42] mt-0.5 leading-none">100%</span>
-          <span className="text-[9px] font-extrabold text-[#5d2a42]/85 mt-0.5">Offline</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      {/* ── SEGMENT 1: MODERN HERO SECTION ── */}
+      <section className="px-4 sm:px-8 lg:px-12 pt-12 pb-16 lg:pt-16 lg:pb-24 relative z-10 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
           
-          {/* Left Hero Column */}
-          <div className="lg:col-span-7 space-y-7">
-            {/* Minimal Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ffdccc] border border-[#d8e2dc] text-xs font-extrabold text-[#5d2a42] shadow-xs animate-float">
-              <Sparkles className="w-4 h-4 text-[#5d2a42]" />
-              <span>HealthScreen AI · Community Health Platform</span>
+          {/* Left Column: High-Impact Typography & Action */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-6 space-y-6 text-left"
+          >
+            {/* Live Status Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/90 text-xs font-semibold text-teal-900 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Offline Edge Intelligence · WHO &amp; ICMR Aligned</span>
             </div>
 
             {/* Main Title (#5d2a42) with Staggered Entrance Animation */}
@@ -269,23 +371,22 @@ export default function CommunityScreeningHero() {
             {/* Action CTAs */}
             <div className="flex flex-wrap items-center gap-4 pt-4 hero-anim hero-fade" style={{ animationDelay: '0.65s' }}>
               <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-2xl text-sm font-black shadow-lg shadow-[#5d2a42]/20 transition-all transform hover:-translate-y-0.5"
+                href="/screening"
+                className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-xl text-sm font-bold shadow-md shadow-teal-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
               >
-                <LayoutDashboard className="w-5 h-5 text-[#ffdccc]" />
-                <span>Enter Official Dashboard</span>
-                <ArrowRight className="w-4 h-4 text-[#ffdccc]" />
+                <Plus className="w-4 h-4 text-teal-100" />
+                <span>Start Patient Screening</span>
+                <ArrowRight className="w-4 h-4 text-teal-100" />
               </Link>
 
               <Link
-                href="/screening"
-                className="inline-flex items-center gap-2 px-6 py-4 bg-[#d8e2dc]/40 hover:bg-[#d8e2dc]/70 border border-[#d8e2dc] text-[#5d2a42] rounded-2xl text-sm font-extrabold transition-all shadow-xs"
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100/80 border border-slate-200 text-slate-800 rounded-xl text-sm font-semibold transition-all shadow-2xs hover:border-slate-300"
               >
-                <Plus className="w-4 h-4 text-[#5d2a42]" />
-                <span>Start Patient Screening</span>
+                <LayoutDashboard className="w-4 h-4 text-teal-600" />
+                <span>Open Clinical Workspace</span>
               </Link>
             </div>
-          </div>
 
           {/* Right Hero Column: SHOWCASE CARD WITH CURSOR SPOTLIGHT REVEAL MECHANIC */}
           <div className="lg:col-span-5 relative min-h-[460px] flex flex-col items-center justify-center">
@@ -325,84 +426,131 @@ export default function CommunityScreeningHero() {
                 <span>Move cursor over card to reveal AI Diagnostic Layer</span>
               </div>
             </div>
+          </motion.div>
 
-            {/* SPACED FLOATING BADGE 1 (Top Right Offset) */}
-            <div className="absolute -top-4 -right-2 sm:-right-6 px-4 py-3 rounded-2xl bg-[#ffdccc] border border-[#d8e2dc] shadow-xl animate-float flex items-center gap-3 z-20">
-              <div className="w-9 h-9 rounded-xl bg-[#5d2a42] text-[#ffdccc] flex items-center justify-center font-bold text-xs">
-                <Award className="w-4.5 h-4.5 text-[#ffdccc]" />
+        </div>
+      </section>
+
+      {/* ── SEGMENT 2: 4 CORE CLINICAL PILLARS (BENTO GRID) ── */}
+      <section id="features" className="py-16 sm:py-20 border-t border-slate-200/90 bg-white/80 relative z-10 px-4 sm:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
+              Validated Architecture
+            </span>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+              Engineered for Primary Health Clinics
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Designed specifically for community health camps and rural clinics where internet connectivity is intermittent and immediate triage decisions save lives.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Bento Card 1: Optical Quality Gate */}
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-teal-300 transition-all space-y-3.5">
+              <div className="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center border border-teal-100">
+                <ShieldCheck className="w-5 h-5 stroke-[2]" />
               </div>
-              <div>
-                <p className="text-xs font-black text-[#5d2a42]">98.4% AI Precision</p>
-                <p className="text-[10px] text-[#5d2a42]/80 font-semibold">Gold Standard Validated</p>
+              <h3 className="text-base font-bold text-slate-900">Multi-Stage Quality Gate</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Prevents misclassification by rejecting unrelated objects, defocused captures, and underexposed shots before any model inference runs.
+              </p>
+              <div className="pt-2 text-[11px] font-semibold text-teal-700 flex items-center gap-1">
+                <span>Laplacian Blur + Color Ratio</span>
               </div>
             </div>
 
-            {/* SPACED FLOATING BADGE 2 (Center Left Offset) */}
-            <div className="absolute top-1/2 -left-4 sm:-left-8 -translate-y-1/2 px-4 py-3 rounded-2xl bg-[#d8e2dc]/90 backdrop-blur-md border border-[#5d2a42]/30 shadow-xl animate-float-slow flex items-center gap-3 z-20">
-              <div className="w-9 h-9 rounded-xl bg-[#ffdccc] border border-[#d8e2dc] text-[#5d2a42] flex items-center justify-center font-bold text-xs">
-                <Cpu className="w-4.5 h-4.5 text-[#5d2a42]" />
+            {/* Bento Card 2: Offline Quantized Inference */}
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all space-y-3.5">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+                <Cpu className="w-5 h-5 stroke-[2]" />
               </div>
-              <div>
-                <p className="text-xs font-black text-[#5d2a42]">⚡ Offline Edge Engine</p>
-                <p className="text-[10px] text-[#5d2a42]/80 font-semibold">&lt;3 Sec Local Response</p>
-              </div>
-            </div>
-
-            {/* SPACED FLOATING BADGE 3 (Bottom Right Offset) */}
-            <div className="absolute -bottom-4 right-0 sm:right-4 px-4 py-3 rounded-2xl bg-[#ffdccc] border border-[#d8e2dc] shadow-xl animate-float flex items-center gap-3 z-20">
-              <div className="w-9 h-9 rounded-xl bg-[#5d2a42] text-[#ffdccc] flex items-center justify-center font-bold text-xs">
-                <Lock className="w-4.5 h-4.5 text-[#ffdccc]" />
-              </div>
-              <div>
-                <p className="text-xs font-black text-[#5d2a42]">🔒 Privacy Preserved</p>
-                <p className="text-[10px] text-[#5d2a42]/80 font-semibold">Local Encrypted Store</p>
+              <h3 className="text-base font-bold text-slate-900">100% Offline Edge Models</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Runs on standard laptops with INT8 PyTorch weights. Zero cloud GPU required, ensuring patient confidentiality and instant response times.
+              </p>
+              <div className="pt-2 text-[11px] font-semibold text-emerald-700 flex items-center gap-1">
+                <span>&lt; 3s CPU Inference</span>
               </div>
             </div>
 
+            {/* Bento Card 3: Dual Multi-Organ Screening */}
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-sky-300 transition-all space-y-3.5">
+              <div className="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center border border-sky-100">
+                <Eye className="w-5 h-5 stroke-[2]" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900">Dual Protocol Coverage</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Comprehensive screening for both Diabetic Retinopathy (retinal fundus) and oral mucosal lesions (early oral cancer risk detection).
+              </p>
+              <div className="pt-2 text-[11px] font-semibold text-sky-700 flex items-center gap-1">
+                <span>Retinal Fundus + Oral Cavity</span>
+              </div>
+            </div>
+
+            {/* Bento Card 4: Closed-Loop Referral */}
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-indigo-300 transition-all space-y-3.5">
+              <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
+                <HeartPulse className="w-5 h-5 stroke-[2]" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900">Closed-Loop Care &amp; Referrals</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Connects field workers directly to district specialists with printable referral slips, priority triage flags, and follow-up tracking.
+              </p>
+              <div className="pt-2 text-[11px] font-semibold text-indigo-700 flex items-center gap-1">
+                <span>Specialist Tele-Consults</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── SEGMENT 2: FOLDER FLOAT ENVELOPE SECTION (AFTER 1 SCROLL) ── */}
-      <section id="options" className="min-h-[85vh] py-20 lg:py-28 border-t-2 border-[#d8e2dc]/60 flex flex-col items-center justify-center relative z-10 scroll-mt-20">
-        
-        {/* Header Title */}
-        <div className="text-center max-w-2xl mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ffdccc] border border-[#d8e2dc] text-xs font-extrabold text-[#5d2a42] shadow-xs">
-            <Layers className="w-4 h-4 text-[#5d2a42]" />
-            <span>Interactive Module Scatter</span>
+      {/* ── SEGMENT 3: MODERN CLINICAL WORKFLOWS DIRECTORY (REPLACED ODD FOLDER) ── */}
+      <section id="modules" className="py-16 sm:py-24 border-t border-slate-200 relative z-10 px-4 sm:px-8 lg:px-12 bg-slate-50/60">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-xs font-bold text-teal-900">
+              <Layers className="w-3.5 h-3.5 text-teal-600" />
+              <span>Full Clinical Platform Directory</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              Explore HealthScreen Workflows
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed font-normal">
+              Direct access to all clinical screening protocols, longitudinal patient records, specialist escalations, and edge operational settings.
+            </p>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-black text-[#5d2a42] tracking-tight">
-            Dashboard Options &amp; Modules
-          </h2>
-          <p className="text-sm sm:text-base text-[#5d2a42]/85 font-semibold leading-relaxed">
-            Click the envelope below to open it and scatter all clinical workspace modules into an interactive floating physics world. Select any module to open it.
-          </p>
-        </div>
+          {/* Clean Modern 4x2 Responsive Card Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {CLINICAL_MODULES.map((module) => {
+              const Icon = module.icon;
+              return (
+                <Link
+                  key={module.href}
+                  href={module.href}
+                  className="group p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-teal-400 transition-all duration-200 flex flex-col justify-between"
+                >
+                  <div className="space-y-3.5">
+                    <div className="flex items-center justify-between">
+                      <div className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-transform group-hover:scale-105 ${module.iconBg}`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${module.tagColor}`}>
+                        {module.tag}
+                      </span>
+                    </div>
 
-        {/* Prominent Centered FolderFloat Envelope Component */}
-        <div className="relative z-30 my-6 flex flex-col items-center">
-          <FolderFloat
-            items={FOLDER_ITEMS}
-            label="Explore Modules"
-            sublabel="Click to scatter dashboard options"
-            trigger="click"
-            physics={true}
-            drift={0.6}
-            width={260}
-            height={180}
-            spread={240}
-            lift={42}
-            folderColor="#5d2a42"
-            frontColor="#d8e2dc"
-            paperColor="#fff9ec"
-            itemColor="#ffdccc"
-            itemTextColor="#5d2a42"
-            labelColor="#5d2a42"
-            onSelect={handlePillSelect}
-          />
-        </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm group-hover:text-teal-700 transition-colors leading-snug">
+                        {module.title}
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                        {module.description}
+                      </p>
+                    </div>
+                  </div>
 
         {/* 3D WebGL FlexCarousel Module Options Showcase */}
         <div className="w-full max-w-5xl h-[360px] relative rounded-3xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-xl my-8">

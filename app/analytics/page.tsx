@@ -12,9 +12,18 @@ import {
   Layers, 
   Cpu,
   Eye,
-  Stethoscope
+  Smile
 } from 'lucide-react';
 import { AnalyticsSummary } from '@/types';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Badge,
+  EmptyState
+} from '@/components/ui';
 
 export default function AnalyticsPage() {
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
@@ -33,7 +42,7 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-extrabold text-[#5d2a42] tracking-tight">Clinical & Technical Analytics</h1>
@@ -97,7 +106,6 @@ export default function AnalyticsPage() {
 
           {/* Screening Outcomes & Daily Volume */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
             {/* Volume Breakdown */}
             <div className="lg:col-span-7 bg-white/90 p-6 rounded-2xl border border-[#d8e2dc] shadow-sm space-y-4">
               <div className="flex justify-between items-center">
@@ -188,13 +196,11 @@ export default function AnalyticsPage() {
                     {analytics.outcomesBreakdown.inconclusive}
                   </span>
                 </div>
-              </div>
-            </div>
-
+              </CardContent>
+            </Card>
           </div>
         </div>
       )}
-
     </div>
   );
 }

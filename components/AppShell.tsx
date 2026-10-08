@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Users,
@@ -14,11 +15,16 @@ import {
   Bell,
   Menu,
   X,
-  Sparkles,
   ArrowRight,
-  ShieldCheck,
   Shield,
-  Eye
+  Eye,
+  LogOut,
+  Smile,
+  Activity,
+  CheckCircle2,
+  Sparkles,
+  Search,
+  Database,
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 import SectionPixelTransition from './SectionPixelTransition';
@@ -26,8 +32,8 @@ import { UserProfile } from '@/types';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isHomePage = pathname === '/';
-
   const [isOnline, setIsOnline] = useState(true);
   const [mongoConnected, setMongoConnected] = useState<boolean | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -70,6 +76,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       })
       .catch(() => setMongoConnected(false));
 
+    // Fetch current session user
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.userId) setAuthUser(data);
+      })
+      .catch(() => {});
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
@@ -77,8 +91,29 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, [pathname]);
 
+  async function handleLogout() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch { /* ignore */ }
+    router.push('/login');
+  }
+
+  // Derive display info from session
+  const roleLabel: Record<string, string> = {
+    HEALTH_WORKER: 'Health Worker',
+    DOCTOR: 'Doctor',
+    CAMP_ADMIN: 'Camp Admin',
+    SYSTEM_ADMIN: 'System Admin',
+    AUDITOR: 'Auditor',
+  };
+  const displayRole = authUser ? (roleLabel[authUser.role] ?? authUser.role) : 'Clinical Staff';
+  const displayInitials = authUser
+    ? authUser.userId.substring(0, 2).toUpperCase()
+    : 'HS';
+
   const navItems = [
     { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+    { label: 'Programs', href: '/programs', icon: Shield },
     { label: 'Patients', href: '/patients', icon: Users },
     { label: 'Screenings', href: '/history', icon: ClipboardList },
     { label: 'Referrals', href: '/referrals', icon: GitPullRequest },
@@ -93,61 +128,88 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     if (pathname.startsWith('/screening')) return 'New Patient Screening';
     if (pathname.startsWith('/history') || pathname.startsWith('/screenings')) return 'Screening History';
     if (pathname.startsWith('/referrals')) return 'Specialist Referrals';
-    if (pathname.startsWith('/reports') || pathname.startsWith('/analytics')) return 'Operational Reports';
+    if (pathname.startsWith('/reports') || pathname.startsWith('/analytics')) return 'Operational Analytics';
+    if (pathname.startsWith('/database')) return 'Database & Collections Explorer';
     if (pathname.startsWith('/settings')) return 'System Settings';
     if (pathname.startsWith('/datasets')) return 'Dataset Documentation';
     return 'Community Health';
   };
 
   // ── IF WE ARE ON THE WEBSITE HOME LANDING PAGE (`/`) ──
-  // Do NOT render left sidebar initially! Render full website experience with Website Navbar & Dashboard button.
   if (isHomePage) {
     return (
-      <div className="min-h-screen bg-[#fff9ec] text-[#5d2a42] font-sans antialiased flex flex-col">
+      <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased flex flex-col selection:bg-teal-500/20 selection:text-teal-900">
         {/* ── PUBLIC WEBSITE TOP NAVBAR ── */}
-        <header className="sticky top-0 z-50 bg-[#fff9ec]/90 backdrop-blur-md border-b border-[#d8e2dc]/60 px-4 sm:px-8 py-3.5 transition-colors">
+        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 px-4 sm:px-8 py-3.5 transition-all">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-            {/* Logo */}
             <div className="flex items-center gap-3">
-              <BrandLogo size="md" showSubtitle={true} />
+              <BrandLogo size="md" showSubtitle={true} theme="light" />
             </div>
 
-            {/* Public Website Links */}
-            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-[#5d2a42]">
-              <a href="#hero" className="hover:opacity-80 transition-opacity">Platform</a>
-              <a href="#options" className="hover:opacity-80 transition-opacity">Modules</a>
-              <Link href="/screening" className="hover:opacity-80 transition-opacity flex items-center gap-1">
-                <Eye className="w-4 h-4 text-[#5d2a42]" />
-                <span>AI Screening</span>
+            {/* Public Navigation Links */}
+            <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 bg-slate-100/70 p-1 rounded-full border border-slate-200/60">
+              <a
+                href="#hero"
+                className="px-4 py-1.5 rounded-full hover:text-slate-900 hover:bg-white transition-all text-xs font-semibold"
+              >
+                Platform
+              </a>
+              <a
+                href="#protocols"
+                className="px-4 py-1.5 rounded-full hover:text-slate-900 hover:bg-white transition-all text-xs font-semibold"
+              >
+                Protocols
+              </a>
+              <a
+                href="#features"
+                className="px-4 py-1.5 rounded-full hover:text-slate-900 hover:bg-white transition-all text-xs font-semibold"
+              >
+                Edge AI
+              </a>
+              <a
+                href="#modules"
+                className="px-4 py-1.5 rounded-full hover:text-slate-900 hover:bg-white transition-all text-xs font-semibold"
+              >
+                Modules
+              </a>
+              <Link
+                href="/datasets"
+                className="px-4 py-1.5 rounded-full hover:text-slate-900 hover:bg-white transition-all text-xs font-semibold"
+              >
+                Validation Data
               </Link>
               <Link href="/datasets" className="hover:opacity-80 transition-opacity">AI Models</Link>
               <Link href="/lithos" className="hover:opacity-80 transition-opacity font-playfair italic text-[#5d2a42]">Lithos Spotlight</Link>
             </nav>
 
-            {/* Prominent Dashboard Button */}
             <div className="flex items-center gap-3">
               <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-xl text-xs sm:text-sm font-extrabold shadow-md transition-all transform hover:scale-[1.02] active:scale-95"
+                href="/screening"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all shadow-xs"
               >
-                <LayoutDashboard className="w-4 h-4 text-[#ffdccc]" />
-                <span>Dashboard</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#ffdccc]" />
+                <Plus className="w-3.5 h-3.5 text-teal-600" />
+                <span>Screen Patient</span>
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-sm shadow-teal-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <LayoutDashboard className="w-4 h-4 text-teal-100" />
+                <span>Clinical Workspace</span>
+                <ArrowRight className="w-3.5 h-3.5 text-teal-100" />
               </Link>
             </div>
           </div>
         </header>
 
-        {/* Website Landing Main Container */}
-        <main className="flex-1 w-full max-w-7xl mx-auto">
+        <main className="flex-1 w-full">
           {children}
         </main>
       </div>
     );
   }
 
-  // ── IF WE ARE ON THE CLINICAL DASHBOARD (`/dashboard`, `/patients`, etc.) ──
-  // Show the official clinical layout WITH the left sidebar options!
+  // ── CLINICAL WORKSPACE LAYOUT (`/dashboard`, `/patients`, etc.) ──
   return (
     <div className="min-h-screen text-[#5d2a42] bg-[#fff9ec] font-sans antialiased flex flex-col lg:flex-row relative overflow-x-hidden">
       {/* ── DESKTOP LEFT SIDEBAR (3D GLASS HOME PALETTE) ── */}
@@ -180,6 +242,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                     : 'text-[#5d2a42]/85 hover:text-[#5d2a42] hover:bg-[#d8e2dc]/40 border border-transparent'
                 }`}
               >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeSidebarIndicator"
+                    className="absolute inset-0 bg-teal-50 border border-teal-200/80 rounded-xl -z-10 shadow-2xs"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
                 <div className="flex items-center gap-3">
                   <Icon
                     className={`w-4 h-4 ${
@@ -299,7 +368,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </h1>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Live Connectivity Badge */}
             <div className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ffdccc] border border-[#d8e2dc] text-xs text-[#5d2a42] font-black shadow-xs">
               <span
@@ -307,8 +376,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   isOnline ? 'bg-emerald-500 shadow-[0_0_6px_#22c55e]' : 'bg-amber-500'
                 }`}
               />
-              <span>Online</span>
+              <span>{isOnline ? 'Edge & Cloud Sync' : 'Offline Mode'}</span>
             </div>
+
+            {/* Quick Screen Button in Topbar */}
+            <Link
+              href="/screening"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 rounded-lg text-xs font-semibold border border-slate-200 transition-all"
+            >
+              <Plus className="w-3.5 h-3.5 text-teal-600" />
+              <span>New Screen</span>
+            </Link>
 
             {/* Notification bell */}
             <button
@@ -341,12 +419,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto relative z-10">
           <SectionPixelTransition>{children}</SectionPixelTransition>
         </main>
-      </div>
-
-      {/* ── CHAINLINK UI FLOATING AUTOPLAY PILL ── */}
-      <div className="autoplay-pill select-none">
-        <div className="autoplay-dot" />
-        <span className="pixel text-[11px] tracking-tight">AI SHOWCASE ACTIVE</span>
       </div>
 
       {/* ── MOBILE BOTTOM NAVIGATION BAR ── */}
@@ -385,7 +457,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           }`}
         >
           <ClipboardList className="w-4 h-4" />
-          <span>Screenings</span>
+          <span>History</span>
         </Link>
         <Link
           href="/referrals"

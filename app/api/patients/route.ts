@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPatients, savePatient } from '@/lib/db-store';
 import { PatientRecord } from '@/types';
+import { Role } from '@/lib/security/types';
+import { hasPermission } from '@/lib/security/authorization/rbac';
+import { patientSchema } from '@/lib/security/validation/schemas';
 
 /**
  * GET /api/patients
@@ -10,9 +13,15 @@ import { PatientRecord } from '@/types';
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const searchParams = new URL(request.url).searchParams;
     const search = searchParams.get('search')?.toLowerCase().trim() || '';
     const filter = searchParams.get('filter') || 'all';
+
+    const userRole = request.headers.get('x-user-role') as Role;
+    if (!userRole || !hasPermission(userRole, 'PATIENT_READ')) {
+      return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+    }
+
 
     let patients = await getPatients();
 
@@ -52,13 +61,24 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
-    if (!body.name || !body.age || !body.sex) {
+    
+    // Validate with Zod
+    const parsedBody = patientSchema.safeParse(body);
+    if (!parsedBody.success) {
       return NextResponse.json(
-        { success: false, error: 'Patient name, age, and sex are required' },
+        { success: false, error: 'Validation failed', issues: parsedBody.error.issues },
         { status: 400 }
       );
     }
+    
+    const validBody = parsedBody.data;
+
+    const userRole = request.headers.get('x-user-role') as Role;
+    if (!userRole || !hasPermission(userRole, 'PATIENT_CREATE')) {
+      return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+    }
+
+
 
     // Generate permanent patient identifier (e.g. PT-1042)
     const existing = await getPatients();
@@ -76,14 +96,14 @@ export async function POST(request: NextRequest) {
 
     const newPatient: PatientRecord = {
       patientId: nextId,
-      name: body.name.trim(),
-      age: Number(body.age),
-      sex: body.sex,
-      phone: body.phone?.trim() || undefined,
-      address: body.address?.trim() || undefined,
-      facilityId: body.facilityId || 'FAC-MAIN',
+      name: validBody.name.trim(),
+      age: Number(validBody.age),
+      sex: validBody.sex,
+      phone: validBody.phone?.trim() || undefined,
+      address: validBody.address?.trim() || undefined,
+      facilityId: validBody.facilityId || 'FAC-MAIN',
       registeredDate: now,
-      notes: body.notes?.trim() || undefined,
+      notes: validBody.notes?.trim() || undefined,
       needsFollowUp: false,
       createdAt: now,
       updatedAt: now,

@@ -8,17 +8,30 @@ import {
   Eye, 
   Smile, 
   CheckCircle2, 
-  AlertTriangle, 
   AlertCircle,
   HelpCircle,
-  X, 
-  ShieldCheck, 
   Clock,
   ArrowRight,
-  ExternalLink,
-  GitPullRequest
+  ShieldCheck,
+  ClipboardList
 } from 'lucide-react';
 import { ScreeningResult } from '@/types';
+import {
+  Button,
+  Card,
+  CardContent,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  Input,
+  Badge,
+  StatusBadge,
+  EmptyState,
+  Modal
+} from '@/components/ui';
 
 function HistoryContent() {
   const searchParams = useSearchParams();
@@ -183,18 +196,35 @@ function HistoryContent() {
         </div>
       </div>
 
-      {/* ── RECORDS TABLE (3D DARK GLASS) ── */}
-      <div className="glass-table-container overflow-hidden shadow-2xl">
-        {loading ? (
-          <div className="p-12 text-center text-xs text-slate-400">
-            Loading screening records...
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="p-12 text-center space-y-3">
-            <h3 className="text-sm font-bold text-white">No matching screening records</h3>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto">
-              No clinical records matched the selected query or filters.
-            </p>
+            <div className="flex rounded-xl bg-slate-100/80 p-1 border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setFilterOutcome('all')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterOutcome === 'all' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                All Findings
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterOutcome('review')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterOutcome === 'review' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Review Advised
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterOutcome('normal')}
+                className={`px-3 py-1 rounded-lg font-medium transition-colors ${
+                  filterOutcome === 'normal' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                No Abnormality
+              </button>
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -214,30 +244,30 @@ function HistoryContent() {
                 {filtered.map((record) => {
                   const sType = (record as any).type || record.screeningType;
                   return (
-                    <tr
+                    <TableRow
                       key={record.screeningId}
                       onClick={() => setSelectedRecord(record)}
-                      className="hover:bg-white/5 cursor-pointer transition-colors"
+                      className="cursor-pointer"
                     >
-                      <td className="py-4 px-5">
-                        <span className="font-bold text-white block">
+                      <TableCell>
+                        <span className="font-semibold text-slate-900 block">
                           {record.patientName || record.patientId}
                         </span>
-                        <span className="text-[11px] font-mono text-slate-300 font-medium">
+                        <span className="text-[11px] font-mono text-slate-400">
                           {record.screeningId}
                         </span>
-                      </td>
+                      </TableCell>
 
                       <td className="py-4 px-5 whitespace-nowrap">
                         <span className="inline-flex items-center gap-2 font-bold text-[#5d2a42] capitalize">
                           {sType === 'eye' ? <Eye className="w-4 h-4 text-[#5d2a42]" /> : <Smile className="w-4 h-4 text-[#5d2a42]" />}
                           <span>{sType === 'eye' ? 'Eye Screening' : 'Oral Screening'}</span>
                         </span>
-                      </td>
+                      </TableCell>
 
                       <td className="py-4 px-5 text-[#5d2a42]/80 whitespace-nowrap font-bold">
                         {new Date(record.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })} · {new Date(record.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </td>
+                      </TableCell>
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span className="font-black text-[#5d2a42]">
@@ -246,11 +276,11 @@ function HistoryContent() {
                         <span className="text-[11px] text-[#5d2a42]/80 ml-1.5 font-bold">
                           ({record.imageQuality?.grade ?? 'PASS'})
                         </span>
-                      </td>
+                      </TableCell>
 
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        {getResultBadge(record)}
-                      </td>
+                      <TableCell className="whitespace-nowrap">
+                        <StatusBadge status={record.resultState || record.riskLevel || 'inconclusive'} />
+                      </TableCell>
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         {record.reviewStatus === 'reviewed' ? (
@@ -266,8 +296,10 @@ function HistoryContent() {
                         )}
                       </td>
 
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <button
+                      <TableCell className="text-right whitespace-nowrap">
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedRecord(record);
@@ -275,42 +307,30 @@ function HistoryContent() {
                           className="px-3 py-1 rounded-xl border border-[#fec89a] bg-[#ffdccc] hover:bg-[#fec89a] text-[#5d2a42] font-black text-xs transition"
                         >
                           View Report
-                        </button>
-                      </td>
-                    </tr>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
 
-      {/* ── INSPECTION & CLINICAL REPORT MODAL ── */}
-      {selectedRecord && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-2xl w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto space-y-5">
-            <div className="flex justify-between items-start pb-3 border-b border-slate-100">
-              <div>
-                <h3 className="text-base font-bold text-slate-900">
-                  Screening Report: {selectedRecord.patientName || selectedRecord.patientId}
-                </h3>
-                <p className="text-xs text-slate-500 font-mono mt-0.5">
-                  ID: {selectedRecord.screeningId} • Recorded on {new Date(selectedRecord.createdAt).toLocaleString()}
-                </p>
-              </div>
-
-              <button
-                onClick={() => setSelectedRecord(null)}
-                className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
+      {/* ── STANDARDIZED CLINICAL REPORT MODAL ── */}
+      <Modal
+        isOpen={Boolean(selectedRecord)}
+        onClose={() => setSelectedRecord(null)}
+        title={selectedRecord ? `Screening Report: ${selectedRecord.patientName || selectedRecord.patientId}` : ''}
+        description={selectedRecord ? `ID: ${selectedRecord.screeningId} • Recorded on ${new Date(selectedRecord.createdAt).toLocaleString()}` : ''}
+        maxWidth="xl"
+      >
+        {selectedRecord && (
+          <div className="space-y-5">
             {/* Specimen Image & Finding */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="relative aspect-4/3 rounded-lg overflow-hidden border border-slate-200 bg-black">
+              <div className="relative aspect-4/3 rounded-xl overflow-hidden border border-slate-200 bg-slate-900">
                 {selectedRecord.imageReference ? (
                   <img
                     src={selectedRecord.imageReference}
@@ -323,17 +343,17 @@ function HistoryContent() {
               </div>
 
               <div className="space-y-3 text-xs">
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Finding</span>
-                  <div className="font-bold text-slate-900">{selectedRecord.prediction}</div>
+                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Clinical Finding</span>
+                  <div className="font-bold text-slate-900 text-sm">{selectedRecord.prediction}</div>
                   <div className="text-slate-600 mt-1">
                     Quality: {selectedRecord.imageQuality?.grade} ({selectedRecord.imageQuality?.score}%)
                     {selectedRecord.confidence ? ` · Confidence: ${selectedRecord.confidence}%` : ''}
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Review & Follow-up</span>
+                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Review & Follow-up</span>
                   <div className="capitalize font-semibold text-slate-800">
                     Status: {selectedRecord.reviewStatus || 'Pending clinical review'}
                   </div>
@@ -345,12 +365,12 @@ function HistoryContent() {
             </div>
 
             {/* Recommendation */}
-            <div className="p-4 rounded-lg border border-slate-200 bg-slate-50 text-xs space-y-1">
-              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+            <div className="p-4 rounded-xl border border-slate-200 bg-teal-50/40 text-xs space-y-1">
+              <span className="font-semibold text-teal-900 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-teal-600" />
                 <span>Clinical Recommendation</span>
               </span>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-slate-700 leading-relaxed">
                 {selectedRecord.recommendation}
               </p>
             </div>
@@ -368,23 +388,25 @@ function HistoryContent() {
                 <span>Open Patient Profile</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
-              <button
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={() => setSelectedRecord(null)}
                 className="px-4 py-1.5 rounded-xl bg-[#5d2a42] text-[#fff9ec] font-bold text-xs hover:bg-[#4a2135]"
               >
                 Close
-              </button>
+              </Button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   );
 }
 
 export default function HistoryPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Loading screening history...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-400 font-medium">Loading screening history...</div>}>
       <HistoryContent />
     </Suspense>
   );

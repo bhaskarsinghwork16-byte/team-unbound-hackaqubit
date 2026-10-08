@@ -1,0 +1,36 @@
+[
+  {
+    "id": "b1606475-d02e-4fe8-9328-48faff58a9dc",
+    "timestamp": "2026-10-08T00:58:20.687Z",
+    "type": "LOGIN_FAILED",
+    "action": "LOGIN",
+    "status": "FAILURE",
+    "metadata": {
+      "username": "rajdeep__ray"
+    },
+    "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "5a3ccc944ab3c52d2caf687a73febcd792648419b7ba88676869a62383017f27"
+  },
+  {
+    "id": "e0c47277-89bd-47d5-b80c-46dc3dd80cbd",
+    "timestamp": "2026-10-08T01:00:35.479Z",
+    "type": "LOGIN_FAILED",
+    "action": "LOGIN",
+    "status": "FAILURE",
+    "metadata": {
+      "username": "rajdeep__ray"
+    },
+    "previousHash": "5a3ccc944ab3c52d2caf687a73febcd792648419b7ba88676869a62383017f27",
+    "hash": "a04af56ae86abe27ab261a5016e4a14e2bc5d92f0082b9283d60bedb56b14225"
+  },
+  {
+    "id": "58b8a29e-249e-40fa-82af-90159f985c49",
+    "timestamp": "2026-10-08T01:10:28.720Z",
+    "type": "LOGIN_SUCCESS",
+    "userId": "9c7fc9e0-a5e8-4c15-84b2-247cb615f96a",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "2b6a20b98973b3ab229be5cb2e1bf5dacaf4575cd4daaecdf582b4c15a4f4c60"
+  }
+]
