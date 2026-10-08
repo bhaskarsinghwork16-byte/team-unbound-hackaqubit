@@ -15,7 +15,9 @@ async function main() {
     userId: crypto.randomUUID(),
     username,
     passwordHash,
-    role,
+    role: role as any,
+    name: username,
+    active: true,
     createdAt: new Date().toISOString(),
   });
 

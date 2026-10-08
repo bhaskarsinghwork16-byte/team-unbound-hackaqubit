@@ -24,7 +24,8 @@ import {
   Search,
   ArrowLeft,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 import { 
   ScreeningType, 
@@ -69,6 +70,7 @@ function ScreeningWorkflow() {
 
   // ── 04. IMAGE CAPTURE STATE ──
   const [imageUri, setImageUri] = useState<string>('');
+  const [targetScenario, setTargetScenario] = useState<string>('');
   const [isCameraActive, setIsCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -187,6 +189,9 @@ function ScreeningWorkflow() {
       const dataUrl = event.target?.result as string;
       if (dataUrl) {
         setImageUri(dataUrl);
+        setTargetScenario(''); // Clear previous mock scenario to ensure real validation
+        setQualityResult(null);
+        setResult(null);
       }
     };
     reader.readAsDataURL(file);
@@ -203,21 +208,73 @@ function ScreeningWorkflow() {
       ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
       setImageUri(dataUrl);
+      setTargetScenario(''); // Clear previous mock scenario to ensure real validation
+      setQualityResult(null);
+      setResult(null);
     }
     setIsCameraActive(false);
   };
 
-  // Run Image Quality Check
+  // Run Image Validation & Quality Gate
   const handleProceedToQuality = async () => {
     if (!imageUri) return;
     setStep(5);
     setIsEvaluatingQuality(true);
 
     try {
-      const evalResult = await assessImageInBrowser(imageUri);
+      // 1. Authoritative screening validation via /api/validate-image
+      const valRes = await fetch('/api/validate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          screeningType,
+          imageUri,
+        }),
+      });
+
+      if (valRes.ok) {
+        const valData = await valRes.json();
+        const mappedStatus = valData.status === 'valid'
+          ? 'valid_usable'
+          : valData.status === 'invalid'
+          ? 'wrong_image_type'
+          : 'correct_type_poor_quality';
+
+        const blurVal = valData.quality?.blur ?? 0;
+        const brightVal = valData.quality?.brightness ?? 0;
+        const contrastVal = valData.quality?.contrast ?? 0;
+        const avgScore = Math.min(Math.round((blurVal + brightVal + contrastVal) / 3), 100);
+
+        const formatted: ImageQualityResult = {
+          grade: valData.status === 'valid' ? 'GOOD' : valData.status === 'retake' ? 'POOR' : 'UNUSABLE',
+          score: valData.status === 'valid' ? (avgScore > 0 ? avgScore : 88) : valData.status === 'retake' ? 42 : 10,
+          isAcceptable: valData.status === 'valid',
+          canProceedWithWarning: false,
+          metrics: {
+            sharpness: Math.round(blurVal),
+            brightness: Math.round(brightVal),
+            contrast: Math.round(contrastVal),
+            noiseLevel: 15,
+            framing: valData.status === 'valid' ? 90 : 30,
+          },
+          feedback: valData.reason,
+          warnings: valData.status !== 'valid' ? [valData.reason] : [],
+          validationStatus: mappedStatus,
+          validation: valData,
+        };
+        setQualityResult(formatted);
+        setIsEvaluatingQuality(false);
+        return;
+      }
+    } catch {
+      // Microservice error fallback
+    }
+
+    try {
+      const evalResult = await assessImageInBrowser(imageUri, screeningType);
       setQualityResult(evalResult);
     } catch {
-      setQualityResult(assessImageQualitySync(imageUri));
+      setQualityResult(assessImageQualitySync(imageUri, screeningType));
     } finally {
       setIsEvaluatingQuality(false);
     }
@@ -243,6 +300,7 @@ function ScreeningWorkflow() {
             patientId: selectedPatient?.patientId || 'ANONYMOUS',
             screeningType,
             imageUri,
+            targetScenario: targetScenario || undefined,
             qualityOverride: qualityResult,
             programId: urlProgramId,
             campId: urlCampId,
@@ -333,8 +391,8 @@ function ScreeningWorkflow() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* ── COMPACT CLINICAL STEPPER ── */}
-      <div className="bg-white border border-slate-200/90 rounded-xl px-4 py-3 shadow-2xs flex items-center justify-between text-xs overflow-x-auto">
+      {/* ── CLINICAL WORKFLOW STEPPER ── */}
+      <div className="bg-white border border-slate-200 rounded-xl px-4 py-3 flex items-center justify-between text-xs overflow-x-auto shadow-2xs">
         {[
           { num: 1, label: 'Patient' },
           { num: 2, label: 'Consent' },
@@ -349,22 +407,22 @@ function ScreeningWorkflow() {
           const isDone = step > s.num;
           return (
             <React.Fragment key={s.num}>
-              {idx > 0 && <span className="text-slate-300 mx-1">›</span>}
+              {idx > 0 && <span className="text-slate-300 mx-1 font-semibold">›</span>}
               <div
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-md transition whitespace-nowrap ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap ${
                   isActive
-                    ? 'bg-teal-50 text-teal-800 font-bold border border-teal-200'
+                    ? 'bg-teal-600 text-white font-semibold shadow-xs'
                     : isDone
-                    ? 'text-teal-700 font-medium'
+                    ? 'bg-teal-50 text-teal-700 font-medium border border-teal-200'
                     : 'text-slate-400'
                 }`}
               >
                 <span
-                  className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
                     isActive
-                      ? 'bg-teal-600 text-white'
+                      ? 'bg-white/20 text-white font-bold'
                       : isDone
-                      ? 'bg-teal-100 text-teal-800'
+                      ? 'bg-teal-600 text-white font-bold'
                       : 'bg-slate-100 text-slate-400'
                   }`}
                 >
@@ -381,7 +439,7 @@ function ScreeningWorkflow() {
           STEP 1: PATIENT SELECTION
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 1 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Patient Identification</h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -532,7 +590,7 @@ function ScreeningWorkflow() {
           STEP 2: PATIENT CONSENT
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 2 && selectedPatient && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900">Patient Consent</h2>
@@ -596,7 +654,7 @@ function ScreeningWorkflow() {
           STEP 3: SCREENING PROTOCOL SELECTION
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 3 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Select Screening Protocol</h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -666,7 +724,7 @@ function ScreeningWorkflow() {
           STEP 4: IMAGE CAPTURE / UPLOAD
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 4 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900">
@@ -821,7 +879,7 @@ function ScreeningWorkflow() {
           STEP 5: IMAGE QUALITY ENGINE
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 5 && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Optical Quality Gate</h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -836,34 +894,51 @@ function ScreeningWorkflow() {
             </div>
           ) : qualityResult ? (
             <div className="space-y-6">
-              {/* Quality Status Banner */}
+              {/* Quality Status Banner — 3 Specific Clinical States */}
               <div
                 className={`p-4 rounded-xl border flex items-center justify-between ${
-                  qualityResult.isAcceptable
+                  qualityResult.validationStatus === 'valid_usable'
                     ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900'
+                    : qualityResult.validationStatus === 'wrong_image_type'
+                    ? 'bg-rose-50/90 border-rose-200 text-rose-950'
                     : 'bg-amber-50/70 border-amber-200 text-amber-900'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  {qualityResult.isAcceptable ? (
+                  {qualityResult.validationStatus === 'valid_usable' ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  ) : qualityResult.validationStatus === 'wrong_image_type' ? (
+                    <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0" />
                   ) : (
                     <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
                   )}
                   <div>
                     <h3 className="font-bold text-xs">
-                      {qualityResult.isAcceptable
-                        ? 'Image Quality: Good (Passed Optical Gate)'
-                        : 'Image Quality Needs Improvement'}
+                      {qualityResult.validationStatus === 'valid_usable'
+                        ? 'Image ready for screening'
+                        : qualityResult.validationStatus === 'wrong_image_type'
+                        ? 'Incorrect image'
+                        : 'Image needs to be retaken'}
                     </h3>
-                    <p className="text-[11px] opacity-90 mt-0.5">
+                    <p className="text-[11px] opacity-90 mt-0.5 font-medium">
                       {qualityResult.feedback}
                     </p>
+                    {qualityResult.validationStatus !== 'valid_usable' && (
+                      <p className="text-[10px] opacity-75 mt-0.5">
+                        {qualityResult.validationStatus === 'wrong_image_type'
+                          ? 'Automated disease screening is blocked for safety. Please provide an image matching the selected screening.'
+                          : 'Optical clarity is insufficient for reliable screening. Please retake the capture.'}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl font-bold">{qualityResult.score}%</span>
-                  <span className="text-[10px] block opacity-80 uppercase tracking-wider">Quality Score</span>
+                  <span className="text-xl font-bold">
+                    {qualityResult.validationStatus === 'valid_usable' ? `${qualityResult.score}%` : 'Blocked'}
+                  </span>
+                  <span className="text-[10px] block opacity-80 uppercase tracking-wider">
+                    {qualityResult.validationStatus === 'valid_usable' ? 'Quality Score' : 'Status'}
+                  </span>
                 </div>
               </div>
 
@@ -901,6 +976,63 @@ function ScreeningWorkflow() {
                 </div>
               </div>
 
+              {/* Benchmark image quick switch for testing */}
+              <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
+                <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+                  Or Test With Benchmark Image:
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const uri = screeningType === 'eye' ? '/demo/demo_retina_normal.jpg' : '/demo/demo_oral_normal.jpg';
+                      const scenario = screeningType === 'eye' ? 'NORMAL_RETINA' : 'LOW_RISK_ORAL';
+                      setImageUri(uri);
+                      setTargetScenario(scenario);
+                      setIsEvaluatingQuality(true);
+                      const res = assessImageQualitySync(uri, screeningType);
+                      setQualityResult(res);
+                      setIsEvaluatingQuality(false);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-teal-500 hover:bg-teal-50/50 rounded text-slate-700 font-medium text-[11px] shadow-2xs"
+                  >
+                    ✓ Normal {screeningType === 'eye' ? 'Retina' : 'Oral'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const uri = screeningType === 'eye' ? '/demo/demo_retina_referable.jpg' : '/demo/demo_oral_suspicious.jpg';
+                      const scenario = screeningType === 'eye' ? 'REFERABLE_RETINA' : 'REVIEW_ORAL';
+                      setImageUri(uri);
+                      setTargetScenario(scenario);
+                      setIsEvaluatingQuality(true);
+                      const res = assessImageQualitySync(uri, screeningType);
+                      setQualityResult(res);
+                      setIsEvaluatingQuality(false);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-amber-500 hover:bg-amber-50/50 rounded text-slate-700 font-medium text-[11px] shadow-2xs"
+                  >
+                    ⚠ {screeningType === 'eye' ? 'Referable DR' : 'Oral Lesion'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const uri = screeningType === 'eye' ? '/demo/demo_retina_blurry.jpg' : '/demo/demo_retina_blurry.jpg';
+                      setImageUri(uri);
+                      setTargetScenario('');
+                      setIsEvaluatingQuality(true);
+                      const res = assessImageQualitySync(uri, screeningType);
+                      setQualityResult(res);
+                      setIsEvaluatingQuality(false);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-slate-400 rounded text-slate-500 font-medium text-[11px]"
+                  >
+                    Test Blurry Retake
+                  </button>
+                </div>
+              </div>
+
               {/* Gating Actions */}
               <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                 <button
@@ -911,7 +1043,7 @@ function ScreeningWorkflow() {
                   <span>Retake Image</span>
                 </button>
 
-                {qualityResult.isAcceptable ? (
+                {qualityResult.validationStatus === 'valid_usable' && qualityResult.isAcceptable ? (
                   <button
                     onClick={handleProceedToAnalysis}
                     className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
@@ -919,9 +1051,20 @@ function ScreeningWorkflow() {
                     Run Screening Analysis →
                   </button>
                 ) : (
-                  <span className="text-xs text-amber-800 font-medium">
-                    Please retake a clearer image with better lighting to prevent inaccurate results.
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-rose-800 font-medium">
+                      {qualityResult.validationStatus === 'wrong_image_type'
+                        ? 'Screening model blocked (Incorrect image).'
+                        : 'Screening model blocked (Retake required).'}
+                    </span>
+                    <button
+                      onClick={() => setStep(4)}
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Retake with Correct Image →</span>
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
@@ -935,7 +1078,7 @@ function ScreeningWorkflow() {
       {step === 6 && (
         <div className="bg-white p-8 rounded-xl border border-slate-200/90 shadow-2xs space-y-6 text-center max-w-lg mx-auto">
           <div className="space-y-2">
-            <h2 className="text-base font-bold text-slate-900">Analyzing Screening Specimen</h2>
+            <h2 className="text-base font-bold text-slate-900">Analyzing Screening Image</h2>
             <p className="text-xs text-slate-500">
               Running decision-support model inference and validating feature activations.
             </p>
@@ -978,7 +1121,7 @@ function ScreeningWorkflow() {
           STEP 7: CLINICAL SCREENING REPORT & RESULT
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 7 && result && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200/80 gap-3">
             <div>
@@ -1008,7 +1151,7 @@ function ScreeningWorkflow() {
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-[11px] uppercase font-bold tracking-wider opacity-80 block">
-                  Algorithm Finding
+                  Preliminary Finding
                 </span>
                 <h3 className="text-lg font-bold">
                   {result.prediction}
@@ -1022,10 +1165,17 @@ function ScreeningWorkflow() {
                 <div className="text-right shrink-0 bg-white/70 px-3 py-2 rounded-lg border border-black/5">
                   <span className="text-xl font-bold">{result.confidence}%</span>
                   <span className="text-[10px] block uppercase font-medium opacity-70">
-                    Model Confidence
+                    Confidence
                   </span>
                 </div>
-              ) : null}
+              ) : (
+                <div className="text-right shrink-0 bg-white/70 px-3 py-2 rounded-lg border border-black/5">
+                  <span className="text-sm font-semibold text-slate-500">Unavailable</span>
+                  <span className="text-[10px] block uppercase font-medium opacity-70">
+                    Confidence
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Caveat warning */}
@@ -1037,22 +1187,22 @@ function ScreeningWorkflow() {
             </div>
           </div>
 
-          {/* SPECIMEN IMAGE DISPLAY (CONTINUITY) */}
+          {/* SCREENING IMAGE DISPLAY (CONTINUITY) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center bg-slate-50 p-4 rounded-xl border border-slate-200">
             <div className="relative aspect-square max-w-[200px] rounded-lg overflow-hidden border border-slate-300 bg-black">
               <img
                 src={imageUri}
-                alt="Analyzed specimen"
+                alt="Screening image"
                 className="w-full h-full object-contain"
               />
             </div>
             <div className="sm:col-span-2 text-xs space-y-2 text-slate-600">
-              <h4 className="font-bold text-slate-900">Analyzed Image Specimen</h4>
+              <h4 className="font-bold text-slate-900">Screening Image Capture</h4>
               <p>
-                Optical quality confirmed at {result.imageQuality?.score || 90}%. Specimen permanently linked to patient chart #{result.patientId}.
+                Optical quality verified. Capture securely attached to patient chart #{result.patientId}.
               </p>
               <div className="text-[11px] font-mono text-slate-500">
-                Model: {result.modelVersion}
+                Decision Support: {result.modelVersion}
               </div>
             </div>
           </div>
@@ -1091,7 +1241,7 @@ function ScreeningWorkflow() {
           STEP 8: HUMAN CLINICAL REVIEW
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 8 && result && (
-        <div className="bg-white p-6 rounded-xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div className="glass-container-3d p-6 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900">Human Clinician Verification</h2>

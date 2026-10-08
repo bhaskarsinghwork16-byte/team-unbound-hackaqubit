@@ -1,63 +1,209 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Inter:ital,wght@0,300..800;1,300..800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* HealthScreen Clinical Design Tokens */
+  --hs-primary: #0d9488;        /* Teal 600 */
+  --hs-primary-hover: #0f766e;  /* Teal 700 */
+  --hs-primary-light: #f0fdfa;  /* Teal 50 */
+  --hs-primary-border: #99f6e4; /* Teal 200 */
+
+  --hs-bg: #f8fafc;             /* Slate 50 Neutral Clinical Canvas */
+  --hs-surface: #ffffff;        /* Pure White Surface */
+  --hs-border: #e2e8f0;         /* Slate 200 Subtle Border */
+  --hs-border-subtle: #f1f5f9;  /* Slate 100 */
+
+  --hs-text-primary: #0f172a;   /* Slate 900 High Contrast Text */
+  --hs-text-secondary: #475569; /* Slate 600 Muted Text */
+  --hs-text-muted: #94a3b8;     /* Slate 400 Inactive */
+
+  /* Semantic Status Tokens */
+  --hs-success: #059669;        /* Emerald 600 */
+  --hs-success-bg: #ecfdf5;     /* Emerald 50 */
+  --hs-warning: #d97706;        /* Amber 600 */
+  --hs-warning-bg: #fffbeb;     /* Amber 50 */
+  --hs-error: #e11d48;          /* Rose 600 */
+  --hs-error-bg: #fff1f2;       /* Rose 50 */
+  --hs-info: #0284c7;           /* Sky 600 */
+  --hs-info-bg: #f0f9ff;        /* Sky 50 */
+}
+
 @layer base {
-  :root {
-    --background: 215 28% 97%;      /* Elegant luminous slate-gray #f8fafc */
-    --foreground: 222 47% 11%;      /* Deep rich slate #0f172a */
-
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-
-    --primary: 173 80% 32%;         /* Restrained healthcare teal #0d9488 */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 214 32% 91%;       /* Slate 100 */
-    --secondary-foreground: 222 47% 11%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;   /* Clinical Red for High-Risk #dc2626 */
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;    /* Soft subtle border #e2e8f0 */
-    --input: 214.3 31.8% 91.4%;
-    --ring: 173 80% 32%;
-
-    --radius: 0.75rem;              /* 12px card radius */
+  html, body {
+    background-color: var(--hs-bg);
+    color: var(--hs-text-primary);
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    @apply antialiased selection:bg-teal-500/20 selection:text-teal-900;
   }
 
-  body {
-    @apply bg-background text-foreground antialiased selection:bg-teal-500/20 selection:text-teal-900;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    color: var(--hs-text-primary);
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 }
 
-/* Subtle medical styling enhancements */
+/* ── Modern Mesh & Grid Textures ── */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-dot-grid-dense {
+  background-image: radial-gradient(rgba(13, 148, 136, 0.18) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-mesh-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(20, 184, 166, 0.08) 0%, rgba(248, 250, 252, 0) 70%);
+}
+
+/* ── Modern Glassmorphism System ── */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
 }
 
-.clinical-badge-lower {
-  @apply bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold;
+.glass-card-elevated {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.clinical-badge-higher {
-  @apply bg-rose-50 text-rose-800 border border-rose-200 font-semibold;
+.glass-card-elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(13, 148, 136, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  border-color: #cbd5e1;
 }
 
-.clinical-badge-inconclusive {
-  @apply bg-amber-50 text-amber-800 border border-amber-200 font-semibold;
+/* ── High-Contrast Gradient Typography ── */
+.text-gradient-teal {
+  background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #0f766e 70%, #0d9488 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Standardized Clinical Card System (Legacy compatibility) ── */
+.glass-container-3d {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.glass-table-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Stat Cards with Accent Highlights ── */
+.glass-stat-green {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #059669;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-green:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -2px rgba(5, 150, 105, 0.12);
+  border-color: #cbd5e1;
+}
+
+.glass-stat-cyan {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #0d9488;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-cyan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -2px rgba(13, 148, 136, 0.12);
+  border-color: #cbd5e1;
+}
+
+.glass-stat-amber {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #d97706;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-amber:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -2px rgba(217, 119, 6, 0.12);
+  border-color: #cbd5e1;
+}
+
+.glass-stat-blue {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #2563eb;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.glass-stat-blue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -2px rgba(37, 99, 235, 0.12);
+  border-color: #cbd5e1;
+}
+
+/* ── Micro Animations ── */
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.pulse-dot {
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

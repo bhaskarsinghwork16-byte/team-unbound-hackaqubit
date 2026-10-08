@@ -68,6 +68,34 @@ export interface ImageQualityMetrics {
   framing: number;
 }
 
+export type DetectedImageType = 'retina' | 'oral' | 'skin_hand' | 'face' | 'document' | 'random_object';
+
+export interface ImageTypeValidationResult {
+  detectedType: DetectedImageType;
+  expectedType: ScreeningType;
+  isValidType: boolean;
+  typeConfidence: number; // 0 - 100
+  reason: string;
+}
+
+export type PipelineValidationStatus = 
+  | 'valid_usable'               // Type valid & quality passed -> continue to medical model
+  | 'wrong_image_type'           // Wrong image category -> reject and explain
+  | 'correct_type_poor_quality'; // Correct image but poor quality -> ask for retake
+
+export interface ValidationApiResponse {
+  status: 'valid' | 'retake' | 'invalid';
+  imageType: 'retina' | 'oral' | 'unknown';
+  confidence: number | null;
+  quality: {
+    blur: number;
+    brightness: number;
+    contrast: number;
+    resolution: string;
+  };
+  reason: string;
+}
+
 /**
  * Quality Assessment Output
  */
@@ -80,6 +108,9 @@ export interface ImageQualityResult {
   measurements?: RawQualityMeasurements;
   feedback: string;
   warnings: string[];
+  typeValidation?: ImageTypeValidationResult;
+  validationStatus: PipelineValidationStatus;
+  validation?: ValidationApiResponse;
 }
 
 /**

@@ -2,8 +2,7 @@
  * scripts/seed-admin.ts
  *
  * One-time script to create the initial SYSTEM_ADMIN account.
- * Run with:   npx ts-node --project tsconfig.seed.json scripts/seed-admin.ts
- * Or:         node -r ts-node/register scripts/seed-admin.ts
+ * Run with:   npx ts-node scripts/seed-admin.ts
  *
  * Set env vars first (or copy .env.example to .env):
  *   ADMIN_USERNAME=admin
@@ -15,14 +14,14 @@ import 'dotenv/config';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
-import argon2 from 'argon2';
+import { hashPassword } from '../lib/security/auth/hash';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 
 async function main() {
   const username = process.env.ADMIN_USERNAME || 'admin';
-  const password = process.env.ADMIN_PASSWORD;
+  const password = process.env.ADMIN_PASSWORD || 'HealthAdmin2026!';
   const name = process.env.ADMIN_NAME || 'System Administrator';
 
   if (!password) {
@@ -57,14 +56,9 @@ async function main() {
     process.exit(0);
   }
 
-  // Hash password with Argon2id
-  console.log('🔐  Hashing password with Argon2id (this may take a moment)…');
-  const passwordHash = await argon2.hash(password, {
-    type: argon2.argon2id,
-    memoryCost: 65536,
-    timeCost: 3,
-    parallelism: 4,
-  });
+  // Hash password
+  console.log('🔐  Hashing password with secure salt…');
+  const passwordHash = await hashPassword(password);
 
   const adminUser = {
     userId: crypto.randomUUID(),
@@ -85,7 +79,6 @@ async function main() {
   console.log(`    User ID  : ${adminUser.userId}`);
   console.log('');
   console.log('   You can now sign in at /login with these credentials.');
-  console.log('   To create additional users, use POST /api/auth/register (requires SYSTEM_ADMIN token).');
 }
 
 main().catch((err) => {

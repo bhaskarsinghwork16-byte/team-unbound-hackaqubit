@@ -2,20 +2,35 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { 
   GitPullRequest, 
-  Search, 
-  Filter, 
-  AlertCircle, 
-  CheckCircle2, 
-  Clock, 
-  ArrowRight,
   ExternalLink,
-  ChevronDown,
   Building,
-  User
+  User,
+  Filter,
+  AlertCircle,
+  Clock,
+  CheckCircle2,
+  Activity,
+  ArrowRight
 } from 'lucide-react';
 import { ReferralRecord, ReferralStatus, ReferralPriority } from '@/types';
+import {
+  Card,
+  CardContent,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  StatusBadge,
+  Badge,
+  EmptyState,
+  Select,
+  Button
+} from '@/components/ui';
 
 export default function ReferralsPage() {
   const [referrals, setReferrals] = useState<ReferralRecord[]>([]);
@@ -79,185 +94,210 @@ export default function ReferralsPage() {
   const getPriorityBadge = (priority: ReferralPriority) => {
     switch (priority) {
       case 'urgent':
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-50 text-red-700 border border-red-200 text-[11px] font-bold uppercase tracking-wider">
-            Urgent
-          </span>
-        );
+        return <Badge variant="error">Urgent Escalation</Badge>;
       case 'priority':
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold uppercase tracking-wider">
-            Priority
-          </span>
-        );
+        return <Badge variant="warning">Priority</Badge>;
       default:
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 text-[11px] font-medium uppercase tracking-wider">
-            Routine
-          </span>
-        );
+        return <Badge variant="neutral">Routine</Badge>;
     }
   };
 
-  const getStatusBadge = (status: ReferralStatus) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-emerald-50 text-emerald-800 border-emerald-200';
-      case 'reviewed':
-        return 'bg-teal-50 text-teal-800 border-teal-200';
-      case 'referral_recommended':
-        return 'bg-blue-50 text-blue-800 border-blue-200';
-      case 'follow_up_required':
-        return 'bg-amber-50 text-amber-800 border-amber-200';
-      default:
-        return 'bg-slate-50 text-slate-700 border-slate-200';
-    }
-  };
+  // Quick metrics calculations
+  const totalCount = referrals.length;
+  const urgentCount = referrals.filter((r) => r.priority === 'urgent').length;
+  const pendingCount = referrals.filter((r) => r.status === 'pending' || r.status === 'referral_recommended').length;
+  const completedCount = referrals.filter((r) => r.status === 'completed').length;
 
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Referrals</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Clinical specialist referrals and community follow-up tracker.
+          <div className="flex items-center gap-2 mb-1">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold">
+              <GitPullRequest className="w-3.5 h-3.5 text-teal-600" />
+              <span>Specialist Escalation Tracker</span>
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Specialist Referrals</h1>
+          <p className="text-sm text-slate-500 mt-0.5">
+            Secondary care routing, clinical tele-consults, and community follow-up tracker.
           </p>
+        </div>
+
+        <Link href="/screening">
+          <Button variant="primary" size="sm" icon={<Activity className="w-4 h-4" />}>
+            <span>+ New Screening Triage</span>
+          </Button>
+        </Link>
+      </div>
+
+      {/* ── REFERRAL METRICS SUMMARY ROW ── */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Referrals</span>
+          <div className="text-2xl font-extrabold text-slate-900 mt-1">{loading ? '—' : totalCount}</div>
+          <p className="text-[11px] text-slate-400 mt-0.5">All registered cases</p>
+        </div>
+        <div className="p-4 rounded-xl bg-white border border-rose-200 bg-rose-50/20 shadow-2xs">
+          <span className="text-[11px] font-bold text-rose-700 uppercase tracking-wider flex items-center gap-1">
+            <AlertCircle className="w-3 h-3 text-rose-600" />
+            Urgent Triage
+          </span>
+          <div className="text-2xl font-extrabold text-rose-700 mt-1">{loading ? '—' : urgentCount}</div>
+          <p className="text-[11px] text-slate-500 mt-0.5">Immediate hospital consult</p>
+        </div>
+        <div className="p-4 rounded-xl bg-white border border-amber-200 bg-amber-50/20 shadow-2xs">
+          <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider flex items-center gap-1">
+            <Clock className="w-3 h-3 text-amber-600" />
+            Pending Routing
+          </span>
+          <div className="text-2xl font-extrabold text-amber-700 mt-1">{loading ? '—' : pendingCount}</div>
+          <p className="text-[11px] text-slate-500 mt-0.5">Awaiting specialist visit</p>
+        </div>
+        <div className="p-4 rounded-xl bg-white border border-emerald-200 bg-emerald-50/20 shadow-2xs">
+          <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1">
+            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+            Completed
+          </span>
+          <div className="text-2xl font-extrabold text-emerald-700 mt-1">{loading ? '—' : completedCount}</div>
+          <p className="text-[11px] text-slate-500 mt-0.5">Confirmed resolution</p>
         </div>
       </div>
 
       {/* ── FILTER CHIPS ── */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs flex flex-wrap gap-4 items-center justify-between">
-        {/* Status Filters */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-semibold text-slate-500 mr-2">Status:</span>
-          {[
-            { id: 'all', label: 'All' },
-            { id: 'pending', label: 'Pending' },
-            { id: 'reviewed', label: 'Reviewed' },
-            { id: 'referral_recommended', label: 'Referral Recommended' },
-            { id: 'follow_up_required', label: 'Follow-up Due' },
-            { id: 'completed', label: 'Completed' },
-          ].map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setStatusFilter(item.id)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${
-                statusFilter === item.id
-                  ? 'bg-teal-600 text-white font-semibold shadow-2xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+      <Card className="shadow-2xs">
+        <CardContent className="p-4 flex flex-wrap gap-4 items-center justify-between">
+          {/* Status Filters */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-xs font-bold text-slate-500 mr-2">Status:</span>
+            {[
+              { id: 'all', label: 'All Cases' },
+              { id: 'pending', label: 'Pending' },
+              { id: 'reviewed', label: 'Reviewed' },
+              { id: 'referral_recommended', label: 'Referral Recommended' },
+              { id: 'follow_up_required', label: 'Follow-up Due' },
+              { id: 'completed', label: 'Completed' },
+            ].map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setStatusFilter(item.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  statusFilter === item.id
+                    ? 'bg-teal-50 text-teal-900 border border-teal-200 shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
 
-        {/* Priority Filter */}
-        <div className="flex items-center gap-2 text-xs">
-          <span className="font-semibold text-slate-500">Priority:</span>
-          <select
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-md text-slate-800 text-xs font-medium"
-          >
-            <option value="all">All Priorities</option>
-            <option value="routine">Routine</option>
-            <option value="priority">Priority</option>
-            <option value="urgent">Urgent</option>
-          </select>
-        </div>
-      </div>
+          {/* Priority Filter */}
+          <div className="flex items-center gap-2 text-xs">
+            <span className="font-bold text-slate-500">Priority:</span>
+            <select
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-slate-700 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 cursor-pointer"
+            >
+              <option value="all">All Priorities</option>
+              <option value="routine">Routine</option>
+              <option value="priority">Priority</option>
+              <option value="urgent">Urgent Escalation</option>
+            </select>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* ── REFERRALS TABLE ── */}
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
-        {loading ? (
-          <div className="p-12 text-center text-xs text-slate-500">
-            Loading referral records...
-          </div>
-        ) : referrals.length === 0 ? (
-          <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
-              <GitPullRequest className="w-6 h-6" />
+      <Card className="shadow-2xs">
+        <CardContent className="p-0">
+          {loading ? (
+            <div className="p-12 text-center text-xs text-slate-400 font-medium">
+              Loading referral records...
             </div>
-            <h3 className="text-sm font-semibold text-slate-800">No active referrals</h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Patients requiring specialist evaluation or secondary care will appear here once referred from a screening session.
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
-                <tr>
-                  <th className="py-3 px-4">Referral ID</th>
-                  <th className="py-3 px-4">Patient</th>
-                  <th className="py-3 px-4">Screening ID</th>
-                  <th className="py-3 px-4">Specialist / Facility</th>
-                  <th className="py-3 px-4">Reason</th>
-                  <th className="py-3 px-4">Priority</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
+          ) : referrals.length === 0 ? (
+            <div className="p-8">
+              <EmptyState
+                icon={GitPullRequest}
+                title="No active referrals found"
+                description="Patients requiring specialist evaluation or secondary care will appear here once escalated from a screening session."
+              />
+            </div>
+          ) : (
+            <Table containerClassName="border-0 rounded-none shadow-none">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Referral ID</TableHead>
+                  <TableHead>Patient</TableHead>
+                  <TableHead>Screening ID</TableHead>
+                  <TableHead>Specialist &amp; Facility</TableHead>
+                  <TableHead>Clinical Indication</TableHead>
+                  <TableHead>Priority</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {referrals.map((r) => (
-                  <tr key={r.referralId} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="py-3 px-4 font-mono font-semibold text-slate-900 whitespace-nowrap">
+                  <TableRow key={r.referralId}>
+                    <TableCell className="font-mono font-bold text-teal-700 text-xs whitespace-nowrap">
                       {r.referralId}
-                    </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <Link
                         href={`/patients/${r.patientId}`}
-                        className="font-bold text-slate-900 hover:text-teal-700 block"
+                        className="font-bold text-slate-900 hover:text-teal-600 block transition-colors"
                       >
                         {r.patientName || r.patientId}
                       </Link>
-                      <span className="text-[11px] font-mono text-slate-500">{r.patientId}</span>
-                    </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                      <span className="text-[11px] font-mono text-slate-400">{r.patientId}</span>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <Link
                         href={`/history?id=${r.screeningId}`}
-                        className="text-teal-700 hover:underline font-mono text-xs flex items-center gap-1"
+                        className="text-teal-600 hover:text-teal-700 font-mono text-xs flex items-center gap-1 transition-colors"
                       >
                         <span>{r.screeningId}</span>
                         <ExternalLink className="w-3 h-3" />
                       </Link>
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-slate-800">{r.specialistType}</div>
-                      <div className="text-[11px] text-slate-500">{r.destinationFacility}</div>
-                    </td>
-                    <td className="py-3 px-4 text-slate-700 max-w-xs">
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-bold text-slate-900 text-xs">{r.specialistType}</div>
+                      <div className="text-[11px] text-slate-500 font-medium">{r.destinationFacility}</div>
+                    </TableCell>
+                    <TableCell className="text-slate-600 text-xs max-w-xs">
                       <span className="line-clamp-2">{r.reason}</span>
-                    </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       {getPriorityBadge(r.priority)}
-                    </td>
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <select
                         value={r.status}
                         disabled={updatingId === r.referralId}
                         onChange={(e) => handleUpdateStatus(r.referralId, e.target.value as ReferralStatus)}
-                        className={`text-xs font-semibold px-2 py-1 rounded-md border ${getStatusBadge(r.status)} focus:outline-hidden`}
+                        className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 cursor-pointer disabled:opacity-50"
                       >
                         <option value="pending">Pending</option>
                         <option value="reviewed">Reviewed</option>
                         <option value="referral_recommended">Referral Recommended</option>
-                        <option value="follow_up_required">Follow-up Required</option>
+                        <option value="follow_up_required">Follow-up Due</option>
                         <option value="completed">Completed</option>
                       </select>
-                    </td>
-                    <td className="py-3 px-4 text-slate-500 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="text-slate-500 whitespace-nowrap text-xs font-medium">
                       {formatDate(r.createdAt)}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
