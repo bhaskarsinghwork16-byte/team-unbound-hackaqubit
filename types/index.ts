@@ -24,6 +24,14 @@ export type ReferralStatus =
 
 export type UserRole = 'chw' | 'clinician' | 'admin';
 
+export interface UserProfile {
+  name: string;
+  role: string;
+  username: string;
+  avatarUrl: string;
+  lastUpdated?: string;
+}
+
 /**
  * Permanent Patient Record
  */

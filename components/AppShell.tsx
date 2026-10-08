@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 import SectionPixelTransition from './SectionPixelTransition';
+import { UserProfile } from '@/types';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -30,8 +31,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [isOnline, setIsOnline] = useState(true);
   const [mongoConnected, setMongoConnected] = useState<boolean | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    name: 'Dr. Sunita Rao',
+    role: 'Community Health Manager',
+    username: 'dr_sunita',
+    avatarUrl: '/images/dr_sunita_avatar.jpg',
+  });
 
-  // Connectivity detection
+  // Profile and connectivity detection
   useEffect(() => {
     setIsOnline(navigator.onLine);
     const handleOnline = () => setIsOnline(true);
@@ -39,6 +46,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+
+    const loadProfile = () => {
+      fetch('/api/profile')
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.success && d.profile) {
+            setUserProfile(d.profile);
+          }
+        })
+        .catch(() => {});
+    };
+
+    loadProfile();
+    window.addEventListener('profileUpdated', loadProfile);
 
     fetch('/api/health')
       .then((r) => r.json())
@@ -52,8 +73,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('profileUpdated', loadProfile);
     };
-  }, []);
+  }, [pathname]);
 
   const navItems = [
     { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
@@ -179,24 +201,28 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
 
         {/* User profile footer */}
-        <div className="p-3 border-t border-[#d8e2dc] flex items-center gap-3 bg-[#ffdccc]/40">
-          <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#5d2a42]/30 shadow-xs">
+        <Link
+          href="/settings"
+          className="p-3 border-t border-[#d8e2dc] flex items-center gap-3 bg-[#ffdccc]/40 hover:bg-[#ffdccc]/70 transition-colors group cursor-pointer"
+          title="Edit Profile & Settings"
+        >
+          <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#5d2a42]/30 shadow-xs shrink-0 bg-[#fff9ec]">
             <img
-              src="/images/dr_sunita_avatar.jpg"
-              alt="Dr. Sunita Rao"
+              src={userProfile.avatarUrl || '/images/dr_sunita_avatar.jpg'}
+              alt={userProfile.name}
               className="w-full h-full object-cover"
             />
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-black text-[#5d2a42] truncate">
-              Dr. Sunita Rao
+            <p className="text-xs font-black text-[#5d2a42] truncate group-hover:underline">
+              {userProfile.name}
             </p>
             <p className="text-[11px] text-[#5d2a42]/80 font-bold truncate">
-              Community Health Worker
+              {userProfile.role}
             </p>
           </div>
-        </div>
+        </Link>
       </aside>
 
       {/* ── MOBILE / TABLET HEADER ── */}
@@ -294,12 +320,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </button>
 
             {/* User badge */}
-            <div className="flex items-center gap-2.5 px-3 py-1 bg-[#d8e2dc]/40 border border-[#d8e2dc] rounded-full text-xs shadow-xs">
-              <div className="w-6 h-6 rounded-full overflow-hidden border border-[#5d2a42]/30 shadow-xs">
-                <img src="/images/dr_sunita_avatar.jpg" alt="Dr. Sunita" className="w-full h-full object-cover" />
+            <Link
+              href="/settings"
+              className="flex items-center gap-2.5 px-3 py-1 bg-[#d8e2dc]/40 hover:bg-[#d8e2dc]/70 border border-[#d8e2dc] rounded-full text-xs shadow-xs transition-colors cursor-pointer"
+              title="Profile Settings"
+            >
+              <div className="w-6 h-6 rounded-full overflow-hidden border border-[#5d2a42]/30 shadow-xs bg-[#fff9ec]">
+                <img
+                  src={userProfile.avatarUrl || '/images/dr_sunita_avatar.jpg'}
+                  alt={userProfile.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <span className="font-black text-[#5d2a42]">SR Dr. Sunita</span>
-            </div>
+              <span className="font-black text-[#5d2a42]">{userProfile.name}</span>
+            </Link>
           </div>
         </header>
 
