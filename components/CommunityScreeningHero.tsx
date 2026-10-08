@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -15,40 +15,184 @@ import {
   Award,
   Cpu,
   Layers,
+  Sparkle,
   Activity,
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  FileText,
-  Sliders,
-  Check,
-  Clock,
-  HeartPulse,
-  ScanLine,
-  Database,
-  ArrowUpRight,
-  Shield,
-  HelpCircle,
-  Users,
-  ClipboardList,
-  GitPullRequest,
-  BarChart2,
+  Scan,
+  Compass
 } from 'lucide-react';
+import FolderFloat from './FolderFloat';
+import BloodVesselBackground from './BloodVesselBackground';
+import FlexCarousel from './FlexCarousel';
 
-// Interactive demo cases for the live hero simulator
-interface DemoCase {
-  id: string;
-  name: string;
-  type: 'eye' | 'oral';
-  sampleThumb: string;
-  gateStatus: 'pass' | 'fail';
-  gateMessage: string;
-  blurScore: number;
-  aiPrediction: string;
-  confidence: number;
-  severity: 'normal' | 'moderate' | 'suspicious' | 'invalid';
-  recommendation: string;
+const FOLDER_ITEMS = [
+  { label: '📊 Clinical Overview', value: '/dashboard' },
+  { label: '👁️ New AI Screening', value: '/screening' },
+  { label: '👥 Patient Directory', value: '/patients' },
+  { label: '📋 Screening History', value: '/history' },
+  { label: '⚕️ Specialist Referrals', value: '/referrals' },
+  { label: '📈 Operational Reports', value: '/reports' },
+  { label: '🧬 Dataset Docs', value: '/datasets' },
+  { label: '⚙️ System Settings', value: '/settings' }
+];
+
+const SPOTLIGHT_R = 240;
+
+interface ClinicalSpotlightProps {
+  cursorX: number;
+  cursorY: number;
 }
+
+function ClinicalSpotlightLayer({ cursorX, cursorY }: ClinicalSpotlightProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const layerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      const parent = canvas.parentElement;
+      if (parent) {
+        canvas.width = parent.clientWidth;
+        canvas.height = parent.clientHeight;
+      }
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const layer = layerRef.current;
+    if (!canvas || !layer) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvas.width || 400;
+    const height = canvas.height || 400;
+
+    ctx.clearRect(0, 0, width, height);
+
+    if (cursorX >= 0 && cursorY >= 0) {
+      const grad = ctx.createRadialGradient(cursorX, cursorY, 0, cursorX, cursorY, SPOTLIGHT_R);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      grad.addColorStop(0.4, 'rgba(255, 255, 255, 1)');
+      grad.addColorStop(0.65, 'rgba(255, 255, 255, 0.75)');
+      grad.addColorStop(0.85, 'rgba(255, 255, 255, 0.35)');
+      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(cursorX, cursorY, SPOTLIGHT_R, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    try {
+      const dataUrl = canvas.toDataURL();
+      layer.style.maskImage = `url(${dataUrl})`;
+      layer.style.webkitMaskImage = `url(${dataUrl})`;
+      layer.style.maskSize = '100% 100%';
+      layer.style.webkitMaskSize = '100% 100%';
+    } catch {
+      // Fallback
+    }
+  }, [cursorX, cursorY]);
+
+  return (
+    <>
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" style={{ display: 'none' }} />
+      <div
+        ref={layerRef}
+        className="absolute inset-0 pointer-events-none z-20 rounded-3xl transition-opacity duration-300 overflow-hidden shadow-2xl"
+        style={{
+          background: 'linear-gradient(135deg, rgba(93,42,66,0.96) 0%, rgba(254,200,154,0.9) 100%)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        <div className="absolute inset-0 p-8 flex flex-col justify-between text-[#fff9ec] z-10">
+          <div className="flex items-center justify-between">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdccc] text-[#5d2a42] text-xs font-black">
+              <Scan className="w-3.5 h-3.5 text-[#5d2a42]" />
+              <span>AI Neural Heatmap Layer</span>
+            </span>
+            <span className="px-2.5 py-1 rounded-md bg-[#5d2a42] text-[#fff9ec] text-[10px] font-black border border-[#ffdccc]/30">
+              98.4% Confidence
+            </span>
+          </div>
+
+          <div className="space-y-3 bg-[#5d2a42]/40 backdrop-blur-md p-4 rounded-2xl border border-[#ffdccc]/30">
+            <h4 className="text-base font-black text-[#ffdccc]">
+              Microvascular Retinal &amp; Lesion Segmentation
+            </h4>
+            <p className="text-xs text-[#fff9ec]/90 leading-relaxed font-medium">
+              Real-time edge INT8 neural network model highlighting vascular exudates, hemorrhages, and mucosal pattern anomalies.
+            </p>
+            <div className="flex items-center gap-3 pt-1 text-[11px] font-bold text-[#ffdccc]">
+              <span className="flex items-center gap-1">
+                <Zap className="w-3 h-3 text-[#ffdccc]" /> &lt; 2.8ms Inference
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <Lock className="w-3 h-3 text-[#ffdccc]" /> 100% Encrypted
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default function CommunityScreeningHero() {
+  const router = useRouter();
+  const cardContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const [cursorPos, setCursorPos] = useState({ x: -999, y: -999 });
+  const mouseRef = useRef({ x: -999, y: -999 });
+  const smoothRef = useRef({ x: -999, y: -999 });
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const card = cardContainerRef.current;
+    if (card) {
+      const rect = card.getBoundingClientRect();
+      const initialX = rect.width / 2;
+      const initialY = rect.height / 2;
+      mouseRef.current = { x: initialX, y: initialY };
+      smoothRef.current = { x: initialX, y: initialY };
+      setCursorPos({ x: initialX, y: initialY });
+    }
+
+    const updateLoop = () => {
+      smoothRef.current.x += (mouseRef.current.x - smoothRef.current.x) * 0.1;
+      smoothRef.current.y += (mouseRef.current.y - smoothRef.current.y) * 0.1;
+
+      setCursorPos({
+        x: Math.round(smoothRef.current.x * 100) / 100,
+        y: Math.round(smoothRef.current.y * 100) / 100,
+      });
+
+      rafRef.current = requestAnimationFrame(updateLoop);
+    };
+
+    rafRef.current = requestAnimationFrame(updateLoop);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardContainerRef.current) return;
+    const rect = cardContainerRef.current.getBoundingClientRect();
+    mouseRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    };
+  };
 
 const DEMO_CASES: DemoCase[] = [
   {
@@ -209,19 +353,23 @@ export default function CommunityScreeningHero() {
               <span>Offline Edge Intelligence · WHO &amp; ICMR Aligned</span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.12]">
-              Clinical-Grade AI Triage for{' '}
-              <span className="text-gradient-teal">Community Health</span>
+            {/* Main Title (#5d2a42) with Staggered Entrance Animation */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#5d2a42] leading-[1.15]">
+              <span className="block hero-anim hero-reveal" style={{ animationDelay: '0.2s' }}>
+                Democratizing Early
+              </span>
+              <span className="block hero-anim hero-reveal" style={{ animationDelay: '0.35s' }}>
+                Disease Detection in Community Health
+              </span>
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-              Empowering frontline community health workers to screen for <strong className="text-slate-800 font-semibold">Diabetic Retinopathy</strong> and <strong className="text-slate-800 font-semibold">Oral Mucosal Lesions</strong> with local INT8 neural inference, automated optical quality gating, and structured specialist referrals.
+            {/* Subtitle Copy */}
+            <p className="text-base sm:text-lg text-[#5d2a42]/85 max-w-2xl leading-relaxed font-medium hero-anim hero-fade" style={{ animationDelay: '0.5s' }}>
+              Offline-first AI triage for Diabetic Retinopathy and Oral Mucosal Lesions. Empowering community health workers to screen patients, evaluate findings, and escalate cases.
             </p>
 
-            {/* Primary Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+            {/* Action CTAs */}
+            <div className="flex flex-wrap items-center gap-4 pt-4 hero-anim hero-fade" style={{ animationDelay: '0.65s' }}>
               <Link
                 href="/screening"
                 className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-xl text-sm font-bold shadow-md shadow-teal-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
@@ -240,185 +388,43 @@ export default function CommunityScreeningHero() {
               </Link>
             </div>
 
-            {/* Quick Metrics Bar */}
-            <div className="pt-4 grid grid-cols-3 gap-3 border-t border-slate-200/90">
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                  <Zap className="w-3.5 h-3.5 text-teal-600" />
-                  <span>Latency</span>
-                </div>
-                <div className="text-base font-bold text-slate-900">&lt; 3.0s</div>
-                <div className="text-[11px] text-slate-400">On CPU laptop</div>
-              </div>
+          {/* Right Hero Column: SHOWCASE CARD WITH CURSOR SPOTLIGHT REVEAL MECHANIC */}
+          <div className="lg:col-span-5 relative min-h-[460px] flex flex-col items-center justify-center">
+            
+            {/* Central Glass Showcase Card with Interactive AI Layer Spotlight */}
+            <div
+              ref={cardContainerRef}
+              onMouseMove={handleCardMouseMove}
+              className="w-full max-w-md p-8 rounded-3xl bg-[#d8e2dc]/40 backdrop-blur-xl border border-[#d8e2dc] shadow-2xl space-y-5 relative overflow-hidden group cursor-crosshair"
+            >
+              {/* Clinical Spotlight Layer revealing AI diagnostic scan underneath */}
+              <ClinicalSpotlightLayer cursorX={cursorPos.x} cursorY={cursorPos.y} />
 
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Connectivity</span>
-                </div>
-                <div className="text-base font-bold text-slate-900">100% Offline</div>
-                <div className="text-[11px] text-slate-400">Zero cloud reliance</div>
-              </div>
-
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                  <Activity className="w-3.5 h-3.5 text-sky-600" />
-                  <span>Protocols</span>
-                </div>
-                <div className="text-base font-bold text-slate-900">Eye + Oral</div>
-                <div className="text-[11px] text-slate-400">Multi-organ triage</div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Column: INTERACTIVE CLINICAL SIMULATOR CARD */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:col-span-6"
-          >
-            <div className="rounded-2xl bg-white border border-slate-200/90 shadow-xl shadow-slate-200/50 p-5 sm:p-6 space-y-5">
-              
-              {/* Simulator Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-teal-50 border border-teal-200 text-teal-700 flex items-center justify-center">
-                    <ScanLine className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                      Live Triage Pipeline Simulator
-                    </h3>
-                    <p className="text-[11px] text-slate-400">Interactive quality gate &amp; neural inference</p>
-                  </div>
-                </div>
-
-                <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  Edge Ready
+              <div className="flex items-center justify-between relative z-10">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#5d2a42]/80">
+                  Clinical Decision Support
                 </span>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#5d2a42] animate-ping" />
               </div>
 
-              {/* Sample Case Selector Buttons */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                  Select A Clinical Test Scenario:
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {DEMO_CASES.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setSelectedCaseId(item.id)}
-                      className={`text-left p-2.5 rounded-xl border text-xs font-semibold transition-all ${
-                        selectedCaseId === item.id
-                          ? 'border-teal-500 bg-teal-50/70 text-teal-900 shadow-2xs ring-1 ring-teal-500/30'
-                          : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'
-                      }`}
-                    >
-                      <div className="truncate">{item.sampleThumb}</div>
-                      <div className="text-[10px] font-normal text-slate-500 mt-0.5">
-                        {item.type === 'eye' ? 'Retinal DR' : 'Oral Mucosa'}
-                      </div>
-                    </button>
-                  ))}
-                </div>
+              <h3 className="text-xl font-black text-[#5d2a42] leading-snug relative z-10">
+                Instant AI Screening for Diabetic Retinopathy &amp; Oral Lesions
+              </h3>
+
+              <p className="text-xs text-[#5d2a42]/85 leading-relaxed font-medium relative z-10">
+                Deployed directly on low-power tablets and laptops without requiring cloud connectivity during field camps.
+              </p>
+
+              <div className="p-3.5 rounded-xl bg-[#ffdccc] border border-[#d8e2dc] flex items-center justify-between text-xs font-extrabold text-[#5d2a42] relative z-10">
+                <span>Ready for Camp Operations</span>
+                <span className="px-2.5 py-0.5 rounded-md bg-[#5d2a42] text-[#fff9ec] text-[10px]">Active</span>
               </div>
 
-              {/* Dynamic Interactive Pipeline Progress Box */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeCase.id}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2 }}
-                  className="space-y-3.5 p-4 rounded-xl bg-slate-50 border border-slate-200/80"
-                >
-                  {/* Step 1: Image Quality Assessment Gate */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-700 flex items-center gap-1.5">
-                        <span>1. Optical Quality Gate (IQA)</span>
-                      </span>
-                      <span
-                        className={`font-semibold px-2 py-0.5 rounded text-[11px] ${
-                          activeCase.gateStatus === 'pass'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-rose-100 text-rose-800'
-                        }`}
-                      >
-                        {activeCase.gateStatus === 'pass' ? 'Passed Quality Check' : 'Quality Rejected'}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-[11px] text-slate-500">
-                      <span>Laplacian Variance Score:</span>
-                      <span className="font-mono font-bold text-slate-700">
-                        {activeCase.blurScore} / 100 min
-                      </span>
-                    </div>
-
-                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          activeCase.blurScore >= 100 ? 'bg-emerald-500' : 'bg-rose-500'
-                        }`}
-                        style={{ width: `${Math.min(100, (activeCase.blurScore / 250) * 100)}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Step 2: Edge Neural Model Inference */}
-                  <div className="space-y-1.5 pt-2 border-t border-slate-200">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-700">2. Neural Model Prediction</span>
-                      {activeCase.gateStatus === 'pass' && (
-                        <span className="font-mono text-[11px] font-bold text-teal-700">
-                          {activeCase.confidence}% Conf.
-                        </span>
-                      )}
-                    </div>
-
-                    <div
-                      className={`p-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 ${
-                        activeCase.severity === 'normal'
-                          ? 'bg-emerald-50 text-emerald-900 border border-emerald-200'
-                          : activeCase.severity === 'moderate'
-                          ? 'bg-amber-50 text-amber-900 border border-amber-200'
-                          : activeCase.severity === 'suspicious'
-                          ? 'bg-rose-50 text-rose-900 border border-rose-200'
-                          : 'bg-slate-200/80 text-slate-700 border border-slate-300'
-                      }`}
-                    >
-                      {activeCase.severity === 'normal' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
-                      {activeCase.severity === 'moderate' && <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />}
-                      {activeCase.severity === 'suspicious' && <HeartPulse className="w-4 h-4 text-rose-600 shrink-0" />}
-                      {activeCase.severity === 'invalid' && <XCircle className="w-4 h-4 text-slate-600 shrink-0" />}
-                      <span className="truncate">{activeCase.aiPrediction}</span>
-                    </div>
-                  </div>
-
-                  {/* Step 3: Clinical Protocol Action */}
-                  <div className="pt-1 text-[11px] text-slate-600 leading-snug">
-                    <strong className="text-slate-800">Clinical Protocol Action: </strong>
-                    <span>{activeCase.recommendation}</span>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Launch Workflow CTA Button */}
-              <Link
-                href={
-                  activeCase.type === 'eye'
-                    ? '/screening?type=eye'
-                    : '/screening?type=oral'
-                }
-                className="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs"
-              >
-                <span>Launch Full {activeCase.type === 'eye' ? 'Retinal' : 'Oral'} Screening Flow</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              {/* Cursor Spotlight Hint Pill */}
+              <div className="pt-2 flex items-center gap-1.5 text-[11px] font-extrabold text-[#5d2a42]/70 relative z-10">
+                <Sparkle className="w-3.5 h-3.5 text-[#5d2a42] animate-spin" />
+                <span>Move cursor over card to reveal AI Diagnostic Layer</span>
+              </div>
             </div>
           </motion.div>
 
@@ -546,15 +552,74 @@ export default function CommunityScreeningHero() {
                     </div>
                   </div>
 
-                  <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-teal-600">
-                    <span>Open Module</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+        {/* 3D WebGL FlexCarousel Module Options Showcase */}
+        <div className="w-full max-w-5xl h-[360px] relative rounded-3xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-xl my-8">
+          <FlexCarousel
+            items={[
+              {
+                src: '/images/eye_torchlight_exam.jpg',
+                alt: 'Eye Ophthalmic Torchlight Inspection',
+                title: '👁️ Ophthalmic Torchlight Exam',
+                subtitle: 'Pupil & Retinal Microvascular Torch Inspection'
+              },
+              {
+                src: '/images/tongue_torchlight_exam.jpg',
+                alt: 'Oral Tongue Torchlight Examination',
+                title: '👅 Oral & Tongue Torchlight Exam',
+                subtitle: 'Penlight Mucosal & Tongue Lesion Screening'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
+                alt: 'Clinical Dashboard Overview',
+                title: '📊 Clinical Overview',
+                subtitle: 'Real-time Screening Flow & Metrics'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&q=80&auto=format&fit=max',
+                alt: 'AI Patient Screening',
+                title: '👁️ AI Patient Screening',
+                subtitle: 'Offline Triage for Retinal & Oral Lesions'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80&auto=format&fit=max',
+                alt: 'Patient Directory',
+                title: '👥 Patient Directory',
+                subtitle: 'Encrypted Longitudinal Records'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1200&q=80&auto=format&fit=max',
+                alt: 'Specialist Referrals',
+                title: '⚕️ Specialist Referrals',
+                subtitle: 'District Hospital Escalation Pipeline'
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1200&q=80&auto=format&fit=max',
+                alt: 'Dataset & Model Docs',
+                title: '🧬 AI Model Specs',
+                subtitle: 'Edge INT8 Quantized Architectures'
+              }
+            ]}
+            preset="liquid"
+            intro="rise"
+            cardHeight={0.65}
+            gap={16}
+            squeeze={0.2}
+            focusOnClick
+            captions
+            onSelect={(_idx, item) => {
+              if (item.title?.includes('Overview')) router.push('/dashboard');
+              else if (item.title?.includes('Screening') || item.title?.includes('Torchlight')) router.push('/screening');
+              else if (item.title?.includes('Directory')) router.push('/patients');
+              else if (item.title?.includes('Referrals')) router.push('/referrals');
+              else if (item.title?.includes('Specs')) router.push('/datasets');
+            }}
+          />
         </div>
+
+        <p className="text-xs text-[#5d2a42]/70 font-bold mt-4 flex items-center gap-1.5">
+          <Sparkle className="w-3.5 h-3.5 text-[#5d2a42]" />
+          <span>3D WebGL Liquid Lens Options Carousel · Drag &amp; Scroll Cards</span>
+        </p>
       </section>
     </div>
   );
