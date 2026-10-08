@@ -1,27 +1,52 @@
 /**
  * scripts/seed-mongo.js
  * 
- * Imports all data from local JSON files (data/*.json) into MongoDB.
- * Works with local MongoDB (mongodb://localhost:27017) or MongoDB Atlas.
+ * Imports all data from local JSON files (data/*.json) into MongoDB Atlas.
  */
 
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config({ path: '.env.local' });
 
-const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/healthscreen_ai';
-const dbName = process.env.MONGODB_DB || 'healthscreen_ai';
+// Read URI from .env.local or .env natively
+function getMongoConfig() {
+  const envFiles = ['.env.local', '.env'];
+  let uri = process.env.MONGODB_URI;
+  let dbName = process.env.MONGODB_DB || 'healthscreen_ai';
+
+  for (const f of envFiles) {
+    const fullPath = path.join(__dirname, '..', f);
+    if (fs.existsSync(fullPath)) {
+      const lines = fs.readFileSync(fullPath, 'utf-8').split('\n');
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('MONGODB_URI=') && !uri) {
+          uri = trimmed.substring('MONGODB_URI='.length).trim();
+        }
+        if (trimmed.startsWith('MONGODB_DB=')) {
+          dbName = trimmed.substring('MONGODB_DB='.length).trim();
+        }
+      }
+    }
+  }
+
+  return {
+    uri: uri || 'mongodb://localhost:27017/healthscreen_ai',
+    dbName: dbName || 'healthscreen_ai',
+  };
+}
+
+const { uri, dbName } = getMongoConfig();
 const dataDir = path.join(__dirname, '..', 'data');
 
 async function main() {
   console.log(`Connecting to MongoDB at: ${uri.replace(/\/\/[^:]+:[^@]+@/, '//***:***@')}...`);
   
-  const client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000 });
+  const client = new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
   
   try {
     await client.connect();
-    console.log('✅ Connected successfully to MongoDB!');
+    console.log('✅ Connected successfully to MongoDB Atlas!');
     const db = client.db(dbName);
 
     // 1. Seed Patients
@@ -66,11 +91,20 @@ async function main() {
       }
     }
 
-    console.log('\n🎉 All collections synced into MongoDB successfully!');
+    // 4. Verify counts
+    const patientCount = await db.collection('patients').countDocuments();
+    const screeningCount = await db.collection('screenings').countDocuments();
+    const referralCount = await db.collection('referrals').countDocuments();
+
+    console.log('\n=============================================');
+    console.log(`🎉 LIVE DATABASE VERIFICATION: ${dbName}`);
+    console.log(`   - patients collection:    ${patientCount} documents`);
+    console.log(`   - screenings collection:  ${screeningCount} documents`);
+    console.log(`   - referrals collection:   ${referralCount} documents`);
+    console.log('=============================================');
+    console.log('✅ All data is officially attached to MongoDB Atlas!\n');
   } catch (err) {
     console.error('❌ MongoDB sync failed:', err.message);
-    console.log('\nTip: If you are connecting to a local MongoDB instance, ensure mongod is running.');
-    console.log('Or use a MongoDB Atlas connection string in .env.local.');
   } finally {
     await client.close();
   }
