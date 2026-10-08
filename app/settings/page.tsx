@@ -25,11 +25,10 @@ import {
 } from 'lucide-react';
 
 const PRESET_AVATARS = [
-  { id: 'sunita', name: 'Dr. Sunita (Default)', url: '/images/dr_sunita_avatar.jpg' },
+  { id: 'female_dr_1', name: 'Dr. Sunita Rao (Primary)', url: '/images/dr_sunita_avatar.jpg' },
+  { id: 'female_dr_2', name: 'Dr. Sunita Rao (Clinic)', url: '/images/dr_sunita_avatar_2.jpg' },
   { id: 'avatar_w1', name: 'Female Clinician 1', url: 'https://images.unsplash.com/photo-1594824813566-7885a3964516?auto=format&fit=crop&q=80&w=250' },
   { id: 'avatar_w2', name: 'Female Clinician 2', url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=250' },
-  { id: 'avatar_m1', name: 'Male Clinician 1', url: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=250' },
-  { id: 'avatar_m2', name: 'Male Clinician 2', url: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=250' },
 ];
 
 export default function SettingsPage() {

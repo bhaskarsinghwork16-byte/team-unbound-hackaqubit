@@ -94,21 +94,21 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                  <span className="w-2 h-2 rounded-full bg-[#5d2a42] animate-pulse"></span>
                   <span>Connected</span>
                 </>
               )}
             </button>
 
             {/* Field Clinic Tag */}
-            <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+            <div className="flex items-center gap-2 pl-2 border-l border-[#d8e2dc]">
               <div className="text-right">
-                <span className="text-[11px] font-bold text-slate-800 block leading-tight">Camp #4 (Rural)</span>
-                <span className="text-[9px] font-semibold text-teal-600 flex items-center justify-end gap-1">
-                  <Radio className="w-2.5 h-2.5 animate-pulse" /> Edge Unit
+                <span className="text-[11px] font-bold text-[#5d2a42] block leading-tight">Camp #4 (Rural)</span>
+                <span className="text-[9px] font-semibold text-[#5d2a42]/80 flex items-center justify-end gap-1">
+                  <Radio className="w-2.5 h-2.5 animate-pulse text-[#5d2a42]" /> Edge Unit
                 </span>
               </div>
-              <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-xs font-bold text-white shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-[#5d2a42] border border-[#5d2a42] flex items-center justify-center text-xs font-bold text-[#fff9ec] shadow-xs">
                 CHW
               </div>
             </div>
@@ -119,7 +119,7 @@ export default function Navbar() {
             <button
               onClick={() => setIsOffline(!isOffline)}
               className={`p-1.5 rounded-lg border text-xs ${
-                isOffline ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                isOffline ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-[#d8e2dc] text-[#5d2a42] border-[#d8e2dc]'
               }`}
             >
               {isOffline ? <WifiOff className="w-4 h-4" /> : <Wifi className="w-4 h-4" />}

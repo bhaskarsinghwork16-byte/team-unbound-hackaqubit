@@ -409,6 +409,18 @@ export default function CommunityScreeningHero() {
           <FlexCarousel
             items={[
               {
+                src: '/images/eye_torchlight_exam.jpg',
+                alt: 'Eye Ophthalmic Torchlight Inspection',
+                title: '👁️ Ophthalmic Torchlight Exam',
+                subtitle: 'Pupil & Retinal Microvascular Torch Inspection'
+              },
+              {
+                src: '/images/tongue_torchlight_exam.jpg',
+                alt: 'Oral Tongue Torchlight Examination',
+                title: '👅 Oral & Tongue Torchlight Exam',
+                subtitle: 'Penlight Mucosal & Tongue Lesion Screening'
+              },
+              {
                 src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
                 alt: 'Clinical Dashboard Overview',
                 title: '📊 Clinical Overview',
@@ -448,7 +460,7 @@ export default function CommunityScreeningHero() {
             captions
             onSelect={(_idx, item) => {
               if (item.title?.includes('Overview')) router.push('/dashboard');
-              else if (item.title?.includes('Screening')) router.push('/screening');
+              else if (item.title?.includes('Screening') || item.title?.includes('Torchlight')) router.push('/screening');
               else if (item.title?.includes('Directory')) router.push('/patients');
               else if (item.title?.includes('Referrals')) router.push('/referrals');
               else if (item.title?.includes('Specs')) router.push('/datasets');

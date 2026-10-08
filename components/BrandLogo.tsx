@@ -16,18 +16,18 @@ export default function BrandLogo({ size = 'md', showSubtitle, showTagline }: Br
 
   return (
     <Link href="/dashboard" className="flex items-center gap-3 group select-none">
-      {/* Glossy 3D Green Cross Emblem */}
-      <div className={`relative ${iconDimensions} rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.4)] border border-emerald-300/40 group-hover:scale-105 transition-transform`}>
-        <span className="font-extrabold text-white text-lg leading-none">+</span>
+      {/* 3D Medical Cross Emblem */}
+      <div className={`relative ${iconDimensions} rounded-xl bg-[#5d2a42] text-[#ffdccc] flex items-center justify-center shadow-md border border-[#ffdccc]/30 group-hover:scale-105 transition-transform`}>
+        <span className="font-extrabold text-[#ffdccc] text-lg leading-none">+</span>
       </div>
 
       {/* Brand Typography */}
       <div className="flex flex-col">
-        <span className={`${titleSize} font-extrabold text-white group-hover:text-emerald-300 transition-colors leading-tight tracking-tight`}>
+        <span className={`${titleSize} font-extrabold text-[#5d2a42] group-hover:opacity-80 transition-opacity leading-tight tracking-tight`}>
           HealthScreen
         </span>
         {displaySubtitle && (
-          <span className="text-[11px] font-medium text-slate-400 leading-tight">
+          <span className="text-[11px] font-medium text-[#5d2a42]/70 leading-tight">
             Community Screening
           </span>
         )}
@@ -35,3 +35,4 @@ export default function BrandLogo({ size = 'md', showSubtitle, showTagline }: Br
     </Link>
   );
 }
+
