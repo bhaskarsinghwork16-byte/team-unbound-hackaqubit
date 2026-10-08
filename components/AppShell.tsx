@@ -90,13 +90,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     : 'HS';
 
   const navItems = [
-    { label: 'Clinical Overview', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'Patient Directory', href: '/patients', icon: Users },
-    { label: 'Screening History', href: '/history', icon: ClipboardList },
-    { label: 'Referrals & Triage', href: '/referrals', icon: GitPullRequest },
-    { label: 'Operational Reports', href: '/reports', icon: BarChart2 },
-    { label: 'Database Explorer', href: '/database', icon: Database },
-    { label: 'System Settings', href: '/settings', icon: Settings },
+    { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+    { label: 'Programs', href: '/programs', icon: Shield },
+    { label: 'Patients', href: '/patients', icon: Users },
+    { label: 'Screenings', href: '/history', icon: ClipboardList },
+    { label: 'Referrals', href: '/referrals', icon: GitPullRequest },
+    { label: 'Reports', href: '/reports', icon: BarChart2 },
+    { label: 'Settings', href: '/settings', icon: Settings },
   ];
 
   // Helper to get current clean page title

@@ -25,6 +25,8 @@ import {
   ReferralRecord,
   OperationalMetrics,
   ReportsSummary,
+  ScreeningProgram,
+  ScreeningCamp,
 } from '@/types';
 import { encryptObject, decryptObject } from './security/encryption';
 
@@ -39,6 +41,8 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const SCREENINGS_FILE = path.join(DATA_DIR, 'screenings.json');
 const PATIENTS_FILE = path.join(DATA_DIR, 'patients.json');
 const REFERRALS_FILE = path.join(DATA_DIR, 'referrals.json');
+const PROGRAMS_FILE = path.join(DATA_DIR, 'programs.json');
+const CAMPS_FILE = path.join(DATA_DIR, 'camps.json');
 
 /** Ensure data/ directory exists before read/write */
 function ensureDataDir(): void {
@@ -342,6 +346,133 @@ export async function updateReferralStatus(
   if (idx === -1) return null;
   list[idx] = { ...list[idx], ...updates, updatedAt: new Date().toISOString() };
   writeLocalJson(REFERRALS_FILE, list);
+  return list[idx];
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * PROGRAM CRUD
+ * ────────────────────────────────────────────────────────────────────────── */
+
+export async function getPrograms(): Promise<ScreeningProgram[]> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const docs = await db.collection('programs').find({}).sort({ createdAt: -1 }).toArray();
+      return docs as unknown as ScreeningProgram[];
+    } catch (err) {
+      console.warn('[DB] MongoDB programs query failed, using local:', (err as Error).message);
+    }
+  }
+  return readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+}
+
+export async function getProgramById(programId: string): Promise<ScreeningProgram | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const doc = await db.collection('programs').findOne({ programId });
+      if (doc) return doc as unknown as ScreeningProgram;
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+  return list.find((p) => p.programId === programId) || null;
+}
+
+export async function saveProgram(program: ScreeningProgram): Promise<ScreeningProgram> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('programs').insertOne(program);
+      return program;
+    } catch (err) {
+      console.warn('[DB] Mongo insert program failed, using local:', (err as Error).message);
+    }
+  }
+  const list = readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+  list.unshift(program);
+  writeLocalJson(PROGRAMS_FILE, list);
+  return program;
+}
+
+export async function updateProgram(programId: string, updates: Partial<ScreeningProgram>): Promise<ScreeningProgram | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('programs').updateOne({ programId }, { $set: updates });
+      return await getProgramById(programId);
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningProgram>(PROGRAMS_FILE, []);
+  const idx = list.findIndex((p) => p.programId === programId);
+  if (idx === -1) return null;
+  list[idx] = { ...list[idx], ...updates, updatedAt: new Date().toISOString() };
+  writeLocalJson(PROGRAMS_FILE, list);
+  return list[idx];
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * CAMP CRUD
+ * ────────────────────────────────────────────────────────────────────────── */
+
+export async function getCamps(programId?: string): Promise<ScreeningCamp[]> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const query = programId ? { programId } : {};
+      const docs = await db.collection('camps').find(query).sort({ createdAt: -1 }).toArray();
+      return docs as unknown as ScreeningCamp[];
+    } catch (err) {
+      console.warn('[DB] MongoDB camps query failed, using local:', (err as Error).message);
+    }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  if (programId) {
+    return list.filter((c) => c.programId === programId);
+  }
+  return list;
+}
+
+export async function getCampById(campId: string): Promise<ScreeningCamp | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      const doc = await db.collection('camps').findOne({ campId });
+      if (doc) return doc as unknown as ScreeningCamp;
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  return list.find((c) => c.campId === campId) || null;
+}
+
+export async function saveCamp(camp: ScreeningCamp): Promise<ScreeningCamp> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('camps').insertOne(camp);
+      return camp;
+    } catch (err) {
+      console.warn('[DB] Mongo insert camp failed, using local:', (err as Error).message);
+    }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  list.unshift(camp);
+  writeLocalJson(CAMPS_FILE, list);
+  return camp;
+}
+
+export async function updateCamp(campId: string, updates: Partial<ScreeningCamp>): Promise<ScreeningCamp | null> {
+  const db = await getDatabase();
+  if (db) {
+    try {
+      await db.collection('camps').updateOne({ campId }, { $set: updates });
+      return await getCampById(campId);
+    } catch { /* fall through */ }
+  }
+  const list = readLocalJson<ScreeningCamp>(CAMPS_FILE, []);
+  const idx = list.findIndex((c) => c.campId === campId);
+  if (idx === -1) return null;
+  list[idx] = { ...list[idx], ...updates, updatedAt: new Date().toISOString() };
+  writeLocalJson(CAMPS_FILE, list);
   return list[idx];
 }
 

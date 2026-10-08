@@ -46,7 +46,9 @@ export async function POST(req: NextRequest) {
       confidenceThreshold, 
       targetScenario, 
       dataSource,
-      qualityOverride 
+      qualityOverride,
+      programId,
+      campId
     } = body;
 
     if (!patientId || !screeningType || !imageUri) {
@@ -81,6 +83,9 @@ export async function POST(req: NextRequest) {
         lastScreeningDate: result.createdAt,
       });
     }
+
+    if (programId) result.programId = programId;
+    if (campId) result.campId = campId;
 
     await saveScreeningRecord(result);
 

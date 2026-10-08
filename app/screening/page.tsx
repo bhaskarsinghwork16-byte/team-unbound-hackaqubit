@@ -42,6 +42,8 @@ function ScreeningWorkflow() {
 
   const urlPatientId = searchParams.get('patientId') || '';
   const urlType = (searchParams.get('type') as ScreeningType) || '';
+  const urlProgramId = searchParams.get('programId') || undefined;
+  const urlCampId = searchParams.get('campId') || undefined;
 
   // Stepper state: 1: Patient, 2: Consent, 3: Protocol, 4: Capture, 5: Quality, 6: Analysis, 7: Result, 8: Review
   const [step, setStep] = useState<number>(urlPatientId ? (urlType ? 4 : 2) : 1);
@@ -300,6 +302,8 @@ function ScreeningWorkflow() {
             imageUri,
             targetScenario: targetScenario || undefined,
             qualityOverride: qualityResult,
+            programId: urlProgramId,
+            campId: urlCampId,
           }),
         });
 

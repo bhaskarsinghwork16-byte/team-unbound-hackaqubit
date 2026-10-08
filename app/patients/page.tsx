@@ -124,6 +124,19 @@ export default function PatientsPage() {
     }
   };
 
+  const calculatePriorityScore = (p: PatientRecord) => {
+    let score = 0;
+    if (p.needsFollowUp) score += 60;
+    if (p.age > 60) score += 25;
+    else if (p.age > 40) score += 10;
+    
+    // Additional metrics if riskContext exists
+    if (p.riskContext && p.riskContext.length > 0) {
+      score += p.riskContext.length * 15;
+    }
+    return Math.min(score, 100);
+  };
+
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
@@ -200,43 +213,21 @@ export default function PatientsPage() {
               Follow-up Required
             </button>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* ── PATIENTS TABLE ── */}
-      <Card>
-        <CardContent className="p-0">
-          {loading ? (
-            <div className="p-12 text-center text-xs text-slate-400">
-              Loading patient records...
-            </div>
-          ) : patients.length === 0 ? (
-            <div className="p-6">
-              <EmptyState
-                icon={Users}
-                title="No patients found"
-                description={
-                  search || filter !== 'all'
-                    ? 'No patient records matched the specified filter criteria.'
-                    : 'Register a patient to begin community screening records.'
-                }
-                actionLabel="+ Add Patient"
-                onAction={() => setShowAddModal(true)}
-              />
-            </div>
-          ) : (
-            <Table containerClassName="border-0 rounded-none shadow-none">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Demographics</TableHead>
-                  <TableHead>Contact & Location</TableHead>
-                  <TableHead>Registered Date</TableHead>
-                  <TableHead>Follow-up</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
+                <tr>
+                  <th className="py-3 px-4">Patient</th>
+                  <th className="py-3 px-4">Demographics</th>
+                  <th className="py-3 px-4">Contact & Location</th>
+                  <th className="py-3 px-4">Registered Date</th>
+                  <th className="py-3 px-4">Follow-up</th>
+                  <th className="py-3 px-4">Priority Score</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
                 {patients.map((p) => (
                   <TableRow key={p.patientId}>
                     <TableCell>
@@ -266,12 +257,26 @@ export default function PatientsPage() {
                       ) : (
                         <StatusBadge status="completed" />
                       )}
-                    </TableCell>
-                    <TableCell className="text-right whitespace-nowrap space-x-2">
-                      <Link href={`/screening?patientId=${p.patientId}`}>
-                        <Button variant="secondary" size="sm">
-                          Screen
-                        </Button>
+                    </td>
+                    <td className="py-3.5 px-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="w-12 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full ${calculatePriorityScore(p) > 50 ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                            style={{ width: `${calculatePriorityScore(p)}%` }}
+                          />
+                        </div>
+                        <span className={`text-xs font-bold ${calculatePriorityScore(p) > 50 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                          {calculatePriorityScore(p)}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4 text-right whitespace-nowrap space-x-2">
+                      <Link
+                        href={`/screening?patientId=${p.patientId}`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-800 font-medium text-xs border border-slate-200 transition"
+                      >
+                        <span>Screen</span>
                       </Link>
                       <Link href={`/patients/${p.patientId}`}>
                         <Button variant="outline" size="sm">
