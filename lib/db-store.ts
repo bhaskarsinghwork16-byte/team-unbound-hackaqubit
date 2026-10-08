@@ -585,3 +585,60 @@ export const realModels: ModelMeta[] = [
     biasesAndLimitations: 'Evaluated on 400 holdout mucosal patches. Detects superficial color and texture anomalies. Cannot evaluate subsurface invasion or lymph node involvement. Biopsy strictly required.',
   },
 ];
+
+/**
+ * Fetch clinical dataset specifications directly from MongoDB Atlas 'datasets' collection,
+ * falling back to static realDatasets when offline.
+ */
+export async function getDatasets(): Promise<DatasetMeta[]> {
+  try {
+    const db = await getDatabase();
+    if (db) {
+      const records = await db.collection('datasets').find({}, { projection: { _id: 0 } }).toArray();
+      if (records && records.length > 0) {
+        return records as unknown as DatasetMeta[];
+      }
+    }
+  } catch (err) {
+    console.warn('[DB Store] Error fetching datasets from MongoDB Atlas, falling back to local:', (err as Error).message);
+  }
+  return realDatasets;
+}
+
+/**
+ * Fetch model specifications directly from MongoDB Atlas 'models' collection,
+ * falling back to static realModels when offline.
+ */
+export async function getModels(): Promise<ModelMeta[]> {
+  try {
+    const db = await getDatabase();
+    if (db) {
+      const records = await db.collection('models').find({}, { projection: { _id: 0 } }).toArray();
+      if (records && records.length > 0) {
+        return records as unknown as ModelMeta[];
+      }
+    }
+  } catch (err) {
+    console.warn('[DB Store] Error fetching models from MongoDB Atlas, falling back to local:', (err as Error).message);
+  }
+  return realModels;
+}
+
+/**
+ * Fetch Kaggle clinical validation cohort directly from MongoDB Atlas 'kaggle_cohort' collection.
+ */
+export async function getKaggleCohort(): Promise<any[]> {
+  try {
+    const db = await getDatabase();
+    if (db) {
+      const records = await db.collection('kaggle_cohort').find({}, { projection: { _id: 0 } }).toArray();
+      if (records && records.length > 0) {
+        return records;
+      }
+    }
+  } catch (err) {
+    console.warn('[DB Store] Error fetching kaggle_cohort from MongoDB Atlas:', (err as Error).message);
+  }
+  return [];
+}
+

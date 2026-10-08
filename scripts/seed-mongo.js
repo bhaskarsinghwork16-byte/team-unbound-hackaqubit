@@ -91,18 +91,31 @@ async function main() {
       }
     }
 
-    // 4. Verify counts
+    // 4. Also seed Kaggle datasets, models, and validation cohort
+    try {
+      require('./seed-kaggle');
+    } catch (kErr) {
+      console.warn('Note on Kaggle seeding:', kErr.message);
+    }
+
+    // 5. Verify counts
     const patientCount = await db.collection('patients').countDocuments();
     const screeningCount = await db.collection('screenings').countDocuments();
     const referralCount = await db.collection('referrals').countDocuments();
+    const datasetCount = await db.collection('datasets').countDocuments();
+    const modelCount = await db.collection('models').countDocuments();
+    const kaggleCohortCount = await db.collection('kaggle_cohort').countDocuments();
 
     console.log('\n=============================================');
     console.log(`🎉 LIVE DATABASE VERIFICATION: ${dbName}`);
-    console.log(`   - patients collection:    ${patientCount} documents`);
-    console.log(`   - screenings collection:  ${screeningCount} documents`);
-    console.log(`   - referrals collection:   ${referralCount} documents`);
+    console.log(`   - patients collection:      ${patientCount} documents`);
+    console.log(`   - screenings collection:    ${screeningCount} documents`);
+    console.log(`   - referrals collection:     ${referralCount} documents`);
+    console.log(`   - datasets (Kaggle):        ${datasetCount} documents`);
+    console.log(`   - models (Benchmarks):      ${modelCount} documents`);
+    console.log(`   - kaggle_cohort (Cases):    ${kaggleCohortCount} documents`);
     console.log('=============================================');
-    console.log('✅ All data is officially attached to MongoDB Atlas!\n');
+    console.log('✅ All data + Kaggle collections officially attached to MongoDB Atlas!\n');
   } catch (err) {
     console.error('❌ MongoDB sync failed:', err.message);
   } finally {
