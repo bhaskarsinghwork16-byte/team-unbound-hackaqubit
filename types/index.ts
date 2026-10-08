@@ -89,6 +89,8 @@ export interface ScreeningRecord {
   screeningId: string;        // Unique screening identifier (e.g., SCR-407556)
   id?: string;                // Backwards-compatible ID alias
   patientId: string;          // Linked permanent patient ID
+  programId?: string;         // Linked program ID
+  campId?: string;            // Linked camp ID
   patientName?: string;       // Linked patient name for rapid display
   facilityId?: string;        // Facility identifier (defaults to FAC-MAIN if omitted)
   screeningType?: ScreeningType; // Preferred screening type
@@ -258,3 +260,57 @@ export interface PatientInfo {
   createdAt: string;
   [key: string]: unknown;
 }
+
+/**
+ * HealthScreen Programs: New Entities
+ */
+
+export interface Organization {
+  organizationId: string;
+  name: string;
+  type: 'hospital' | 'ngo' | 'csr' | 'public_health';
+  contactEmail?: string;
+  createdAt: string;
+}
+
+export type ProgramStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'ARCHIVED';
+
+export interface ScreeningProgram {
+  programId: string;
+  organizationId: string;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate?: string;
+  targetPatients: number;
+  screeningTypes: ScreeningType[];
+  status: ProgramStatus;
+  coordinatorName?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export type CampStatus = 'DRAFT' | 'ACTIVE' | 'COMPLETED';
+
+export interface ScreeningCamp {
+  campId: string;
+  programId: string;
+  name: string;
+  location: string;
+  startDate: string;
+  endDate?: string;
+  targetPatients: number;
+  status: CampStatus;
+  assignedWorkers: string[]; // User IDs or UserRole
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ProgramMembership {
+  membershipId: string;
+  programId: string;
+  userId: string;
+  role: UserRole;
+  createdAt: string;
+}
+

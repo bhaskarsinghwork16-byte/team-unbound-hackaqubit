@@ -104,6 +104,19 @@ export default function PatientsPage() {
     }
   };
 
+  const calculatePriorityScore = (p: PatientRecord) => {
+    let score = 0;
+    if (p.needsFollowUp) score += 60;
+    if (p.age > 60) score += 25;
+    else if (p.age > 40) score += 10;
+    
+    // Additional metrics if riskContext exists
+    if (p.riskContext && p.riskContext.length > 0) {
+      score += p.riskContext.length * 15;
+    }
+    return Math.min(score, 100);
+  };
+
   return (
     <div className="space-y-6">
       {/* ── HEADER ── */}
@@ -207,6 +220,7 @@ export default function PatientsPage() {
                   <th className="py-3 px-4">Contact & Location</th>
                   <th className="py-3 px-4">Registered Date</th>
                   <th className="py-3 px-4">Follow-up</th>
+                  <th className="py-3 px-4">Priority Score</th>
                   <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -246,6 +260,19 @@ export default function PatientsPage() {
                           <span>Up to date</span>
                         </span>
                       )}
+                    </td>
+                    <td className="py-3.5 px-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="w-12 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full ${calculatePriorityScore(p) > 50 ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                            style={{ width: `${calculatePriorityScore(p)}%` }}
+                          />
+                        </div>
+                        <span className={`text-xs font-bold ${calculatePriorityScore(p) > 50 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                          {calculatePriorityScore(p)}
+                        </span>
+                      </div>
                     </td>
                     <td className="py-3.5 px-4 text-right whitespace-nowrap space-x-2">
                       <Link

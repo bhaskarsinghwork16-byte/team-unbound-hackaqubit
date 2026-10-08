@@ -1,0 +1,46 @@
+[
+  {
+    "campId": "CAMP-RNC-01",
+    "programId": "PRG-JRK-2027",
+    "name": "Ranchi Community Health Camp",
+    "location": "Ranchi",
+    "startDate": "2027-10-12",
+    "targetPatients": 300,
+    "status": "ACTIVE",
+    "assignedWorkers": ["chw-rajesh", "chw-anita"],
+    "createdAt": "2026-10-08T00:00:00.000Z"
+  },
+  {
+    "campId": "CAMP-JSR-02",
+    "programId": "PRG-JRK-2027",
+    "name": "Jamshedpur Urban Slum Outreach",
+    "location": "Jamshedpur",
+    "startDate": "2027-10-15",
+    "targetPatients": 250,
+    "status": "ACTIVE",
+    "assignedWorkers": ["chw-rajesh"],
+    "createdAt": "2026-10-08T00:00:00.000Z"
+  },
+  {
+    "campId": "CAMP-DMK-03",
+    "programId": "PRG-JRK-2027",
+    "name": "Dumka District Vision Camp",
+    "location": "Dumka",
+    "startDate": "2027-10-20",
+    "targetPatients": 400,
+    "status": "ACTIVE",
+    "assignedWorkers": ["chw-anita"],
+    "createdAt": "2026-10-08T00:00:00.000Z"
+  },
+  {
+    "campId": "CAMP-DGH-04",
+    "programId": "PRG-JRK-2027",
+    "name": "Deoghar Pilgrimage Medical Camp",
+    "location": "Deoghar",
+    "startDate": "2027-11-01",
+    "targetPatients": 500,
+    "status": "DRAFT",
+    "assignedWorkers": [],
+    "createdAt": "2026-10-08T00:00:00.000Z"
+  }
+]

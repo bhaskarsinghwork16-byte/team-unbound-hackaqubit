@@ -86,6 +86,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+    { label: 'Programs', href: '/programs', icon: Shield },
     { label: 'Patients', href: '/patients', icon: Users },
     { label: 'Screenings', href: '/history', icon: ClipboardList },
     { label: 'Referrals', href: '/referrals', icon: GitPullRequest },
