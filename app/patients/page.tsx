@@ -143,93 +143,61 @@ export default function PatientsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] bg-[#ffdccc] text-[#5d2a42] px-2.5 py-0.5 rounded-full border border-[#fec89a] font-bold tracking-wide">
-              PATIENT DIRECTORY
-            </span>
+            <Badge variant="info">Patient Directory</Badge>
           </div>
-          <h1 className="text-3xl font-black tracking-tight text-[#5d2a42]">Patients Directory</h1>
-          <p className="text-xs text-[#5d2a42]/80 font-bold mt-1">
-            Find patients and view their longitudinal screening history.
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Patients</h1>
+          <p className="text-sm text-slate-500 mt-0.5">
+            Registered community patients and their longitudinal screening records.
           </p>
         </div>
 
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-2xl text-xs font-black shadow-md shadow-[#5d2a42]/20 transition-all border border-[#ffdccc]"
-        >
-          <Plus className="w-4 h-4 text-[#ffdccc] stroke-[3]" />
-          <span>+ Add Patient</span>
-        </button>
-      </div>
-
-      {/* ── SEARCH & FILTER CONTROLS ── */}
-      <div className="bg-white/90 p-4 rounded-3xl border border-[#d8e2dc] shadow-sm flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-[#5d2a42] absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Search by name, patient ID, or phone..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-[#fff9ec] border border-[#d8e2dc] rounded-2xl text-xs text-[#5d2a42] font-bold placeholder-[#5d2a42]/60 focus:outline-hidden focus:border-[#5d2a42] transition"
-          />
-        </div>
-
-        {/* Filters: All, Recently screened, Follow-up required */}
-        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-[#fff9ec] p-1.5 rounded-2xl border border-[#d8e2dc]">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-              filter === 'all'
-                ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm'
-                : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
-            }`}
-          >
-            All Patients
-          </button>
-          <button
-            onClick={() => setFilter('recent')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-              filter === 'recent'
-                ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm'
-                : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
-            }`}
-          >
-            Recently Screened
-          </button>
-          <button
-            onClick={() => setFilter('followup')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-              filter === 'followup'
-                ? 'bg-[#5d2a42] text-[#fff9ec] shadow-sm'
-                : 'text-[#5d2a42] hover:bg-[#ffdccc]/50'
-            }`}
+        <div>
+          <Button
+            variant="primary"
+            size="md"
+            icon={<Plus className="w-4 h-4" />}
+            onClick={() => setShowAddModal(true)}
           >
             + Add Patient
           </Button>
         </div>
       </div>
 
-      {/* ── PATIENTS TABLE ── */}
-      <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl overflow-hidden shadow-sm">
-        {loading ? (
-          <div className="p-12 text-center text-xs text-[#5d2a42]/70 font-bold">
-            Loading patient records...
+      {/* ── SEARCH & FILTER CONTROLS ── */}
+      <Card>
+        <CardContent className="p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+          <div className="flex-1 max-w-md">
+            <Input
+              type="text"
+              placeholder="Search by name, patient ID, or phone..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              leftIcon={<Search className="w-4 h-4 text-slate-400" />}
+              className="py-2 text-xs"
+            />
           </div>
-        ) : patients.length === 0 ? (
-          <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-[#ffdccc] text-[#5d2a42] mx-auto flex items-center justify-center border border-[#fec89a]">
-              <Users className="w-6 h-6" />
-            </div>
-            <h3 className="text-sm font-bold text-[#5d2a42]">No patients found</h3>
-            <p className="text-xs text-[#5d2a42]/70 max-w-sm mx-auto font-medium">
-              {search || filter !== 'all'
-                ? 'No patient records matched the specified filter.'
-                : 'Add a patient to begin community screening records.'}
-            </p>
+
+          {/* Filters: All, Recently screened, Follow-up required */}
+          <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100/80 p-1 rounded-xl border border-slate-200">
             <button
-              onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#5d2a42] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs hover:scale-105 transition-transform"
+              type="button"
+              onClick={() => setFilter('all')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                filter === 'all'
+                  ? 'bg-white text-slate-900 shadow-2xs font-semibold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              All Patients
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter('recent')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                filter === 'recent'
+                  ? 'bg-white text-slate-900 shadow-2xs font-semibold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
               Recently Screened
             </button>
@@ -245,54 +213,59 @@ export default function PatientsPage() {
               Follow-up Required
             </button>
           </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#5d2a42] text-[#fff9ec] uppercase tracking-wider font-black border-b border-[#d8e2dc]">
+        </CardContent>
+      </Card>
+
+      {/* ── PATIENT TABLE CARD ── */}
+      <Card>
+        <CardContent className="p-0">
+          {loading ? (
+            <div className="p-8 text-center text-slate-500 text-xs">Loading patient registry...</div>
+          ) : patients.length === 0 ? (
+            <div className="p-8 text-center text-slate-500 text-xs">No matching patient records found.</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
                 <tr>
-                  <th className="py-4 px-5 text-[#fff9ec] font-black">PATIENT</th>
-                  <th className="py-4 px-5 text-[#fff9ec] font-black">DEMOGRAPHICS</th>
-                  <th className="py-4 px-5 text-[#fff9ec] font-black">CONTACT &amp; LOCATION</th>
-                  <th className="py-4 px-5 text-[#fff9ec] font-black">REGISTERED DATE</th>
-                  <th className="py-4 px-5 text-[#fff9ec] font-black">FOLLOW-UP</th>
-                  <th className="py-4 px-5 text-[#fff9ec] font-black text-right">ACTIONS</th>
+                  <th className="py-3 px-4">Patient</th>
+                  <th className="py-3 px-4">Demographics</th>
+                  <th className="py-3 px-4">Contact & Location</th>
+                  <th className="py-3 px-4">Registered Date</th>
+                  <th className="py-3 px-4">Follow-up</th>
+                  <th className="py-3 px-4">Priority Score</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#d8e2dc] text-[#5d2a42] font-bold">
+              <tbody className="divide-y divide-slate-100">
                 {patients.map((p) => (
-                  <tr key={p.patientId} className="hover:bg-[#ffdccc]/30 transition-colors">
-                    <td className="py-4 px-5">
+                  <tr key={p.patientId} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="py-3 px-4">
                       <Link
                         href={`/patients/${p.patientId}`}
-                        className="font-black text-[#5d2a42] hover:underline block text-sm"
+                        className="font-semibold text-slate-900 hover:text-teal-600 transition-colors block"
                       >
                         {p.name}
                       </Link>
-                      <span className="text-[11px] font-mono text-[#5d2a42]/80 font-bold">
+                      <span className="text-[11px] font-mono text-slate-400">
                         {p.patientId}
                       </span>
                     </td>
-                    <td className="py-4 px-5 text-[#5d2a42] font-bold">
+                    <td className="py-3 px-4 text-slate-600 text-xs">
                       {p.age} yrs · {p.sex}
                     </td>
-                    <td className="py-4 px-5 text-[#5d2a42]">
-                      <div className="font-black text-[#5d2a42]">{p.phone || '—'}</div>
-                      <span className="text-[11px] text-[#5d2a42]/80 font-bold">{p.address || '—'}</span>
+                    <td className="py-3 px-4 text-xs">
+                      <div className="font-medium text-slate-800">{p.phone || '—'}</div>
+                      <span className="text-[11px] text-slate-500">{p.address || '—'}</span>
                     </td>
-                    <td className="py-4 px-5 text-[#5d2a42] whitespace-nowrap font-bold">
+                    <td className="py-3 px-4 text-slate-500 whitespace-nowrap text-xs font-medium">
                       {formatDate(p.registeredDate)}
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
+                    </td>
+                    <td className="py-3 px-4 whitespace-nowrap">
                       {p.needsFollowUp ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fec89a] text-[#5d2a42] border border-[#5d2a42]/30 text-xs font-black shadow-xs">
-                          <AlertCircle className="w-3.5 h-3.5 text-[#5d2a42]" />
-                          <span>Follow-up due</span>
-                        </span>
+                        <StatusBadge status="follow_up_required" />
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d8e2dc] text-[#5d2a42] border border-[#5d2a42]/20 text-xs font-black shadow-xs">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#5d2a42]" />
-                          <span>Up to date</span>
-                        </span>
+                        <StatusBadge status="completed" />
                       )}
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">
@@ -311,23 +284,23 @@ export default function PatientsPage() {
                     <td className="py-3.5 px-4 text-right whitespace-nowrap space-x-2">
                       <Link
                         href={`/screening?patientId=${p.patientId}`}
-                        className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-[#ffdccc] text-[#5d2a42] font-black text-xs border border-[#5d2a42]/20 hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-800 font-medium text-xs border border-slate-200 transition"
                       >
                         <span>Screen</span>
                       </Link>
-                      <Link
-                        href={`/patients/${p.patientId}`}
-                        className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-[#d8e2dc] text-[#5d2a42] font-black text-xs border border-[#5d2a42]/20 hover:bg-[#5d2a42] hover:text-[#fff9ec] transition-all group"
-                      >
-                        <span>Record</span>
-                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      <Link href={`/patients/${p.patientId}`}>
+                        <Button variant="outline" size="sm">
+                          <span>Record</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Button>
                       </Link>
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 ))}
-              </TableBody>
-            </Table>
-          )}
+              </tbody>
+            </table>
+          </div>
+        )}
         </CardContent>
       </Card>
 
@@ -345,114 +318,69 @@ export default function PatientsPage() {
             <span>{formError}</span>
           </div>
         )}
-      </div>
 
-      {/* ── ADD PATIENT MODAL (HERO COLOR PALETTE) ── */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-[#5d2a42]/40 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#fff9ec] rounded-3xl border border-[#d8e2dc] max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-[#d8e2dc]">
-              <div>
-                <h3 className="text-xl font-black text-[#5d2a42]">Register New Patient</h3>
-                <p className="text-xs text-[#5d2a42]/80 mt-0.5 font-bold">Create a clinical patient profile for community screening</p>
-              </div>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="text-[#5d2a42] hover:bg-[#d8e2dc]/40 p-1.5 rounded-xl font-black"
-              >
-                <X className="w-5 h-5 text-[#5d2a42]" />
-              </button>
-            </div>
+        <form onSubmit={handleCreatePatient} className="space-y-4">
+          <Input
+            label="Full Name"
+            required
+            placeholder="e.g. Kamala Devi"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
 
-            {formError && (
-              <div className="p-3 bg-[#fec89a] border border-[#5d2a42]/30 rounded-2xl text-xs text-[#5d2a42] font-black flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-[#5d2a42]" />
-                <span>{formError}</span>
-              </div>
-            )}
+          <div className="grid grid-cols-2 gap-3">
+            <Input
+              label="Age (Years)"
+              type="number"
+              required
+              placeholder="e.g. 45"
+              value={newAge}
+              onChange={(e) => setNewAge(e.target.value)}
+            />
 
-            <form onSubmit={handleCreatePatient} className="space-y-4 text-xs font-bold text-[#5d2a42]">
-              <div>
-                <label className="block font-black text-[#5d2a42] mb-1">
-                  Full Name <span className="text-[#5d2a42]">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Kamala Devi"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d8e2dc] rounded-2xl text-[#5d2a42] font-bold placeholder-[#5d2a42]/50 focus:outline-none focus:border-[#5d2a42]"
-                />
-              </div>
+            <Select
+              label="Sex"
+              value={newSex}
+              onChange={(e) => setNewSex(e.target.value as any)}
+              options={[
+                { value: 'Female', label: 'Female' },
+                { value: 'Male', label: 'Male' },
+                { value: 'Other', label: 'Other' },
+              ]}
+            />
+          </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-black text-[#5d2a42] mb-1">
-                    Age (Years) <span className="text-[#5d2a42]">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    placeholder="e.g. 45"
-                    value={newAge}
-                    onChange={(e) => setNewAge(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-white border border-[#d8e2dc] rounded-2xl text-[#5d2a42] font-bold placeholder-[#5d2a42]/50 focus:outline-none focus:border-[#5d2a42]"
-                  />
-                </div>
-                <div>
-                  <label className="block font-black text-[#5d2a42] mb-1">Sex</label>
-                  <select
-                    value={newSex}
-                    onChange={(e) => setNewSex(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 bg-white border border-[#d8e2dc] rounded-2xl text-[#5d2a42] font-bold focus:outline-none focus:border-[#5d2a42]"
-                  >
-                    <option value="Female">Female</option>
-                    <option value="Male">Male</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-              </div>
+          <Input
+            label="Phone Number"
+            placeholder="+91 98765 43210"
+            value={newPhone}
+            onChange={(e) => setNewPhone(e.target.value)}
+          />
 
-              <div>
-                <label className="block font-black text-[#5d2a42] mb-1">Phone Number</label>
-                <input
-                  type="text"
-                  placeholder="+91 98765 43210"
-                  value={newPhone}
-                  onChange={(e) => setNewPhone(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d8e2dc] rounded-2xl text-[#5d2a42] font-bold placeholder-[#5d2a42]/50 focus:outline-none focus:border-[#5d2a42]"
-                />
-              </div>
+          <Input
+            label="Address / Village / Camp"
+            placeholder="District clinic or community location"
+            value={newAddress}
+            onChange={(e) => setNewAddress(e.target.value)}
+          />
 
-              <div>
-                <label className="block font-black text-[#5d2a42] mb-1">Address / Village / Camp</label>
-                <input
-                  type="text"
-                  placeholder="District clinic or community location"
-                  value={newAddress}
-                  onChange={(e) => setNewAddress(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d8e2dc] rounded-2xl text-[#5d2a42] font-bold placeholder-[#5d2a42]/50 focus:outline-none focus:border-[#5d2a42]"
-                />
-              </div>
-
-              <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#d8e2dc]">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 text-[#5d2a42] hover:bg-[#d8e2dc]/40 rounded-xl font-black"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-6 py-2.5 bg-[#5d2a42] text-[#fff9ec] rounded-2xl text-xs font-black shadow-md border border-[#ffdccc] hover:scale-105 transition-transform"
-                >
-                  {submitting ? 'Saving...' : 'Register Patient'}
-                </button>
-              </div>
-            </form>
+          <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-100">
+            <Button
+              type="button"
+              variant="secondary"
+              size="md"
+              onClick={() => setShowAddModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={submitting}
+            >
+              Register Patient
+            </Button>
           </div>
         </form>
       </Modal>

@@ -27,8 +27,6 @@ import {
   Database,
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
-import SectionPixelTransition from './SectionPixelTransition';
-import { UserProfile } from '@/types';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -37,14 +35,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [isOnline, setIsOnline] = useState(true);
   const [mongoConnected, setMongoConnected] = useState<boolean | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState<UserProfile>({
-    name: 'Dr. Sunita Rao',
-    role: 'Community Health Manager',
-    username: 'dr_sunita',
-    avatarUrl: '/images/dr_sunita_avatar.jpg',
-  });
+  const [authUser, setAuthUser] = useState<{ userId: string; role: string } | null>(null);
 
-  // Profile and connectivity detection
+  // Connectivity detection
   useEffect(() => {
     setIsOnline(navigator.onLine);
     const handleOnline = () => setIsOnline(true);
@@ -52,20 +45,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-
-    const loadProfile = () => {
-      fetch('/api/profile')
-        .then((r) => r.json())
-        .then((d) => {
-          if (d.success && d.profile) {
-            setUserProfile(d.profile);
-          }
-        })
-        .catch(() => {});
-    };
-
-    loadProfile();
-    window.addEventListener('profileUpdated', loadProfile);
 
     fetch('/api/health')
       .then((r) => r.json())
@@ -87,9 +66,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-      window.removeEventListener('profileUpdated', loadProfile);
     };
-  }, [pathname]);
+  }, []);
 
   async function handleLogout() {
     try {
@@ -178,8 +156,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               >
                 Validation Data
               </Link>
-              <Link href="/datasets" className="hover:opacity-80 transition-opacity">AI Models</Link>
-              <Link href="/lithos" className="hover:opacity-80 transition-opacity font-playfair italic text-[#5d2a42]">Lithos Spotlight</Link>
             </nav>
 
             <div className="flex items-center gap-3">
@@ -211,18 +187,29 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   // ── CLINICAL WORKSPACE LAYOUT (`/dashboard`, `/patients`, etc.) ──
   return (
-    <div className="min-h-screen text-[#5d2a42] bg-[#fff9ec] font-sans antialiased flex flex-col lg:flex-row relative overflow-x-hidden">
-      {/* ── DESKTOP LEFT SIDEBAR (3D GLASS HOME PALETTE) ── */}
-      <aside className="hidden lg:flex flex-col w-64 bg-[#fff9ec]/95 backdrop-blur-2xl border-r border-[#d8e2dc] h-screen sticky top-0 z-40 select-none shadow-lg shadow-[#5d2a42]/5">
+    <div className="min-h-screen bg-slate-50/70 text-slate-900 font-sans antialiased flex flex-col lg:flex-row relative">
+      {/* ── DESKTOP LEFT SIDEBAR ── */}
+      <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200/90 h-screen sticky top-0 z-40 select-none shadow-xs">
         {/* Brand header */}
-        <div className="p-5 border-b border-[#d8e2dc] flex items-center justify-between">
-          <BrandLogo size="md" showSubtitle={true} />
+        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+          <BrandLogo size="md" showSubtitle={true} theme="light" />
+        </div>
+
+        {/* Quick Launch Button */}
+        <div className="px-3 pt-4 pb-2">
+          <Link
+            href="/screening"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-xs font-bold shadow-sm shadow-teal-600/20 transition-all transform hover:scale-[1.01] active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            <span>+ New Patient Screening</span>
+          </Link>
         </div>
 
         {/* Navigation list */}
-        <nav className="flex-1 px-3 py-4 space-y-2 overflow-y-auto">
-          <div className="px-3 pb-2 text-[11px] font-black uppercase tracking-wider text-[#5d2a42]/70">
-            CLINICAL WORKFLOW
+        <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+          <div className="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            Workflows
           </div>
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -236,10 +223,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-extrabold transition-all relative ${
+                className={`relative flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-[#5d2a42] text-[#fff9ec] shadow-md shadow-[#5d2a42]/20 border border-[#5d2a42]'
-                    : 'text-[#5d2a42]/85 hover:text-[#5d2a42] hover:bg-[#d8e2dc]/40 border border-transparent'
+                    ? 'text-teal-900 font-bold'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                 }`}
               >
                 {isActive && (
@@ -251,63 +238,79 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 )}
                 <div className="flex items-center gap-3">
                   <Icon
-                    className={`w-4 h-4 ${
-                      isActive ? 'text-[#ffdccc]' : 'text-[#5d2a42]/70'
+                    className={`w-4 h-4 transition-colors ${
+                      isActive ? 'text-teal-600' : 'text-slate-400'
                     }`}
                   />
                   <span>{item.label}</span>
                 </div>
                 {isActive && (
-                  <div className="w-5 h-5 rounded-lg bg-[#ffdccc] flex items-center justify-center border border-[#5d2a42]/20 shadow-xs">
-                    <div className="w-2.5 h-2.5 bg-[#5d2a42] rounded-sm transform rotate-45 shadow-xs" />
-                  </div>
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-600" />
                 )}
               </Link>
             );
           })}
         </nav>
 
-
+        {/* Local Storage / Online Status Bar */}
+        <div className="px-4 py-3 border-t border-slate-100 bg-slate-50/70">
+          <div className="flex items-center justify-between text-xs text-slate-600">
+            <span className="flex items-center gap-2 font-medium">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  mongoConnected
+                    ? 'bg-emerald-500'
+                    : isOnline
+                    ? 'bg-emerald-500'
+                    : 'bg-amber-500'
+                }`}
+              />
+              <span className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
+                <Shield className="w-3.5 h-3.5 text-teal-600" />
+                <span>{mongoConnected ? 'Cloud Sync' : 'Local Storage'}</span>
+              </span>
+            </span>
+            <span className="text-[10px] font-mono text-slate-500 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">
+              v1.4.0
+            </span>
+          </div>
+        </div>
 
         {/* User profile footer */}
-        <Link
-          href="/settings"
-          className="p-3 border-t border-[#d8e2dc] flex items-center gap-3 bg-[#ffdccc]/40 hover:bg-[#ffdccc]/70 transition-colors group cursor-pointer"
-          title="Edit Profile & Settings"
-        >
-          <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#5d2a42]/30 shadow-xs shrink-0 bg-[#fff9ec]">
+        <div className="p-3.5 border-t border-slate-100 flex items-center gap-3 bg-white">
+          <div className="relative w-9 h-9 rounded-full overflow-hidden border border-slate-200 shrink-0">
             <img
-              src={userProfile.avatarUrl || '/images/dr_sunita_avatar.jpg'}
-              alt={userProfile.name}
+              src="/images/dr_sunita_avatar.jpg"
+              alt="Dr. Sunita Rao"
               className="w-full h-full object-cover"
             />
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-white" />
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-black text-[#5d2a42] truncate group-hover:underline">
-              {userProfile.name}
+            <p className="text-xs font-bold text-slate-900 truncate">
+              Dr. Sunita Rao
             </p>
-            <p className="text-[11px] text-[#5d2a42]/80 font-bold truncate">
-              {userProfile.role}
+            <p className="text-[11px] text-slate-500 truncate">
+              Community Health Worker
             </p>
           </div>
-        </Link>
+        </div>
       </aside>
 
       {/* ── MOBILE / TABLET HEADER ── */}
-      <header className="lg:hidden sticky top-0 z-50 bg-[#fff9ec]/95 backdrop-blur-xl border-b border-[#d8e2dc] px-4 py-3 flex items-center justify-between">
-        <BrandLogo size="sm" showSubtitle={false} />
+      <header className="lg:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+        <BrandLogo size="sm" showSubtitle={false} theme="light" />
         <div className="flex items-center gap-2">
           <Link
             href="/screening"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#5d2a42] text-[#fff9ec] rounded-xl text-xs font-black shadow-md shadow-[#5d2a42]/20"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-lg text-xs font-bold shadow-2xs transition-colors"
           >
-            <Plus className="w-3.5 h-3.5 text-[#ffdccc]" />
+            <Plus className="w-3.5 h-3.5" />
             <span>Screen</span>
           </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-xl border border-[#d8e2dc] text-[#5d2a42] hover:bg-[#d8e2dc]/40"
+            className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 transition-colors"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -316,64 +319,55 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Mobile drawer when menu is opened */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-[#5d2a42]/30 backdrop-blur-md flex flex-col pt-16">
-          <div className="bg-[#fff9ec] p-4 space-y-2 border-b border-[#d8e2dc] shadow-2xl">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold ${
-                    isActive
-                      ? 'bg-[#5d2a42] text-[#fff9ec]'
-                      : 'text-[#5d2a42] hover:bg-[#d8e2dc]/40'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#ffdccc]' : 'text-[#5d2a42]'}`} />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="lg:hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs flex flex-col pt-14"
+          >
+            <div className="bg-white p-4 space-y-1 border-b border-slate-200 shadow-xl">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                      isActive
+                        ? 'bg-teal-50 text-teal-800 border border-teal-200'
+                        : 'text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 text-teal-600" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── MAIN WORKSPACE CONTENT AREA ── */}
       <div className="flex-1 flex flex-col min-w-0 pb-16 lg:pb-0 relative">
-        {/* Ambient 3D Floating Background Elements */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-          <div className="absolute -left-10 bottom-8 w-56 h-56 opacity-40 animate-float-eye">
-            <img src="/images/glass_eye_3d.jpg" alt="3D Glass Eye" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
-          </div>
-          <div className="absolute -right-8 bottom-6 w-60 h-60 opacity-40 animate-float-pill">
-            <img src="/images/glass_pill_3d.jpg" alt="3D Glass Pill" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
-          </div>
-          <div className="absolute right-[28%] -bottom-6 w-44 h-44 opacity-35 animate-float-cross">
-            <img src="/images/glass_cross_3d.jpg" alt="3D Glass Cross" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
-          </div>
-          <div className="absolute -right-14 top-8 w-64 h-64 opacity-35 animate-float-dna">
-            <img src="/images/glass_dna_3d.jpg" alt="3D Glass DNA" className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(93,42,66,0.15)]" />
-          </div>
-        </div>
-
         {/* Top desktop header bar */}
-        <header className="hidden lg:flex items-center justify-between h-16 px-8 bg-[#fff9ec]/90 backdrop-blur-2xl border-b border-[#d8e2dc] sticky top-0 z-30">
+        <header className="hidden lg:flex items-center justify-between h-16 px-8 bg-white/80 backdrop-blur-xl border-b border-slate-200/90 sticky top-0 z-30">
           <div>
-            <h1 className="text-xl font-black text-[#5d2a42] tracking-tight">
+            <h1 className="text-base font-bold text-slate-900 tracking-tight">
               {getPageTitle()}
             </h1>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Live Connectivity Badge */}
-            <div className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ffdccc] border border-[#d8e2dc] text-xs text-[#5d2a42] font-black shadow-xs">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-xs text-emerald-800 font-semibold shadow-2xs">
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isOnline ? 'bg-emerald-500 shadow-[0_0_6px_#22c55e]' : 'bg-amber-500'
+                  isOnline ? 'bg-emerald-500 pulse-dot' : 'bg-amber-500'
                 }`}
               />
               <span>{isOnline ? 'Edge & Cloud Sync' : 'Offline Mode'}</span>
@@ -391,42 +385,42 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             {/* Notification bell */}
             <button
               type="button"
-              className="p-2 rounded-xl text-[#5d2a42] hover:bg-[#d8e2dc]/50 transition-colors"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
             </button>
 
-            {/* User badge */}
-            <Link
-              href="/settings"
-              className="flex items-center gap-2.5 px-3 py-1 bg-[#d8e2dc]/40 hover:bg-[#d8e2dc]/70 border border-[#d8e2dc] rounded-full text-xs shadow-xs transition-colors cursor-pointer"
-              title="Profile Settings"
-            >
-              <div className="w-6 h-6 rounded-full overflow-hidden border border-[#5d2a42]/30 shadow-xs bg-[#fff9ec]">
-                <img
-                  src={userProfile.avatarUrl || '/images/dr_sunita_avatar.jpg'}
-                  alt={userProfile.name}
-                  className="w-full h-full object-cover"
-                />
+            {/* User badge + logout */}
+            <div className="flex items-center gap-2 pl-2 border-l border-slate-200 text-xs">
+              <div className="w-7 h-7 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold shrink-0">
+                {displayInitials}
               </div>
-              <span className="font-black text-[#5d2a42]">{userProfile.name}</span>
-            </Link>
+              <span className="font-semibold text-slate-700 truncate max-w-[80px]">{displayRole}</span>
+              <button
+                onClick={handleLogout}
+                title="Sign out"
+                aria-label="Sign out"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </header>
 
         {/* Page children content */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto relative z-10">
-          <SectionPixelTransition>{children}</SectionPixelTransition>
+          {children}
         </main>
       </div>
 
       {/* ── MOBILE BOTTOM NAVIGATION BAR ── */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#fff9ec] border-t border-[#d8e2dc] px-3 py-2 flex items-center justify-around text-[10px] font-bold text-[#5d2a42]/80">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 py-2 flex items-center justify-around text-[10px] font-medium text-slate-500">
         <Link
           href="/dashboard"
           className={`flex flex-col items-center gap-1 ${
-            pathname === '/dashboard' ? 'text-[#5d2a42] font-black' : ''
+            pathname === '/dashboard' ? 'text-teal-600 font-bold' : ''
           }`}
         >
           <LayoutDashboard className="w-4 h-4" />
@@ -435,7 +429,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <Link
           href="/patients"
           className={`flex flex-col items-center gap-1 ${
-            pathname.startsWith('/patients') ? 'text-[#5d2a42] font-black' : ''
+            pathname.startsWith('/patients') ? 'text-teal-600 font-bold' : ''
           }`}
         >
           <Users className="w-4 h-4" />
@@ -443,17 +437,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </Link>
         <Link
           href="/screening"
-          className="flex flex-col items-center gap-1 text-[#5d2a42] font-black"
+          className="flex flex-col items-center gap-1 text-teal-600 font-bold"
         >
-          <div className="w-8 h-8 rounded-full bg-[#5d2a42] text-[#fff9ec] flex items-center justify-center shadow-md -mt-3">
-            <Plus className="w-5 h-5 text-[#ffdccc]" />
+          <div className="w-9 h-9 rounded-full bg-gradient-to-r from-teal-600 to-emerald-600 text-white flex items-center justify-center shadow-md -mt-4">
+            <Plus className="w-5 h-5" />
           </div>
           <span>Screen</span>
         </Link>
         <Link
           href="/history"
           className={`flex flex-col items-center gap-1 ${
-            pathname.startsWith('/history') ? 'text-[#5d2a42] font-black' : ''
+            pathname.startsWith('/history') ? 'text-teal-600 font-bold' : ''
           }`}
         >
           <ClipboardList className="w-4 h-4" />
@@ -462,7 +456,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <Link
           href="/referrals"
           className={`flex flex-col items-center gap-1 ${
-            pathname.startsWith('/referrals') ? 'text-[#5d2a42] font-black' : ''
+            pathname.startsWith('/referrals') ? 'text-teal-600 font-bold' : ''
           }`}
         >
           <GitPullRequest className="w-4 h-4" />

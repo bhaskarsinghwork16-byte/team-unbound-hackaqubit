@@ -35,7 +35,6 @@ import {
   ReferralPriority 
 } from '@/types';
 import { assessImageInBrowser, assessImageQualitySync } from '@/services/imageQuality';
-import FlexCarousel from '@/components/FlexCarousel';
 
 function ScreeningWorkflow() {
   const searchParams = useSearchParams();
@@ -392,8 +391,8 @@ function ScreeningWorkflow() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* ── STEPPER ── */}
-      <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl px-5 py-3.5 flex items-center justify-between text-xs overflow-x-auto shadow-sm">
+      {/* ── CLINICAL WORKFLOW STEPPER ── */}
+      <div className="bg-white border border-slate-200 rounded-xl px-4 py-3 flex items-center justify-between text-xs overflow-x-auto shadow-2xs">
         {[
           { num: 1, label: 'Patient' },
           { num: 2, label: 'Consent' },
@@ -408,23 +407,23 @@ function ScreeningWorkflow() {
           const isDone = step > s.num;
           return (
             <React.Fragment key={s.num}>
-              {idx > 0 && <span className="text-[#5d2a42]/30 mx-1 font-bold">›</span>}
+              {idx > 0 && <span className="text-slate-300 mx-1 font-semibold">›</span>}
               <div
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap ${
                   isActive
-                    ? 'bg-[#5d2a42] text-[#fff9ec] font-extrabold shadow-sm'
+                    ? 'bg-teal-600 text-white font-semibold shadow-xs'
                     : isDone
-                    ? 'bg-[#ffdccc] text-[#5d2a42] font-bold border border-[#fec89a]'
-                    : 'text-[#5d2a42]/50'
+                    ? 'bg-teal-50 text-teal-700 font-medium border border-teal-200'
+                    : 'text-slate-400'
                 }`}
               >
                 <span
                   className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
                     isActive
-                      ? 'bg-[#fff9ec] text-[#5d2a42] font-extrabold'
+                      ? 'bg-white/20 text-white font-bold'
                       : isDone
-                      ? 'bg-[#5d2a42] text-[#fff9ec] font-bold'
-                      : 'bg-[#d8e2dc]/50 text-[#5d2a42]'
+                      ? 'bg-teal-600 text-white font-bold'
+                      : 'bg-slate-100 text-slate-400'
                   }`}
                 >
                   {isDone ? '✓' : s.num}
@@ -440,10 +439,10 @@ function ScreeningWorkflow() {
           STEP 1: PATIENT SELECTION
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 1 && (
-        <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-6 shadow-sm">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
-            <h2 className="text-lg font-bold text-[#5d2a42]">Patient Identification</h2>
-            <p className="text-xs text-[#5d2a42]/70 mt-0.5">
+            <h2 className="text-lg font-bold text-slate-900">Patient Identification</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
               Select an existing patient record or register a new patient before proceeding.
             </p>
           </div>
@@ -452,21 +451,21 @@ function ScreeningWorkflow() {
             <div className="space-y-4">
               {/* Search input */}
               <div className="relative">
-                <Search className="w-4 h-4 text-[#5d2a42]/50 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search existing patient by Name or Patient ID..."
                   value={patientSearch}
                   onChange={(e) => setPatientSearch(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 bg-[#fff9ec] border border-[#d8e2dc] rounded-xl text-xs text-[#5d2a42] placeholder-[#5d2a42]/50 focus:outline-hidden focus:ring-2 focus:ring-[#5d2a42]/20 focus:border-[#5d2a42]"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
                 />
               </div>
 
               {/* Search results */}
               {isSearchingPatient ? (
-                <div className="py-4 text-center text-xs text-[#5d2a42]/60">Searching records...</div>
+                <div className="py-4 text-center text-xs text-slate-400">Searching records...</div>
               ) : patientResults.length > 0 ? (
-                <div className="border border-[#d8e2dc] rounded-xl divide-y divide-[#d8e2dc] max-h-60 overflow-y-auto">
+                <div className="border border-slate-200 rounded-lg divide-y divide-slate-100 max-h-60 overflow-y-auto">
                   {patientResults.map((p) => (
                     <div
                       key={p.patientId}
@@ -474,33 +473,33 @@ function ScreeningWorkflow() {
                         setSelectedPatient(p);
                         setStep(2);
                       }}
-                      className="p-3 hover:bg-[#ffdccc]/30 cursor-pointer flex items-center justify-between transition text-xs"
+                      className="p-3 hover:bg-teal-50/50 cursor-pointer flex items-center justify-between transition text-xs"
                     >
                       <div>
-                        <div className="font-bold text-[#5d2a42]">{p.name}</div>
-                        <div className="text-[11px] text-[#5d2a42]/70 font-mono">
+                        <div className="font-bold text-slate-900">{p.name}</div>
+                        <div className="text-[11px] text-slate-500 font-mono">
                           {p.patientId} · {p.age} yrs · {p.sex} {p.phone ? `· ${p.phone}` : ''}
                         </div>
                       </div>
-                      <span className="text-[#5d2a42] font-semibold flex items-center gap-1">
+                      <span className="text-teal-700 font-semibold flex items-center gap-1">
                         Select <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
                   ))}
                 </div>
               ) : patientSearch.trim().length > 1 ? (
-                <div className="p-4 text-center text-xs text-[#5d2a42]/70 bg-[#fff9ec] rounded-xl border border-[#d8e2dc]">
+                <div className="p-4 text-center text-xs text-slate-500 bg-slate-50 rounded-lg border border-slate-200">
                   No matching patients found.
                 </div>
               ) : null}
 
               {/* Or Create New Patient */}
-              <div className="pt-4 border-t border-[#d8e2dc] flex items-center justify-between">
-                <span className="text-xs text-[#5d2a42]/70">Patient not found in records?</span>
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs text-slate-500">Patient not found in records?</span>
                 <button
                   type="button"
                   onClick={() => setShowNewPatientForm(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#ffdccc] hover:bg-[#fec89a] text-[#5d2a42] rounded-xl text-xs font-bold transition border border-[#fec89a]"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold transition"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Register New Patient</span>
@@ -512,8 +511,8 @@ function ScreeningWorkflow() {
             <form onSubmit={handleQuickCreatePatient} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-[#5d2a42] mb-1">
-                    Full Name <span className="text-[#5d2a42]">*</span>
+                  <label className="block font-semibold text-slate-700 mb-1">
+                    Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -521,13 +520,13 @@ function ScreeningWorkflow() {
                     placeholder="e.g. Meera Devi"
                     value={newPatientName}
                     onChange={(e) => setNewPatientName(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#fff9ec] border border-[#d8e2dc] rounded-xl text-[#5d2a42] focus:outline-hidden focus:ring-2 focus:ring-[#5d2a42]/20 focus:border-[#5d2a42]"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block font-semibold text-[#5d2a42] mb-1">
-                      Age <span className="text-[#5d2a42]">*</span>
+                    <label className="block font-semibold text-slate-700 mb-1">
+                      Age <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -537,15 +536,15 @@ function ScreeningWorkflow() {
                       placeholder="e.g. 48"
                       value={newPatientAge}
                       onChange={(e) => setNewPatientAge(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#fff9ec] border border-[#d8e2dc] rounded-xl text-[#5d2a42] focus:outline-hidden focus:ring-2 focus:ring-[#5d2a42]/20 focus:border-[#5d2a42]"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-[#5d2a42] mb-1">Sex</label>
+                    <label className="block font-semibold text-slate-700 mb-1">Sex</label>
                     <select
                       value={newPatientSex}
                       onChange={(e) => setNewPatientSex(e.target.value as any)}
-                      className="w-full px-3 py-2 bg-[#fff9ec] border border-[#d8e2dc] rounded-xl text-[#5d2a42] focus:outline-hidden focus:ring-2 focus:ring-[#5d2a42]/20 focus:border-[#5d2a42]"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
                     >
                       <option value="Female">Female</option>
                       <option value="Male">Male</option>
@@ -556,13 +555,13 @@ function ScreeningWorkflow() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#5d2a42] mb-1">Phone Number (Optional)</label>
+                <label className="block font-semibold text-slate-700 mb-1">Phone Number (Optional)</label>
                 <input
                   type="tel"
                   placeholder="+91 98765 43210"
                   value={newPatientPhone}
                   onChange={(e) => setNewPatientPhone(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#fff9ec] border border-[#d8e2dc] rounded-xl text-[#5d2a42] focus:outline-hidden focus:ring-2 focus:ring-[#5d2a42]/20 focus:border-[#5d2a42]"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
                 />
               </div>
 
@@ -570,14 +569,14 @@ function ScreeningWorkflow() {
                 <button
                   type="button"
                   onClick={() => setShowNewPatientForm(false)}
-                  className="text-[#5d2a42]/70 hover:text-[#5d2a42] font-semibold"
+                  className="text-slate-500 hover:text-slate-800 font-medium"
                 >
                   ← Back to search
                 </button>
                 <button
                   type="submit"
                   disabled={isCreatingPatient}
-                  className="px-4 py-2 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl font-bold shadow-xs disabled:opacity-50"
+                  className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold shadow-xs disabled:opacity-50"
                 >
                   {isCreatingPatient ? 'Saving...' : 'Register & Continue'}
                 </button>
@@ -591,21 +590,21 @@ function ScreeningWorkflow() {
           STEP 2: PATIENT CONSENT
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 2 && selectedPatient && (
-        <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-6 shadow-sm">
-          <div className="flex items-center justify-between pb-3 border-b border-[#d8e2dc]">
+        <div className="glass-container-3d p-6 space-y-6">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-              <h2 className="text-lg font-bold text-[#5d2a42]">Patient Consent</h2>
-              <p className="text-xs text-[#5d2a42]/70 mt-0.5">
+              <h2 className="text-lg font-bold text-slate-900">Patient Consent</h2>
+              <p className="text-xs text-slate-500 mt-0.5">
                 Informed consent verification prior to optical image capture
               </p>
             </div>
-            <span className="px-3 py-1 bg-[#ffdccc] text-[#5d2a42] rounded-xl font-mono text-xs font-bold border border-[#fec89a]">
+            <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md font-mono text-xs font-semibold">
               {selectedPatient.name} ({selectedPatient.patientId})
             </span>
           </div>
 
-          <div className="bg-[#fff9ec] p-4 rounded-xl border border-[#d8e2dc] text-xs text-[#5d2a42] space-y-2">
-            <p className="font-bold text-[#5d2a42]">
+          <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs text-slate-600 space-y-2">
+            <p className="font-semibold text-slate-800">
               Clinical Screening Protocol Notice:
             </p>
             <p>
@@ -616,18 +615,18 @@ function ScreeningWorkflow() {
             </p>
           </div>
 
-          <label className="flex items-start gap-3 p-4 bg-[#ffdccc]/30 border border-[#d8e2dc] rounded-xl cursor-pointer hover:bg-[#ffdccc]/50 transition">
+          <label className="flex items-start gap-3 p-3 bg-teal-50/50 border border-teal-200/80 rounded-lg cursor-pointer hover:bg-teal-50 transition">
             <input
               type="checkbox"
               checked={consentObtained}
               onChange={(e) => setConsentObtained(e.target.checked)}
-              className="mt-0.5 w-4 h-4 text-[#5d2a42] rounded-sm border-[#d8e2dc] focus:ring-[#5d2a42]"
+              className="mt-0.5 w-4 h-4 text-teal-600 rounded-sm border-slate-300 focus:ring-teal-500"
             />
             <div className="text-xs">
-              <span className="font-bold text-[#5d2a42] block">
+              <span className="font-bold text-teal-900 block">
                 Consent obtained
               </span>
-              <span className="text-[#5d2a42]/80">
+              <span className="text-slate-600">
                 Informed verbal or written consent has been obtained from the patient or legal guardian for this screening and secure image processing.
               </span>
             </div>
@@ -636,14 +635,14 @@ function ScreeningWorkflow() {
           <div className="flex items-center justify-between pt-2">
             <button
               onClick={() => setStep(1)}
-              className="text-xs font-bold text-[#5d2a42]/70 hover:text-[#5d2a42]"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800"
             >
               ← Change Patient
             </button>
             <button
               onClick={() => setStep(3)}
               disabled={!consentObtained}
-              className="px-5 py-2.5 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs transition disabled:opacity-40"
+              className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs transition disabled:opacity-40"
             >
               Continue to Protocol Selection →
             </button>
@@ -655,56 +654,12 @@ function ScreeningWorkflow() {
           STEP 3: SCREENING PROTOCOL SELECTION
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 3 && (
-        <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-6 shadow-sm">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
-            <h2 className="text-lg font-bold text-[#5d2a42]">Select Screening Protocol</h2>
-            <p className="text-xs text-[#5d2a42]/70 mt-0.5">
-              Choose the examination protocol for this session or click any module card below
+            <h2 className="text-lg font-bold text-slate-900">Select Screening Protocol</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Choose the examination protocol for this session
             </p>
-          </div>
-
-          {/* Interactive WebGL Liquid FlexCarousel Options Viewer */}
-          <div className="w-full h-[300px] relative rounded-2xl overflow-hidden border border-[#d8e2dc] bg-[#fff9ec] shadow-inner">
-            <FlexCarousel
-              items={[
-                {
-                  src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&q=80&auto=format&fit=max',
-                  alt: 'Retinal Eye Screening',
-                  title: '👁️ Retinal Eye Screening',
-                  subtitle: 'Diabetic Retinopathy & Optic Disc Assessment'
-                },
-                {
-                  src: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1200&q=80&auto=format&fit=max',
-                  alt: 'Oral Mucosa Screening',
-                  title: '👄 Oral Mucosal Screening',
-                  subtitle: 'Pre-Cancerous Lesion Pattern Detection'
-                },
-                {
-                  src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80&auto=format&fit=max',
-                  alt: 'Glaucoma Optical Check',
-                  title: '🔍 Glaucoma & Cataract',
-                  subtitle: 'Optic Cup-to-Disc Ratio Evaluation'
-                },
-                {
-                  src: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1200&q=80&auto=format&fit=max',
-                  alt: 'Conjunctival Pallor Check',
-                  title: '🩸 Conjunctival Pallor',
-                  subtitle: 'Non-Invasive Anemia Edge Screening'
-                }
-              ]}
-              preset="liquid"
-              intro="rise"
-              cardHeight={0.65}
-              gap={12}
-              squeeze={0.2}
-              focusOnClick
-              captions
-              onSelect={(index) => {
-                if (index === 0) setScreeningType('eye');
-                else setScreeningType('oral');
-                setStep(4);
-              }}
-            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -714,23 +669,23 @@ function ScreeningWorkflow() {
                 setScreeningType('eye');
                 setStep(4);
               }}
-              className={`p-5 rounded-2xl border cursor-pointer transition flex flex-col justify-between ${
+              className={`p-5 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
                 screeningType === 'eye'
-                  ? 'border-[#5d2a42] bg-[#ffdccc]/40 shadow-sm'
-                  : 'border-[#d8e2dc] hover:border-[#5d2a42]/50 bg-white'
+                  ? 'border-teal-600 bg-teal-50/40 shadow-xs'
+                  : 'border-slate-200 hover:border-slate-300 bg-white'
               }`}
             >
               <div>
-                <div className="w-10 h-10 rounded-xl bg-[#5d2a42] text-[#fff9ec] flex items-center justify-center mb-3">
+                <div className="w-10 h-10 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center mb-3">
                   <Eye className="w-5 h-5" />
                 </div>
-                <h3 className="text-sm font-bold text-[#5d2a42]">Eye Screening</h3>
-                <p className="text-xs text-[#5d2a42] font-extrabold mt-0.5">Diabetic Retinopathy</p>
-                <p className="text-xs text-[#5d2a42]/80 mt-2 leading-relaxed">
+                <h3 className="text-sm font-bold text-slate-900">Eye Screening</h3>
+                <p className="text-xs text-teal-800 font-semibold mt-0.5">Diabetic Retinopathy</p>
+                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                   Screen retinal images for potential DR-related microaneurysms, hemorrhages, or exudates.
                 </p>
               </div>
-              <div className="mt-4 flex items-center text-xs font-bold text-[#5d2a42]">
+              <div className="mt-4 flex items-center text-xs font-semibold text-teal-700">
                 <span>Start Eye Screening →</span>
               </div>
             </div>
@@ -741,23 +696,23 @@ function ScreeningWorkflow() {
                 setScreeningType('oral');
                 setStep(4);
               }}
-              className={`p-5 rounded-2xl border cursor-pointer transition flex flex-col justify-between ${
+              className={`p-5 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
                 screeningType === 'oral'
-                  ? 'border-[#5d2a42] bg-[#ffdccc]/40 shadow-sm'
-                  : 'border-[#d8e2dc] hover:border-[#5d2a42]/50 bg-white'
+                  ? 'border-teal-600 bg-teal-50/40 shadow-xs'
+                  : 'border-slate-200 hover:border-slate-300 bg-white'
               }`}
             >
               <div>
-                <div className="w-10 h-10 rounded-xl bg-[#ffdccc] text-[#5d2a42] border border-[#fec89a] flex items-center justify-center mb-3">
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center mb-3">
                   <Smile className="w-5 h-5" />
                 </div>
-                <h3 className="text-sm font-bold text-[#5d2a42]">Oral Screening</h3>
-                <p className="text-xs text-[#5d2a42] font-extrabold mt-0.5">Oral Visual Screening</p>
-                <p className="text-xs text-[#5d2a42]/80 mt-2 leading-relaxed">
+                <h3 className="text-sm font-bold text-slate-900">Oral Screening</h3>
+                <p className="text-xs text-emerald-800 font-semibold mt-0.5">Oral Visual Screening</p>
+                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                   Screen oral cavity images for mucosal lesions or visual findings requiring further review.
                 </p>
               </div>
-              <div className="mt-4 flex items-center text-xs font-bold text-[#5d2a42]">
+              <div className="mt-4 flex items-center text-xs font-semibold text-teal-700">
                 <span>Start Oral Screening →</span>
               </div>
             </div>
@@ -769,25 +724,25 @@ function ScreeningWorkflow() {
           STEP 4: IMAGE CAPTURE / UPLOAD
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 4 && (
-        <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-6 shadow-sm">
-          <div className="flex items-center justify-between pb-2 border-b border-[#d8e2dc]">
+        <div className="glass-container-3d p-6 space-y-6">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
-              <h2 className="text-lg font-bold text-[#5d2a42]">
+              <h2 className="text-lg font-bold text-slate-900">
                 {screeningType === 'eye' ? 'Retinal Optical Image Capture' : 'Oral Cavity Visual Capture'}
               </h2>
-              <p className="text-xs text-[#5d2a42]/70">
+              <p className="text-xs text-slate-500">
                 {screeningType === 'eye'
                   ? 'Position smartphone fundus adapter or upload digital fundus image.'
                   : 'Ensure adequate illumination and clear framing of oral mucosa.'}
               </p>
             </div>
-            <span className="text-xs text-[#5d2a42] font-mono font-bold">
+            <span className="text-xs text-slate-500 font-mono font-medium">
               Patient: {selectedPatient?.patientId || 'Unlinked'}
             </span>
           </div>
 
           {/* VIEWPORT & FRAMING GUIDES */}
-          <div className="relative aspect-4/3 max-w-xl mx-auto bg-[#5d2a42] rounded-2xl overflow-hidden border border-[#d8e2dc] flex items-center justify-center shadow-inner">
+          <div className="relative aspect-4/3 max-w-xl mx-auto bg-slate-950 rounded-xl overflow-hidden border border-slate-300 flex items-center justify-center shadow-inner">
             {/* If camera is streaming */}
             {isCameraActive ? (
               <video
@@ -797,55 +752,57 @@ function ScreeningWorkflow() {
                 className="w-full h-full object-cover"
               />
             ) : imageUri ? (
+              /* REAL CAPTURED/UPLOADED IMAGE DOMINATES THE INTERFACE */
               <img
                 src={imageUri}
                 alt="Captured screening specimen"
                 className="w-full h-full object-contain bg-black"
               />
             ) : (
-              <div className="text-center p-6 space-y-3 text-[#fff9ec]/80">
-                <Camera className="w-10 h-10 mx-auto text-[#fff9ec] stroke-1" />
-                <p className="text-xs font-semibold">No image captured yet</p>
+              /* Empty Standby Viewport */
+              <div className="text-center p-6 space-y-3 text-slate-400">
+                <Camera className="w-10 h-10 mx-auto text-slate-500 stroke-1" />
+                <p className="text-xs">No image captured yet</p>
               </div>
             )}
 
-            {/* RETINAL OVERLAY */}
+            {/* RETINAL SUBTLE FRAMING GUIDE OVERLAY */}
             {screeningType === 'eye' && (
               <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <div className="w-64 h-64 rounded-full border border-[#fec89a]/50 border-dashed flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full border border-[#fec89a]/30" />
-                  <div className="w-2 h-2 rounded-full bg-[#fec89a]/60" />
+                <div className="w-64 h-64 rounded-full border border-teal-400/40 border-dashed flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full border border-teal-400/20" />
+                  <div className="w-2 h-2 rounded-full bg-teal-400/30" />
                 </div>
               </div>
             )}
 
-            {/* ORAL CAVITY OVERLAY */}
+            {/* ORAL CAVITY FRAMING GUIDE OVERLAY */}
             {screeningType === 'oral' && (
               <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <div className="w-72 h-48 rounded-2xl border border-[#fec89a]/50 border-dashed flex items-center justify-center">
-                  <div className="w-8 h-8 border-t border-b border-[#fec89a]/30" />
+                <div className="w-72 h-48 rounded-2xl border border-emerald-400/40 border-dashed flex items-center justify-center">
+                  <div className="w-8 h-8 border-t border-b border-emerald-400/30" />
                 </div>
               </div>
             )}
           </div>
 
-          {/* LIVE GUIDANCE PILLS */}
+          {/* LIVE GUIDANCE PILLS (Lighting, Focus, Position, Stability) */}
           <div className="grid grid-cols-4 gap-2 text-center text-[11px] max-w-xl mx-auto">
-            <div className="p-2 rounded-xl bg-[#fff9ec] border border-[#d8e2dc]">
-              <span className="text-[#5d2a42]/60 block">Lighting</span>
-              <span className="font-extrabold text-[#5d2a42]">Good</span>
+            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200">
+              <span className="text-slate-400 block">Lighting</span>
+              <span className="font-semibold text-emerald-700">Good</span>
             </div>
-            <div className="p-2 rounded-xl bg-[#fff9ec] border border-[#d8e2dc]">
-              <span className="text-[#5d2a42]/60 block">Focus</span>
-              <span className="font-extrabold text-[#5d2a42]">Sharp</span>
+            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200">
+              <span className="text-slate-400 block">Focus</span>
+              <span className="font-semibold text-emerald-700">Sharp</span>
             </div>
-            <div className="p-2 rounded-xl bg-[#fff9ec] border border-[#d8e2dc]">
-              <span className="text-[#5d2a42]/60 block">Position</span>
-              <span className="font-extrabold text-[#5d2a42]">Centered</span>
+            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200">
+              <span className="text-slate-400 block">Position</span>
+              <span className="font-semibold text-slate-700">Centered</span>
             </div>
-            <div className="p-2 rounded-xl bg-[#fff9ec] border border-[#d8e2dc]">
-              <span className="text-[#5d2a42]/60 block">Stability</span>
-              <span className="font-extrabold text-[#5d2a42]">Hold Steady</span>
+            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200">
+              <span className="text-slate-400 block">Stability</span>
+              <span className="font-semibold text-emerald-700">Hold Steady</span>
             </div>
           </div>
 
@@ -863,7 +820,7 @@ function ScreeningWorkflow() {
               <button
                 type="button"
                 onClick={captureCameraFrame}
-                className="px-5 py-2.5 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs"
+                className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
               >
                 Snap Frame
               </button>
@@ -871,9 +828,9 @@ function ScreeningWorkflow() {
               <button
                 type="button"
                 onClick={() => setIsCameraActive(true)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#d8e2dc] hover:bg-[#fff9ec] text-[#5d2a42] rounded-xl text-xs font-bold shadow-2xs"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-2xs"
               >
-                <Camera className="w-4 h-4 text-[#5d2a42]" />
+                <Camera className="w-4 h-4 text-slate-600" />
                 <span>Use Camera</span>
               </button>
             )}
@@ -881,9 +838,9 @@ function ScreeningWorkflow() {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#d8e2dc] hover:bg-[#fff9ec] text-[#5d2a42] rounded-xl text-xs font-bold shadow-2xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-2xs"
             >
-              <Upload className="w-4 h-4 text-[#5d2a42]" />
+              <Upload className="w-4 h-4 text-slate-600" />
               <span>Upload Image</span>
             </button>
 
@@ -891,7 +848,7 @@ function ScreeningWorkflow() {
               <button
                 type="button"
                 onClick={() => setImageUri('')}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-[#5d2a42]/70 hover:text-[#5d2a42] text-xs font-bold"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-slate-700 text-xs font-medium"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Retake</span>
@@ -900,17 +857,17 @@ function ScreeningWorkflow() {
           </div>
 
           {/* NEXT CTA */}
-          <div className="flex items-center justify-between pt-4 border-t border-[#d8e2dc]">
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
             <button
               onClick={() => setStep(3)}
-              className="text-xs font-bold text-[#5d2a42]/70 hover:text-[#5d2a42]"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800"
             >
               ← Back to Protocol
             </button>
             <button
               onClick={handleProceedToQuality}
               disabled={!imageUri}
-              className="px-5 py-2 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs disabled:opacity-40"
+              className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-40"
             >
               Evaluate Quality Gate →
             </button>
@@ -922,52 +879,52 @@ function ScreeningWorkflow() {
           STEP 5: IMAGE QUALITY ENGINE
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 5 && (
-        <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-6 shadow-sm">
+        <div className="glass-container-3d p-6 space-y-6">
           <div>
-            <h2 className="text-lg font-bold text-[#5d2a42]">Optical Quality Gate</h2>
-            <p className="text-xs text-[#5d2a42]/70 mt-0.5">
+            <h2 className="text-lg font-bold text-slate-900">Optical Quality Gate</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
               Automated computer vision verification of sharpness, illumination, contrast, and resolution.
             </p>
           </div>
 
           {isEvaluatingQuality ? (
-            <div className="py-12 text-center text-xs text-[#5d2a42] space-y-2">
-              <div className="w-6 h-6 border-2 border-[#5d2a42] border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="font-bold">Computing pixel Laplacian variance & luminance...</p>
+            <div className="py-12 text-center text-xs text-slate-500 space-y-2">
+              <div className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+              <p>Computing pixel Laplacian variance & luminance...</p>
             </div>
           ) : qualityResult ? (
             <div className="space-y-6">
-              {/* Quality Status Banner */}
+              {/* Quality Status Banner — 3 Specific Clinical States */}
               <div
-                className={`p-4 rounded-2xl border flex items-center justify-between ${
+                className={`p-4 rounded-xl border flex items-center justify-between ${
                   qualityResult.validationStatus === 'valid_usable'
-                    ? 'bg-[#d8e2dc] border-[#c4d4cc] text-[#5d2a42]'
+                    ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900'
                     : qualityResult.validationStatus === 'wrong_image_type'
-                    ? 'bg-[#fec89a] border-[#ffdccc] text-[#5d2a42]'
-                    : 'bg-[#ffdccc] border-[#fec89a] text-[#5d2a42]'
+                    ? 'bg-rose-50/90 border-rose-200 text-rose-950'
+                    : 'bg-amber-50/70 border-amber-200 text-amber-900'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {qualityResult.validationStatus === 'valid_usable' ? (
-                    <CheckCircle2 className="w-5 h-5 text-[#5d2a42] shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                   ) : qualityResult.validationStatus === 'wrong_image_type' ? (
-                    <ShieldAlert className="w-5 h-5 text-[#5d2a42] shrink-0" />
+                    <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0" />
                   ) : (
-                    <AlertCircle className="w-5 h-5 text-[#5d2a42] shrink-0" />
+                    <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
                   )}
                   <div>
-                    <h3 className="font-extrabold text-xs text-[#5d2a42]">
+                    <h3 className="font-bold text-xs">
                       {qualityResult.validationStatus === 'valid_usable'
                         ? 'Image ready for screening'
                         : qualityResult.validationStatus === 'wrong_image_type'
                         ? 'Incorrect image'
                         : 'Image needs to be retaken'}
                     </h3>
-                    <p className="text-[11px] opacity-90 mt-0.5 font-bold">
+                    <p className="text-[11px] opacity-90 mt-0.5 font-medium">
                       {qualityResult.feedback}
                     </p>
                     {qualityResult.validationStatus !== 'valid_usable' && (
-                      <p className="text-[10px] opacity-80 mt-0.5 font-medium">
+                      <p className="text-[10px] opacity-75 mt-0.5">
                         {qualityResult.validationStatus === 'wrong_image_type'
                           ? 'Automated disease screening is blocked for safety. Please provide an image matching the selected screening.'
                           : 'Optical clarity is insufficient for reliable screening. Please retake the capture.'}
@@ -976,10 +933,10 @@ function ScreeningWorkflow() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl font-black text-[#5d2a42]">
+                  <span className="text-xl font-bold">
                     {qualityResult.validationStatus === 'valid_usable' ? `${qualityResult.score}%` : 'Blocked'}
                   </span>
-                  <span className="text-[10px] block opacity-80 uppercase font-bold tracking-wider text-[#5d2a42]">
+                  <span className="text-[10px] block opacity-80 uppercase tracking-wider">
                     {qualityResult.validationStatus === 'valid_usable' ? 'Quality Score' : 'Status'}
                   </span>
                 </div>
@@ -987,42 +944,42 @@ function ScreeningWorkflow() {
 
               {/* Measured Metrics Checklist */}
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
-                <div className="p-3 bg-[#fff9ec] rounded-xl border border-[#d8e2dc]">
-                  <span className="text-[#5d2a42]/70 block text-[11px]">Sharpness</span>
-                  <span className="font-extrabold text-[#5d2a42] mt-1 flex items-center gap-1">
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-slate-500 block text-[11px]">Sharpness</span>
+                  <span className="font-bold text-slate-900 mt-1 flex items-center gap-1">
                     ✓ {qualityResult.metrics.sharpness}%
                   </span>
                 </div>
-                <div className="p-3 bg-[#fff9ec] rounded-xl border border-[#d8e2dc]">
-                  <span className="text-[#5d2a42]/70 block text-[11px]">Lighting</span>
-                  <span className="font-extrabold text-[#5d2a42] mt-1 flex items-center gap-1">
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-slate-500 block text-[11px]">Lighting</span>
+                  <span className="font-bold text-slate-900 mt-1 flex items-center gap-1">
                     ✓ {qualityResult.metrics.brightness}%
                   </span>
                 </div>
-                <div className="p-3 bg-[#fff9ec] rounded-xl border border-[#d8e2dc]">
-                  <span className="text-[#5d2a42]/70 block text-[11px]">Contrast</span>
-                  <span className="font-extrabold text-[#5d2a42] mt-1 flex items-center gap-1">
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-slate-500 block text-[11px]">Contrast</span>
+                  <span className="font-bold text-slate-900 mt-1 flex items-center gap-1">
                     ✓ {qualityResult.metrics.contrast}%
                   </span>
                 </div>
-                <div className="p-3 bg-[#fff9ec] rounded-xl border border-[#d8e2dc]">
-                  <span className="text-[#5d2a42]/70 block text-[11px]">Noise Level</span>
-                  <span className="font-extrabold text-[#5d2a42] mt-1 flex items-center gap-1">
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-slate-500 block text-[11px]">Noise Level</span>
+                  <span className="font-bold text-slate-900 mt-1 flex items-center gap-1">
                     ✓ {100 - qualityResult.metrics.noiseLevel}%
                   </span>
                 </div>
-                <div className="p-3 bg-[#fff9ec] rounded-xl border border-[#d8e2dc]">
-                  <span className="text-[#5d2a42]/70 block text-[11px]">Framing</span>
-                  <span className="font-extrabold text-[#5d2a42] mt-1 flex items-center gap-1">
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-slate-500 block text-[11px]">Framing</span>
+                  <span className="font-bold text-slate-900 mt-1 flex items-center gap-1">
                     ✓ {qualityResult.metrics.framing}%
                   </span>
                 </div>
               </div>
 
-              {/* Benchmark image quick switch */}
-              <div className="pt-4 border-t border-[#d8e2dc] flex flex-wrap items-center justify-between gap-3 text-xs bg-[#fff9ec] p-3 rounded-xl border border-[#d8e2dc]">
-                <span className="font-bold text-[#5d2a42] flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-[#5d2a42]" />
+              {/* Benchmark image quick switch for testing */}
+              <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
+                <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-teal-600" />
                   Or Test With Benchmark Image:
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
@@ -1038,7 +995,7 @@ function ScreeningWorkflow() {
                       setQualityResult(res);
                       setIsEvaluatingQuality(false);
                     }}
-                    className="px-2.5 py-1 bg-white border border-[#d8e2dc] hover:bg-[#ffdccc] rounded text-[#5d2a42] font-bold text-[11px] shadow-2xs"
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-teal-500 hover:bg-teal-50/50 rounded text-slate-700 font-medium text-[11px] shadow-2xs"
                   >
                     ✓ Normal {screeningType === 'eye' ? 'Retina' : 'Oral'}
                   </button>
@@ -1054,7 +1011,7 @@ function ScreeningWorkflow() {
                       setQualityResult(res);
                       setIsEvaluatingQuality(false);
                     }}
-                    className="px-2.5 py-1 bg-[#ffdccc] border border-[#fec89a] hover:bg-[#fec89a] rounded text-[#5d2a42] font-extrabold text-[11px] shadow-2xs"
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-amber-500 hover:bg-amber-50/50 rounded text-slate-700 font-medium text-[11px] shadow-2xs"
                   >
                     ⚠ {screeningType === 'eye' ? 'Referable DR' : 'Oral Lesion'}
                   </button>
@@ -1069,7 +1026,7 @@ function ScreeningWorkflow() {
                       setQualityResult(res);
                       setIsEvaluatingQuality(false);
                     }}
-                    className="px-2.5 py-1 bg-white border border-[#d8e2dc] hover:bg-[#fff9ec] rounded text-[#5d2a42]/80 font-bold text-[11px]"
+                    className="px-2.5 py-1 bg-white border border-slate-200 hover:border-slate-400 rounded text-slate-500 font-medium text-[11px]"
                   >
                     Test Blurry Retake
                   </button>
@@ -1077,10 +1034,10 @@ function ScreeningWorkflow() {
               </div>
 
               {/* Gating Actions */}
-              <div className="flex items-center justify-between pt-4 border-t border-[#d8e2dc]">
+              <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                 <button
                   onClick={() => setStep(4)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-[#5d2a42] hover:bg-[#ffdccc] border border-[#d8e2dc] rounded-xl"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Retake Image</span>
@@ -1089,20 +1046,20 @@ function ScreeningWorkflow() {
                 {qualityResult.validationStatus === 'valid_usable' && qualityResult.isAcceptable ? (
                   <button
                     onClick={handleProceedToAnalysis}
-                    className="px-5 py-2 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs"
+                    className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
                   >
                     Run Screening Analysis →
                   </button>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-[#5d2a42] font-bold">
+                    <span className="text-xs text-rose-800 font-medium">
                       {qualityResult.validationStatus === 'wrong_image_type'
                         ? 'Screening model blocked (Incorrect image).'
                         : 'Screening model blocked (Retake required).'}
                     </span>
                     <button
                       onClick={() => setStep(4)}
-                      className="px-4 py-2 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs transition inline-flex items-center gap-1.5"
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Retake with Correct Image →</span>
@@ -1116,43 +1073,43 @@ function ScreeningWorkflow() {
       )}
 
       {/* ──────────────────────────────────────────────────────────────────────────
-          STEP 6: CLINICAL ANALYSIS ENGINE
+          STEP 6: CLINICAL ANALYSIS ENGINE (CALM & TRUSTWORTHY)
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 6 && (
-        <div className="bg-white/90 p-8 rounded-2xl border border-[#d8e2dc] shadow-sm space-y-6 text-center max-w-lg mx-auto">
+        <div className="bg-white p-8 rounded-xl border border-slate-200/90 shadow-2xs space-y-6 text-center max-w-lg mx-auto">
           <div className="space-y-2">
-            <h2 className="text-base font-bold text-[#5d2a42]">Analyzing Screening Image</h2>
-            <p className="text-xs text-[#5d2a42]/70">
+            <h2 className="text-base font-bold text-slate-900">Analyzing Screening Image</h2>
+            <p className="text-xs text-slate-500">
               Running decision-support model inference and validating feature activations.
             </p>
           </div>
 
           <div className="space-y-3 text-left max-w-sm mx-auto text-xs py-4">
-            <div className="flex items-center gap-2.5 text-[#5d2a42] font-bold">
-              <Check className="w-4 h-4 text-[#5d2a42] shrink-0" />
+            <div className="flex items-center gap-2.5 text-slate-700">
+              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Image received and verified</span>
             </div>
-            <div className={`flex items-center gap-2.5 ${analysisStage >= 1 ? 'text-[#5d2a42] font-bold' : 'text-[#5d2a42]/40'}`}>
+            <div className={`flex items-center gap-2.5 ${analysisStage >= 1 ? 'text-slate-700' : 'text-slate-400'}`}>
               {analysisStage >= 1 ? (
-                <Check className="w-4 h-4 text-[#5d2a42] shrink-0" />
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
               ) : (
-                <div className="w-4 h-4 rounded-full border border-[#d8e2dc] shrink-0" />
+                <div className="w-4 h-4 rounded-full border border-slate-300 shrink-0" />
               )}
               <span>Image quality checked</span>
             </div>
-            <div className={`flex items-center gap-2.5 ${analysisStage >= 2 ? 'text-[#5d2a42] font-bold' : 'text-[#5d2a42]/40'}`}>
+            <div className={`flex items-center gap-2.5 ${analysisStage >= 2 ? 'text-slate-700' : 'text-slate-400'}`}>
               {analysisStage >= 2 ? (
-                <Check className="w-4 h-4 text-[#5d2a42] shrink-0" />
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
               ) : (
-                <div className="w-4 h-4 rounded-full border border-[#d8e2dc] shrink-0" />
+                <div className="w-4 h-4 rounded-full border border-slate-300 shrink-0" />
               )}
               <span>Image prepared & normalized</span>
             </div>
-            <div className={`flex items-center gap-2.5 ${analysisStage >= 3 ? 'text-[#5d2a42] font-extrabold' : 'text-[#5d2a42]/40'}`}>
+            <div className={`flex items-center gap-2.5 ${analysisStage >= 3 ? 'text-teal-700 font-semibold' : 'text-slate-400'}`}>
               {analysisStage >= 3 ? (
-                <div className="w-4 h-4 border-2 border-[#5d2a42] border-t-transparent rounded-full animate-spin shrink-0" />
+                <div className="w-4 h-4 border-2 border-teal-600 border-t-transparent rounded-full animate-spin shrink-0" />
               ) : (
-                <div className="w-4 h-4 rounded-full border border-[#d8e2dc] shrink-0" />
+                <div className="w-4 h-4 rounded-full border border-slate-300 shrink-0" />
               )}
               <span>Running screening analysis</span>
             </div>
@@ -1164,55 +1121,57 @@ function ScreeningWorkflow() {
           STEP 7: CLINICAL SCREENING REPORT & RESULT
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 7 && result && (
-        <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-6 shadow-sm">
+        <div className="glass-container-3d p-6 space-y-6">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#d8e2dc] gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200/80 gap-3">
             <div>
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#5d2a42]">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-700">
                 Preliminary Clinical Screening Report
               </span>
-              <h2 className="text-xl font-bold text-[#5d2a42] mt-0.5">
+              <h2 className="text-xl font-bold text-slate-900 mt-0.5">
                 {screeningType === 'eye' ? 'Retinal Screening Result' : 'Oral Visual Screening Result'}
               </h2>
             </div>
-            <div className="text-left sm:text-right text-xs text-[#5d2a42]/70 font-mono font-bold">
+            <div className="text-left sm:text-right text-xs text-slate-500 font-mono">
               <div>Screening ID: {result.screeningId}</div>
               <div>Patient: {selectedPatient?.name} ({result.patientId})</div>
             </div>
           </div>
 
-          {/* MAIN FINDING BANNER (Potential Finding vs No Abnormality) */}
+          {/* MAIN FINDING BANNER (NO FAKE DIAGNOSIS) */}
           <div
-            className={`p-5 rounded-2xl border ${
+            className={`p-5 rounded-xl border ${
               result.resultState === 'potential_finding' || result.riskLevel === 'higher_risk'
-                ? 'bg-[#fec89a] border-[#ffdccc] text-[#5d2a42]'
-                : 'bg-[#d8e2dc] border-[#c4d4cc] text-[#5d2a42]'
+                ? 'bg-amber-50/80 border-amber-200 text-amber-950'
+                : result.resultState === 'no_abnormality' || result.riskLevel === 'lower_risk'
+                ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
+                : 'bg-slate-50 border-slate-200 text-slate-900'
             }`}
           >
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
-                <span className="text-[11px] uppercase font-black tracking-wider opacity-90 block">
+                <span className="text-[11px] uppercase font-bold tracking-wider opacity-80 block">
                   Preliminary Finding
                 </span>
-                <h3 className="text-lg font-black text-[#5d2a42]">
+                <h3 className="text-lg font-bold">
                   {result.prediction}
                 </h3>
-                <p className="text-xs font-bold opacity-90 mt-1 max-w-xl">
+                <p className="text-xs opacity-90 mt-1 max-w-xl">
                   {result.recommendation}
                 </p>
               </div>
 
               {result.confidence ? (
-                <div className="text-right shrink-0 bg-white/80 px-3.5 py-2 rounded-xl border border-[#5d2a42]/10">
-                  <span className="text-xl font-black text-[#5d2a42]">{result.confidence}%</span>
-                  <span className="text-[10px] block uppercase font-bold text-[#5d2a42] opacity-80">
+                <div className="text-right shrink-0 bg-white/70 px-3 py-2 rounded-lg border border-black/5">
+                  <span className="text-xl font-bold">{result.confidence}%</span>
+                  <span className="text-[10px] block uppercase font-medium opacity-70">
                     Confidence
                   </span>
                 </div>
               ) : (
-                <div className="text-right shrink-0 bg-white/80 px-3.5 py-2 rounded-xl border border-[#5d2a42]/10">
-                  <span className="text-sm font-extrabold text-[#5d2a42]/60">Unavailable</span>
-                  <span className="text-[10px] block uppercase font-bold text-[#5d2a42] opacity-80">
+                <div className="text-right shrink-0 bg-white/70 px-3 py-2 rounded-lg border border-black/5">
+                  <span className="text-sm font-semibold text-slate-500">Unavailable</span>
+                  <span className="text-[10px] block uppercase font-medium opacity-70">
                     Confidence
                   </span>
                 </div>
@@ -1220,7 +1179,7 @@ function ScreeningWorkflow() {
             </div>
 
             {/* Caveat warning */}
-            <div className="mt-4 pt-3 border-t border-[#5d2a42]/10 text-[11px] font-bold opacity-90 flex items-center gap-1.5">
+            <div className="mt-4 pt-3 border-t border-black/5 text-[11px] opacity-80 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
               <span>
                 {result.clinicalCaveat || 'Decision support only. Not a medical diagnosis.'}
@@ -1228,31 +1187,31 @@ function ScreeningWorkflow() {
             </div>
           </div>
 
-          {/* SCREENING IMAGE DISPLAY */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center bg-[#fff9ec] p-4 rounded-2xl border border-[#d8e2dc]">
-            <div className="relative aspect-square max-w-[200px] rounded-xl overflow-hidden border border-[#d8e2dc] bg-black">
+          {/* SCREENING IMAGE DISPLAY (CONTINUITY) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div className="relative aspect-square max-w-[200px] rounded-lg overflow-hidden border border-slate-300 bg-black">
               <img
                 src={imageUri}
                 alt="Screening image"
                 className="w-full h-full object-contain"
               />
             </div>
-            <div className="sm:col-span-2 text-xs space-y-2 text-[#5d2a42]">
-              <h4 className="font-extrabold text-[#5d2a42]">Screening Image Capture</h4>
-              <p className="font-medium text-[#5d2a42]/80">
+            <div className="sm:col-span-2 text-xs space-y-2 text-slate-600">
+              <h4 className="font-bold text-slate-900">Screening Image Capture</h4>
+              <p>
                 Optical quality verified. Capture securely attached to patient chart #{result.patientId}.
               </p>
-              <div className="text-[11px] font-mono font-bold text-[#5d2a42]/70">
+              <div className="text-[11px] font-mono text-slate-500">
                 Decision Support: {result.modelVersion}
               </div>
             </div>
           </div>
 
           {/* ACTIONS: HUMAN REVIEW & REFERRAL */}
-          <div className="pt-4 border-t border-[#d8e2dc] flex flex-wrap items-center justify-between gap-3">
+          <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
             <Link
               href={`/patients/${selectedPatient?.patientId || result.patientId}`}
-              className="text-xs font-bold text-[#5d2a42]/80 hover:text-[#5d2a42]"
+              className="text-xs font-semibold text-slate-600 hover:text-slate-900"
             >
               ← View Patient Chart
             </Link>
@@ -1261,7 +1220,7 @@ function ScreeningWorkflow() {
               <button
                 type="button"
                 onClick={() => setStep(8)}
-                className="px-4 py-2 bg-[#ffdccc] hover:bg-[#fec89a] text-[#5d2a42] rounded-xl text-xs font-bold border border-[#fec89a]"
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold"
               >
                 Conduct Clinical Review
               </button>
@@ -1269,7 +1228,7 @@ function ScreeningWorkflow() {
               <button
                 type="button"
                 onClick={() => setShowReferralModal(true)}
-                className="px-4 py-2 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl text-xs font-bold shadow-xs"
+                className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-xs"
               >
                 Create Specialist Referral →
               </button>
@@ -1282,22 +1241,22 @@ function ScreeningWorkflow() {
           STEP 8: HUMAN CLINICAL REVIEW
          ────────────────────────────────────────────────────────────────────────── */}
       {step === 8 && result && (
-        <div className="bg-white/90 border border-[#d8e2dc] rounded-2xl p-6 space-y-6 shadow-sm">
-          <div className="flex items-center justify-between pb-3 border-b border-[#d8e2dc]">
+        <div className="glass-container-3d p-6 space-y-6">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-              <h2 className="text-lg font-bold text-[#5d2a42]">Human Clinician Verification</h2>
-              <p className="text-xs text-[#5d2a42]/70 mt-0.5">
+              <h2 className="text-lg font-bold text-slate-900">Human Clinician Verification</h2>
+              <p className="text-xs text-slate-500 mt-0.5">
                 Screening review by attending health professional
               </p>
             </div>
-            <span className="text-xs text-[#5d2a42] font-mono font-bold">
+            <span className="text-xs text-slate-600 font-mono">
               Screening #{result.screeningId}
             </span>
           </div>
 
           <div className="space-y-4 text-xs">
             <div>
-              <label className="block font-semibold text-[#5d2a42] mb-1">
+              <label className="block font-semibold text-slate-700 mb-1">
                 Clinical Assessment Notes
               </label>
               <textarea
@@ -1305,14 +1264,14 @@ function ScreeningWorkflow() {
                 value={reviewNotes}
                 onChange={(e) => setReviewNotes(e.target.value)}
                 placeholder="Document your clinical impression, visual confirmation of findings, or referral recommendation..."
-                className="w-full p-3 bg-[#fff9ec] border border-[#d8e2dc] rounded-xl text-[#5d2a42] focus:outline-hidden focus:ring-2 focus:ring-[#5d2a42]/20 focus:border-[#5d2a42]"
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
               />
             </div>
 
             <div className="flex items-center justify-between pt-2">
               <button
                 onClick={() => setStep(7)}
-                className="text-[#5d2a42]/70 hover:text-[#5d2a42] font-bold"
+                className="text-slate-500 hover:text-slate-800 font-medium"
               >
                 ← Back to Result
               </button>
@@ -1321,7 +1280,7 @@ function ScreeningWorkflow() {
                 <button
                   type="button"
                   onClick={handleMarkReviewed}
-                  className="px-4 py-2 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl font-bold shadow-xs"
+                  className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold shadow-xs"
                 >
                   {reviewStatus === 'reviewed' ? '✓ Review Logged' : 'Sign Off & Mark Reviewed'}
                 </button>
@@ -1335,18 +1294,18 @@ function ScreeningWorkflow() {
           REFERRAL MODAL
          ────────────────────────────────────────────────────────────────────────── */}
       {showReferralModal && result && selectedPatient && (
-        <div className="fixed inset-0 z-50 bg-[#5d2a42]/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#fff9ec] rounded-2xl border border-[#d8e2dc] max-w-lg w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#d8e2dc]">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl border border-slate-200 max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <div>
-                <h3 className="text-base font-bold text-[#5d2a42]">Create Specialist Referral</h3>
-                <p className="text-xs text-[#5d2a42]/70">
+                <h3 className="text-base font-bold text-slate-900">Create Specialist Referral</h3>
+                <p className="text-xs text-slate-500">
                   Refer {selectedPatient.name} for secondary clinical evaluation
                 </p>
               </div>
               <button
                 onClick={() => setShowReferralModal(false)}
-                className="text-[#5d2a42]/50 hover:text-[#5d2a42] p-1"
+                className="text-slate-400 hover:text-slate-600 p-1"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1354,44 +1313,44 @@ function ScreeningWorkflow() {
 
             {referralCreated ? (
               <div className="p-6 text-center space-y-2">
-                <CheckCircle2 className="w-10 h-10 text-[#5d2a42] mx-auto" />
-                <h4 className="text-sm font-bold text-[#5d2a42]">Referral Slip Generated</h4>
-                <p className="text-xs text-[#5d2a42]/70">
+                <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
+                <h4 className="text-sm font-bold text-slate-900">Referral Slip Generated</h4>
+                <p className="text-xs text-slate-500">
                   Patient referred successfully. Record logged to Referrals tracker.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleCreateReferral} className="space-y-3 text-xs">
                 <div>
-                  <label className="block font-semibold text-[#5d2a42] mb-1">Specialist Specialty</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Specialist Specialty</label>
                   <input
                     type="text"
                     required
                     value={referralSpecialist}
                     onChange={(e) => setReferralSpecialist(e.target.value)}
                     placeholder="e.g. Ophthalmologist / Retina Specialist"
-                    className="w-full px-3 py-2 bg-white border border-[#d8e2dc] rounded-xl text-[#5d2a42]"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#5d2a42] mb-1">Destination Facility</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Destination Facility</label>
                   <input
                     type="text"
                     required
                     value={referralFacility}
                     onChange={(e) => setReferralFacility(e.target.value)}
                     placeholder="e.g. District Civil Hospital Eye Clinic"
-                    className="w-full px-3 py-2 bg-white border border-[#d8e2dc] rounded-xl text-[#5d2a42]"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#5d2a42] mb-1">Referral Priority</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Referral Priority</label>
                   <select
                     value={referralPriority}
                     onChange={(e) => setReferralPriority(e.target.value as any)}
-                    className="w-full px-3 py-2 bg-white border border-[#d8e2dc] rounded-xl text-[#5d2a42]"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
                   >
                     <option value="routine">Routine (within 4 weeks)</option>
                     <option value="priority">Priority (within 1 week)</option>
@@ -1400,29 +1359,29 @@ function ScreeningWorkflow() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#5d2a42] mb-1">Clinical Indication / Reason</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Clinical Indication / Reason</label>
                   <textarea
                     rows={3}
                     required
                     value={referralReason}
                     onChange={(e) => setReferralReason(e.target.value)}
                     placeholder="Specify why patient requires further evaluation..."
-                    className="w-full px-3 py-2 bg-white border border-[#d8e2dc] rounded-xl text-[#5d2a42]"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#d8e2dc]">
+                <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowReferralModal(false)}
-                    className="px-3 py-1.5 rounded-xl border border-[#d8e2dc] text-[#5d2a42] hover:bg-[#ffdccc]"
+                    className="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSavingReferral}
-                    className="px-4 py-1.5 bg-[#5d2a42] hover:bg-[#4a2135] text-[#fff9ec] rounded-xl font-bold shadow-xs disabled:opacity-50"
+                    className="px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold shadow-xs disabled:opacity-50"
                   >
                     {isSavingReferral ? 'Creating...' : 'Issue Referral Slip'}
                   </button>
@@ -1438,7 +1397,7 @@ function ScreeningWorkflow() {
 
 export default function ScreeningPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-xs text-[#5d2a42]/70 font-bold">Loading screening flow...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Loading screening flow...</div>}>
       <ScreeningWorkflow />
     </Suspense>
   );
