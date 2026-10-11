@@ -113,8 +113,8 @@ const BEND_PRESETS: Record<string, BendPreset> = {
 };
 
 const FIT_ASPECT: Record<string, number> = { portrait: 0.75, square: 1, landscape: 4 / 3 };
-const TAPS = 12;
-const PIXEL_BUDGET = 4.5e6;
+const TAPS = 4;
+const PIXEL_BUDGET = 2.0e6;
 const INTRO_DURATION: Record<string, number> = { rise: 2.1, bloom: 1.6, spin: 2.2, deal: 1.5, fade: 0.35 };
 
 const wrap = (value: number, size: number) => ((((value + size / 2) % size) + size) % size) - size / 2;
