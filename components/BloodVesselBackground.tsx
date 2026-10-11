@@ -4,7 +4,10 @@ import React from 'react';
 
 export default function BloodVesselBackground() {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-40 mix-blend-multiply">
+    <div 
+      className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-30 mix-blend-multiply"
+      style={{ willChange: 'transform, opacity', contain: 'strict' }}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 800 600"
@@ -44,15 +47,14 @@ export default function BloodVesselBackground() {
             <stop offset="100%" stopColor="#4a0005" />
           </radialGradient>
 
-          {/* Glow Filter for Atmosphere */}
-          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="12" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          {/* Lightweight Glow Filter for GPU Atmosphere */}
+          <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="4" />
           </filter>
 
           {/* Soft Depth Blur for Background Vessels */}
-          <filter id="depthBlur" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="6" />
+          <filter id="depthBlur" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="2" />
           </filter>
         </defs>
 

@@ -44,106 +44,54 @@ interface ClinicalSpotlightProps {
 }
 
 function ClinicalSpotlightLayer({ cursorX, cursorY }: ClinicalSpotlightProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const layerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const resize = () => {
-      const parent = canvas.parentElement;
-      if (parent) {
-        canvas.width = parent.clientWidth;
-        canvas.height = parent.clientHeight;
-      }
-    };
-
-    resize();
-    window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const layer = layerRef.current;
-    if (!canvas || !layer) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const width = canvas.width || 400;
-    const height = canvas.height || 400;
-
-    ctx.clearRect(0, 0, width, height);
-
-    if (cursorX >= 0 && cursorY >= 0) {
-      const grad = ctx.createRadialGradient(cursorX, cursorY, 0, cursorX, cursorY, SPOTLIGHT_R);
-      grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-      grad.addColorStop(0.4, 'rgba(255, 255, 255, 1)');
-      grad.addColorStop(0.65, 'rgba(255, 255, 255, 0.75)');
-      grad.addColorStop(0.85, 'rgba(255, 255, 255, 0.35)');
-      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(cursorX, cursorY, SPOTLIGHT_R, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    try {
-      const dataUrl = canvas.toDataURL();
-      layer.style.maskImage = `url(${dataUrl})`;
-      layer.style.webkitMaskImage = `url(${dataUrl})`;
-      layer.style.maskSize = '100% 100%';
-      layer.style.webkitMaskSize = '100% 100%';
-    } catch {
-      // Fallback
-    }
-  }, [cursorX, cursorY]);
+  const isHovering = cursorX >= 0 && cursorY >= 0;
 
   return (
-    <>
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" style={{ display: 'none' }} />
-      <div
-        ref={layerRef}
-        className="absolute inset-0 pointer-events-none z-20 rounded-3xl transition-opacity duration-300 overflow-hidden shadow-2xl"
-        style={{
-          background: 'linear-gradient(135deg, rgba(93,42,66,0.96) 0%, rgba(254,200,154,0.9) 100%)',
-          backdropFilter: 'blur(10px)'
-        }}
-      >
-        <div className="absolute inset-0 p-8 flex flex-col justify-between text-[#fff9ec] z-10">
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdccc] text-[#5d2a42] text-xs font-black">
-              <Scan className="w-3.5 h-3.5 text-[#5d2a42]" />
-              <span>AI Neural Heatmap Layer</span>
-            </span>
-            <span className="px-2.5 py-1 rounded-md bg-[#5d2a42] text-[#fff9ec] text-[10px] font-black border border-[#ffdccc]/30">
-              98.4% Confidence
-            </span>
-          </div>
+    <div
+      className="absolute inset-0 pointer-events-none z-20 rounded-3xl transition-opacity duration-200 overflow-hidden shadow-2xl"
+      style={{
+        background: 'linear-gradient(135deg, rgba(93,42,66,0.96) 0%, rgba(254,200,154,0.9) 100%)',
+        backdropFilter: 'blur(10px)',
+        opacity: isHovering ? 1 : 0,
+        WebkitMaskImage: isHovering
+          ? `radial-gradient(circle ${SPOTLIGHT_R}px at ${cursorX}px ${cursorY}px, black 30%, rgba(0,0,0,0.6) 65%, transparent 100%)`
+          : 'none',
+        maskImage: isHovering
+          ? `radial-gradient(circle ${SPOTLIGHT_R}px at ${cursorX}px ${cursorY}px, black 30%, rgba(0,0,0,0.6) 65%, transparent 100%)`
+          : 'none',
+        willChange: 'mask-image, -webkit-mask-image',
+      }}
+    >
+      <div className="absolute inset-0 p-8 flex flex-col justify-between text-[#fff9ec] z-10">
+        <div className="flex items-center justify-between">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdccc] text-[#5d2a42] text-xs font-black">
+            <Scan className="w-3.5 h-3.5 text-[#5d2a42]" />
+            <span>AI Neural Heatmap Layer</span>
+          </span>
+          <span className="px-2.5 py-1 rounded-md bg-[#5d2a42] text-[#fff9ec] text-[10px] font-black border border-[#ffdccc]/30">
+            98.4% Confidence
+          </span>
+        </div>
 
-          <div className="space-y-3 bg-[#5d2a42]/40 backdrop-blur-md p-4 rounded-2xl border border-[#ffdccc]/30">
-            <h4 className="text-base font-black text-[#ffdccc]">
-              Microvascular Retinal &amp; Lesion Segmentation
-            </h4>
-            <p className="text-xs text-[#fff9ec]/90 leading-relaxed font-medium">
-              Real-time edge INT8 neural network model highlighting vascular exudates, hemorrhages, and mucosal pattern anomalies.
-            </p>
-            <div className="flex items-center gap-3 pt-1 text-[11px] font-bold text-[#ffdccc]">
-              <span className="flex items-center gap-1">
-                <Zap className="w-3 h-3 text-[#ffdccc]" /> &lt; 2.8ms Inference
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <Lock className="w-3 h-3 text-[#ffdccc]" /> 100% Encrypted
-              </span>
-            </div>
+        <div className="space-y-3 bg-[#5d2a42]/40 backdrop-blur-md p-4 rounded-2xl border border-[#ffdccc]/30">
+          <h4 className="text-base font-black text-[#ffdccc]">
+            Microvascular Retinal &amp; Lesion Segmentation
+          </h4>
+          <p className="text-xs text-[#fff9ec]/90 leading-relaxed font-medium">
+            Real-time edge INT8 neural network model highlighting vascular exudates, hemorrhages, and mucosal pattern anomalies.
+          </p>
+          <div className="flex items-center gap-3 pt-1 text-[11px] font-bold text-[#ffdccc]">
+            <span className="flex items-center gap-1">
+              <Zap className="w-3 h-3 text-[#ffdccc]" /> &lt; 2.8ms Inference
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <Lock className="w-3 h-3 text-[#ffdccc]" /> 100% Encrypted
+            </span>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
