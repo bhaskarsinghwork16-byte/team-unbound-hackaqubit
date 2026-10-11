@@ -7,15 +7,16 @@ interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg';
   showSubtitle?: boolean;
   showTagline?: boolean;
+  href?: string;
 }
 
-export default function BrandLogo({ size = 'md', showSubtitle, showTagline }: BrandLogoProps) {
+export default function BrandLogo({ size = 'md', showSubtitle, showTagline, href = '/dashboard' }: BrandLogoProps) {
   const displaySubtitle = showSubtitle ?? showTagline ?? true;
   const iconDimensions = size === 'sm' ? 'w-7 h-7' : size === 'lg' ? 'w-10 h-10' : 'w-8 h-8';
   const titleSize = size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-lg' : 'text-base';
 
   return (
-    <Link href="/dashboard" className="flex items-center gap-3 group select-none">
+    <Link href={href} className="flex items-center gap-3 group select-none">
       {/* 3D Medical Cross Emblem */}
       <div className={`relative ${iconDimensions} rounded-xl bg-[#5d2a42] text-[#ffdccc] flex items-center justify-center shadow-md border border-[#ffdccc]/30 group-hover:scale-105 transition-transform`}>
         <span className="font-extrabold text-[#ffdccc] text-lg leading-none">+</span>

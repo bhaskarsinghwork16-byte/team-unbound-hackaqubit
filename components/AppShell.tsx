@@ -104,37 +104,99 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen bg-[#fff9ec] text-[#5d2a42] font-sans antialiased flex flex-col">
         {/* ── PUBLIC WEBSITE TOP NAVBAR ── */}
-        <header className="sticky top-0 z-50 bg-[#fff9ec]/90 backdrop-blur-md border-b border-[#d8e2dc]/60 px-4 sm:px-8 py-3.5 transition-colors">
+        <header className="sticky top-0 z-50 bg-[#fff9ec]/95 backdrop-blur-md border-b border-[#d8e2dc] px-4 sm:px-8 py-3">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <BrandLogo size="md" showSubtitle={true} />
+              <BrandLogo size="md" showSubtitle={true} href="/" />
             </div>
 
-            {/* Public Website Links */}
+            {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-[#5d2a42]">
-              <a href="#hero" className="hover:opacity-80 transition-opacity">Platform</a>
-              <a href="#options" className="hover:opacity-80 transition-opacity">Modules</a>
-              <Link href="/screening" className="hover:opacity-80 transition-opacity flex items-center gap-1">
+              <a href="#hero" className="hover:text-[#5d2a42]/70 transition-colors">Platform</a>
+              <a href="#modules" className="hover:text-[#5d2a42]/70 transition-colors">Modules</a>
+              <Link href="/screening" className="hover:text-[#5d2a42]/70 transition-colors flex items-center gap-1.5">
                 <Eye className="w-4 h-4 text-[#5d2a42]" />
                 <span>AI Screening</span>
               </Link>
-              <Link href="/datasets" className="hover:opacity-80 transition-opacity">AI Models</Link>
-              <Link href="/lithos" className="hover:opacity-80 transition-opacity font-playfair italic text-[#5d2a42]">Lithos Spotlight</Link>
+              <Link href="/datasets" className="hover:text-[#5d2a42]/70 transition-colors">AI Models</Link>
+              <Link href="/patients" className="hover:text-[#5d2a42]/70 transition-colors">Patients</Link>
             </nav>
 
-            {/* Prominent Dashboard Button */}
+            {/* Right Action: Dashboard Button & Mobile Hamburger */}
             <div className="flex items-center gap-3">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-xl text-xs sm:text-sm font-extrabold shadow-md transition-all transform hover:scale-[1.02] active:scale-95"
+                id="navbar-dashboard-btn"
+                className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-[#5d2a42] hover:bg-[#5d2a42]/90 text-[#fff9ec] rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors"
               >
                 <LayoutDashboard className="w-4 h-4 text-[#ffdccc]" />
                 <span>Dashboard</span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#ffdccc]" />
               </Link>
+
+              {/* Mobile Hamburger Toggle Button */}
+              <button
+                type="button"
+                id="mobile-menu-toggle"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg text-[#5d2a42] hover:bg-[#d8e2dc]/60 transition-colors"
+                aria-label="Toggle navigation menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
+
+          {/* Mobile Collapsible Navigation Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-3 pt-3 border-t border-[#d8e2dc] pb-2 space-y-2">
+              <a
+                href="#hero"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg text-sm font-bold text-[#5d2a42] hover:bg-[#d8e2dc]/40 transition-colors"
+              >
+                Platform Overview
+              </a>
+              <a
+                href="#modules"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg text-sm font-bold text-[#5d2a42] hover:bg-[#d8e2dc]/40 transition-colors"
+              >
+                Clinical Modules
+              </a>
+              <Link
+                href="/screening"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold text-[#5d2a42] hover:bg-[#d8e2dc]/40 transition-colors"
+              >
+                <Eye className="w-4 h-4 text-[#5d2a42]" />
+                <span>Start AI Screening</span>
+              </Link>
+              <Link
+                href="/datasets"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg text-sm font-bold text-[#5d2a42] hover:bg-[#d8e2dc]/40 transition-colors"
+              >
+                AI Model &amp; Datasets
+              </Link>
+              <Link
+                href="/patients"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg text-sm font-bold text-[#5d2a42] hover:bg-[#d8e2dc]/40 transition-colors"
+              >
+                Patient Directory
+              </Link>
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-bold bg-[#5d2a42] text-[#fff9ec] transition-colors"
+              >
+                <span>Enter Official Dashboard</span>
+                <ArrowRight className="w-4 h-4 text-[#ffdccc]" />
+              </Link>
+            </div>
+          )}
         </header>
 
         {/* Website Landing Main Container */}

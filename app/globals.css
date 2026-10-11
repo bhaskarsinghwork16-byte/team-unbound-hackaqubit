@@ -43,7 +43,7 @@
     --ring: 330 38% 24%;
   }
 
-  html, body, button, input, select, textarea {
+  html, body {
     background-color: #fff9ec;
     background-image: 
       radial-gradient(circle at 10% 20%, rgba(216, 226, 220, 0.35) 0%, transparent 40%),
@@ -54,6 +54,11 @@
     color: #5d2a42;
     font-family: 'Product Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
     @apply antialiased selection:bg-[#ffdccc] selection:text-[#5d2a42];
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    color: inherit;
   }
 
   h1, h2, h3, h4, h5, h6 {
